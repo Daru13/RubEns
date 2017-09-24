@@ -2,7 +2,10 @@
   "language": "node_js",
   "node_js": 8.5.0,
   "install": [
-    "make travis"
+    "make all"
+  ],
+  "script": [
+    "make test"
   ],
   "group": "stable",
   "dist": "precise",
