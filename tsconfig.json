@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "ES2017",
+    "sourceMap": true
+  },
+
+  "compileOnSave": false,
+
+  "scripts": {
+    "test": "ts-mocha"
+  },
+
+  "exclude": [
+    "node_modules"
+  ]
+}

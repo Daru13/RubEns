@@ -1,12 +1,17 @@
 {
   "language": "node_js",
   "node_js": 8.5.0,
+
   "install": [
-    "make all"
+    "npm install typescript",
+    "npm install ts-mocha -g"
   ],
+
   "script": [
+    "make all",
     "make test"
   ],
+
   "group": "stable",
   "dist": "precise",
   "os": "linux"

@@ -1,3 +1,4 @@
+.PHONY: clean test
 
 #Build the application
 build:
@@ -9,7 +10,11 @@ doc:
 
 #Test the application, to find errors
 test:
-	@echo "Testing the app"
+	@echo "Testing the application with mocha:"
+	@ts-mocha test/travis.ts
 
 #Build the application, and the documentation
 all: build doc
+
+clean:
+	rm -rf build/*
