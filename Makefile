@@ -11,7 +11,7 @@ doc:
 #Test the application, to find errors
 test:
 	@echo "Testing the application with mocha:"
-	@ts-mocha test/travis.ts
+	@ts-mocha test/**/*.ts
 
 #Build the application, and the documentation
 all: build doc
