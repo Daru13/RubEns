@@ -8,7 +8,7 @@ export class RubEns {
     readonly parameters: RubEnsParameters;
 
     // Currently modified document
-    private document: Document = null;
+    /*private*/ document: Document = null;
 
     constructor (parameters: RubEnsParameters) {
         if (parameters.createDocumentOnStartup) {

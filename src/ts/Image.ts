@@ -11,11 +11,11 @@ export class Image {
     }
 
     getImageData () {
-        return this.canvas2DContext.getImageData();
+        return this.canvas2DContext.getImageData(0, 0, this.canvas.width, this.canvas.height);
     }
 
     setImageData (data: ImageData) {
-        this.canvas2DContext.putImageData(data);
+        this.canvas2DContext.putImageData(data, 0, 0);
     }
 
 }

@@ -12,4 +12,9 @@ export class Document {
         this.parameters = parameters;
         this.image      = image;
     }
+
+    // TODO: handle multiples images?
+    createImage (canvas) {
+        this.image = new Image(canvas);
+    }
 }
