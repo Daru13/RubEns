@@ -15,3 +15,4 @@ NPM should be installed, with these package:
 
 - `typescript`
 - `mocha` and `ts-mocha`
+- `amd-loader`
