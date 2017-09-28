@@ -6,7 +6,7 @@ all: build doc
 # Build the application
 build:
 	@echo "Building the app..."
-	@cp -r -u src/html src/css build
+	@cp -r -u src/html src/css src/js build
 	@tsc
 
 # Build the web documentation
