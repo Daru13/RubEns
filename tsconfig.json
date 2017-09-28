@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "ES2017",
-    "outDir": "./build"
+    "target": "ES6",
+    "outDir": "./build/js"
   },
 
   "compileOnSave": false,
