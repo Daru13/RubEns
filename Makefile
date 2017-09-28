@@ -5,6 +5,7 @@ all: build doc
 
 # Build the application
 build:
+	@mkdir -p build
 	@echo "Building the app..."
 	@cp -r -u src/html src/css src/js build
 	@tsc
