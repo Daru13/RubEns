@@ -1,4 +1,5 @@
 import { EventHandler, EventHandlerCallback } from "./EventHandler";
+import * as $ from "jquery";
 
 /**
  * This class is an important part of the Controller,  meant to handle all events
@@ -10,7 +11,7 @@ export class EventManager {
     static handledEvents: Array<string> = [
         "click"
     ];
-    
+
     // List of registered handlers
     private registeredHandlers: Array<EventHandler>;
 
@@ -52,7 +53,7 @@ export class EventManager {
      *
      * @author Camille Gobert
      */
-    private dispatchEvent (event: object) {
+    private dispatchEvent (event: any) {
         // Browse all registered event handlers and check their selectors
         for (let handler of this.registeredHandlers) {
             // Ignore disabled events

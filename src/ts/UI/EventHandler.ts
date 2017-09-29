@@ -5,7 +5,7 @@
  * @author Camille Gobert
  */
 export interface EventHandlerCallback {
-    (event: object): void;
+    (event: any): void;
 }
 
 
