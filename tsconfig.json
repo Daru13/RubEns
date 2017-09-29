@@ -2,7 +2,8 @@
   "compilerOptions": {
     "module": "amd",
     "target": "ES6",
-    "outDir": "./build/js"
+    "outDir": "./build/js",
+    "pretty": true
   },
 
   "compileOnSave": false,
