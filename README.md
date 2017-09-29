@@ -11,9 +11,11 @@ It is our course project for ENS Paris-Saclay's software dev. course.
 
 ## Dependencies: 
 
-NPM should be installed, with these package:
+NPM should be installed, with these packages:
 
 - `typescript`
 - `mocha` and `ts-mocha`
 - `amd-loader`
 - `typedoc`
+- 'jquery' and '@types/jquery'
+
