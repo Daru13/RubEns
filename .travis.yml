@@ -5,7 +5,9 @@
   "install": [
     "npm install typescript -g",
     "npm install mocha -g",
-    "npm install ts-mocha -g"
+    "npm install ts-mocha -g",
+    "npm install amd-loader -g",
+    "npm install typedoc -g"
   ],
 
   "script": [

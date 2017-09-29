@@ -1,15 +1,11 @@
 {
   "compilerOptions": {
-    "module": "AMD",
+    "module": "amd",
     "target": "ES6",
     "outDir": "./build/js"
   },
 
   "compileOnSave": false,
-
-  "scripts": {
-    "test": "ts-mocha"
-  },
 
   "exclude": [
     "node_modules",
