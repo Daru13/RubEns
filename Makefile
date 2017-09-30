@@ -5,7 +5,7 @@ all: build doc
 
 # Build the application
 build:
-	@echo "Building the app..."
+	@echo "Building the application..."
 	@mkdir -p build
 	@cp -r -u src/html src/css src/js build
 	@tsc
@@ -18,7 +18,7 @@ doc:
 
 # Test the application, to find errors
 test:
-	@echo "Testing the application (with mocha)..."
+	@echo "Testing the application..."
 	@ts-mocha test/**/*.ts
 
 # Clean files built from the sources
