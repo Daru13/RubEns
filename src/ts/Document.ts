@@ -3,6 +3,8 @@ import { DocumentParameters } from "./DocumentParameters";
 import { ImageFormat } from "./Image/ImageFormat";
 import { DrawingParameters } from "./DrawingTools/DrawingParameters";
 import { DrawingTool } from "./DrawingTools/DrawingTool";
+import { EllipseTool } from "./DrawingTools/EllipseTool";
+import { EventManager } from "./UI/EventManager";
 
 export class Document {
     // Single image per document
@@ -15,7 +17,13 @@ export class Document {
 
     currentDrawingTool: DrawingTool;
 
-    constructor (parameters: DocumentParameters, image?: Canvas) {
+    //TODO: maybe remove this from this class
+    eventManager: EventManager;
+
+    constructor (parameters: DocumentParameters, eventManager: EventManager, image?: Canvas) {
+        this.eventManager = eventManager;
+        this.currentDrawingTool = new EllipseTool();
+        this.currentDrawingTool.registerEvents(this.eventManager);
         this.parameters = parameters;
         this.image      = image;
     }
