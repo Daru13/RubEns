@@ -2,6 +2,7 @@ import { RubEnsParameters } from "./RubEnsParameters";
 import { Document } from "./Document";
 import { DocumentParameters } from "./DocumentParameters";
 import { EventManager } from "./UI/EventManager";
+import { SupportChecker } from "./SupportChecker";
 
 export class RubEns {
     static version: string = "0.1";
@@ -14,6 +15,15 @@ export class RubEns {
     private eventManager: EventManager;
 
     constructor (parameters: RubEnsParameters) {
+
+        // Check the support of the used API
+        let APISupported = SupportChecker.checkSupport();
+
+        // TODO change error message
+        if(!APISupported) {
+            alert("RubEns is not supported on this browser");
+        }
+
         if (parameters.createDocumentOnStartup) {
             this.createDocument(new DocumentParameters());
         }
