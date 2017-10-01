@@ -9,5 +9,5 @@ console.log(document["rubens"]);
 document["rubens"] = new RubEns(new RubEnsParameters());
 
 // Bind the single image to the canvas
-let canvas = document.getElementById("main_drawing_canvas");
+let canvas = document.getElementById("drawing_canvas");
 document["rubens"].document.createImage(canvas);
