@@ -1,4 +1,4 @@
-import { Image } from "../Image";
+import { Canvas } from "../Image/Canvas";
 import { DrawingParameters } from "./DrawingParameters";
 import { DrawingTool } from "./DrawingTool"
 
@@ -23,7 +23,7 @@ export class DrawLine implements DrawingTool {
 
     // this  function draws a line
 
-    apply (image: Image, parameters: DrawingTool){
+    apply (image: Canvas, parameters: DrawingTool){
 
     }
 
