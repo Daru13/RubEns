@@ -24,12 +24,13 @@ export class RubEns {
             alert("RubEns is not supported on this browser");
         }
 
+        this.eventManager = new EventManager();
+
         if (parameters.createDocumentOnStartup) {
             this.createDocument(new DocumentParameters());
         }
 
         // Start handling events in the UI
-        this.eventManager = new EventManager();
         this.eventManager.startListening();
 
         // Debug tests
@@ -47,7 +48,7 @@ export class RubEns {
     }
 
     createDocument (parameters: DocumentParameters) {
-        this.document = new Document(parameters);
+        this.document = new Document(parameters, this.eventManager);
     }
 
     loadDocument (document: Document) {
