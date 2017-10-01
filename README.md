@@ -17,5 +17,5 @@ NPM should be installed, with these packages:
 - `mocha` and `ts-mocha`
 - `amd-loader`
 - `typedoc`
-- 'jquery' and '@types/jquery'
+- `jquery` and `@types/jquery`
 
