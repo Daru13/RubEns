@@ -5,7 +5,7 @@
  * @author Camille Gobert
  */
 export interface EventHandlerCallback {
-    (event: any): void;
+    (event: Event): void;
 }
 
 
@@ -15,6 +15,9 @@ export interface EventHandlerCallback {
  * @author Camille Gobert
  */
 export interface EventHandler {
+    // Array of types of events to handle.
+    eventTypes: Array<string>
+
     // Selector in the jQuery format, to filter which events should be handled.
     // This selector will be applied to the root of the document.
     selector: string;

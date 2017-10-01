@@ -9,15 +9,17 @@ export class EventManager {
     // Static list of handled events
     // All events which should be handled by this manager must be listed here!
     static handledEvents: Array<string> = [
-        "click"
+        "click",
+        "mousemove"
     ];
 
-    // List of registered handlers
     private registeredHandlers: Array<EventHandler>;
-
+    private isListening: boolean;
 
     constructor () {
-
+        this.registeredHandlers = [];
+        console.log("Registered handlers list created:", this.registeredHandlers);
+        this.isListening = false;
     }
 
     /**
@@ -53,17 +55,20 @@ export class EventManager {
      *
      * @author Camille Gobert
      */
-    private dispatchEvent (event: any) {
+    private dispatchEvent (event: Event) {
         // Browse all registered event handlers and check their selectors
         for (let handler of this.registeredHandlers) {
-            // Ignore disabled events
             if (handler.disabled) {
                 continue;
             }
 
-            let matchingElement = $(event.target).closest(handler.selector);
+            // Check if the event type matches one of the handled types
+            if (! handler.eventTypes.find((type) => type === event.type)) {
+                continue;
+            }
 
-            // If current handler selector does not match, continue with the next one
+            // Check if the handler selector applies to the event target node
+            let matchingElement = $(event.target).closest(handler.selector);
             if (matchingElement.length === 0) {
                 continue;
             }
@@ -73,5 +78,41 @@ export class EventManager {
         }
     }
 
+    /**
+     * Start listening to events of the types listed in the related static array.
+     * Nothing happens if the manager was already listening.
+     *
+     * @author Camille Gobert
+     */
+    startListening () {
+        if (this.isListening) {
+            return;
+        }
+
+        let self = this;
+        for (let eventType of EventManager.handledEvents) {
+            document.addEventListener(eventType, (event) => self.dispatchEvent(event));
+        }
+
+        this.isListening = true;
+    }
+
+    /**
+     * Stop listening to events of the types listed in the related static array.
+     * Nothing happens if the manager was not listening.
+     *
+     * @author Camille Gobert
+     */
+    stopListening () {
+        if (! this.isListening) {
+            return;
+        }
+
+        for (let eventType of EventManager.handledEvents) {
+            document.removeEventListener(eventType, (event) => self.dispatchEvent(event));
+        }
+
+        this.isListening = false;
+    }
 
 }
