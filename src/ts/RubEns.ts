@@ -3,6 +3,7 @@ import { Document } from "./Document";
 import { DocumentParameters } from "./DocumentParameters";
 import { EventManager } from "./UI/EventManager";
 import { SupportChecker } from "./SupportChecker";
+import { RootLayout } from "./UI/RootLayout";
 
 export class RubEns {
     static version: string = "0.1";
@@ -13,25 +14,23 @@ export class RubEns {
     /*private*/ document: Document = null;
 
     private eventManager: EventManager;
+    private rootLayout: RootLayout;
 
     constructor (parameters: RubEnsParameters) {
 
         // Check the support of the used API
+        // TODO: change error message
         let APISupported = SupportChecker.checkSupport();
-
-        // TODO change error message
-        if(!APISupported) {
+        if (! APISupported) {
             alert("RubEns is not supported on this browser");
-        }
-
-        this.eventManager = new EventManager();
-
-        if (parameters.createDocumentOnStartup) {
-            this.createDocument(new DocumentParameters());
         }
 
         // Start handling events in the UI
         this.eventManager.startListening();
+        this.eventManager = new EventManager();
+
+        // Initiate the UI
+        this.rootLayout = new RootLayout($("body"));
 
         // Debug tests
         this.eventManager.registerEventHandler({
@@ -45,6 +44,11 @@ export class RubEns {
             selector: "canvas",
             callback: (_) => console.log("Move event on canvas.")
         });
+
+
+        if (parameters.createDocumentOnStartup) {
+            this.createDocument(new DocumentParameters());
+        }
     }
 
     createDocument (parameters: DocumentParameters) {
