@@ -1,6 +1,8 @@
 import { Canvas } from "./Image/Canvas";
 import { DocumentParameters } from "./DocumentParameters";
 import { ImageFormat } from "./Image/ImageFormat";
+import { DrawingParameters } from "./DrawingTools/DrawingParameters";
+import { DrawingTool } from "./DrawingTools/DrawingTool";
 
 export class Document {
     // Single image per document
@@ -8,6 +10,10 @@ export class Document {
     image: Canvas;
 
     readonly parameters: DocumentParameters;
+
+    globalDrawingParameters: DrawingParameters;
+
+    currentDrawingTool: DrawingTool;
 
     constructor (parameters: DocumentParameters, image?: Canvas) {
         this.parameters = parameters;
