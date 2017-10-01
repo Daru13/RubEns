@@ -26,7 +26,7 @@ export interface EventHandler {
     // It receives the event as a parameter.
     callback: EventHandlerCallback;
 
-    // Optionnal.
-    // If defined and set to true, ignore this hancler.
+    // Optional.
+    // If defined and set to true, ignore this handler.
     disabled?: boolean;
 }
