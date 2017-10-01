@@ -1,6 +1,6 @@
-import { Image } from "../Image";
+import { Canvas } from "../Image/Canvas";
 import { DrawingParameters } from "./DrawingParameters";
 
 export interface DrawingTool {
-    apply(image: Image, parameters: DrawingTool);
+    apply(image: Canvas, parameters: DrawingParameters);
 }
