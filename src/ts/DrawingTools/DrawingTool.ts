@@ -15,10 +15,22 @@ export abstract class DrawingTool {
     protected eventHandlers: EventHandler[];
 
     /**
+     * The canvas where the image resides.
+     */
+    workingCanvas: Canvas;
+
+    /**
+     * The canvas used to preview the operation
+     */
+    previewCanvas: Canvas;
+
+    /**
      * Basic constructor
      */
-    constructor() {
+    constructor(workingCanvas: Canvas, previewCanvas: Canvas) {
         this.eventHandlers = [];
+        this.workingCanvas = workingCanvas;
+        this.previewCanvas = previewCanvas;
     }
 
 

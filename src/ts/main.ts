@@ -1,5 +1,6 @@
 import { RubEns } from "./RubEns";
 import { RubEnsParameters } from "./RubEnsParameters";
+import {EllipseTool} from "./DrawingTools/EllipseTool";
 
 // Global variable to hold the running instance of the app (for debug purposes)
 document["rubens"] = null;

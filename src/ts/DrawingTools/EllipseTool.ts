@@ -30,19 +30,27 @@ export class EllipseTool extends DrawingTool {
     private second_point: Point;
 
 
-    onMouseDown(event: Event) {
-        console.log("mouse pressed");
+    onMouseDown(event: MouseEvent) {
+        if(this.first_point === null) {
+            this.first_point = new Point(event.clientX, event.clientY);
+        } else if(this.second_point === null) {
+            this.second_point = new Point(event.clientX, event.clientY);
+            this.apply(this.workingCanvas, null);
+
+            this.first_point = null;
+            this.second_point = null;
+        }
     }
 
     /**
      * Basic constructor
      */
-    constructor() {
-        super();
+    constructor(workingCanvas: Canvas, previewCanvas: Canvas) {
+        super(workingCanvas, previewCanvas);
         this.eventHandlers.push({
             eventTypes: ["mousedown"],
-            selector: "canvas",
-            callback: (event) => this.onMouseDown(event)
+                selector: "canvas",
+            callback: (event) => this.onMouseDown(<MouseEvent> event)
 
         });
         this.first_point = null;
@@ -60,16 +68,6 @@ export class EllipseTool extends DrawingTool {
      * // TODO add thickness support
      */
     apply(image: Canvas, parameters: DrawingParameters) {
-        this.applyTemp(image,parameters,10,10,100,100);
-    }
-
-    /**
-     * Temporary function used to apply the function with the console.
-     */
-    applyTemp(image: Canvas, parameters: DrawingParameters,x1,y1,x2,y2) {
-        this.first_point = new Point(x1,y1);
-        this.second_point = new Point(x2,y2);
-
         // Check if the rectangle is defined
         if(this.first_point === null || this.second_point === null) {
             return;

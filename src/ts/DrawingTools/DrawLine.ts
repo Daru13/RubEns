@@ -22,6 +22,10 @@ type Point = {
 
 export class DrawLine extends DrawingTool {
 
+    constructor(workingCanvas: Canvas, previewCanvas: Canvas) {
+        super(workingCanvas,previewCanvas);
+    }
+
     // this  function draws a line
 
     apply (image: Canvas, parameters: DrawingTool){

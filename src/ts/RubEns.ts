@@ -26,8 +26,8 @@ export class RubEns {
         }
 
         // Start handling events in the UI
-        this.eventManager.startListening();
         this.eventManager = new EventManager();
+        this.eventManager.startListening();
 
         // Initiate the UI
         this.rootLayout = new RootLayout($("body"));

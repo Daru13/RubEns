@@ -22,7 +22,7 @@ export class Document {
 
     constructor (parameters: DocumentParameters, eventManager: EventManager, image?: Canvas) {
         this.eventManager = eventManager;
-        this.currentDrawingTool = new EllipseTool();
+        this.currentDrawingTool = new EllipseTool(image,null);
         this.currentDrawingTool.registerEvents(this.eventManager);
         this.parameters = parameters;
         this.image      = image;
@@ -31,6 +31,7 @@ export class Document {
     // TODO: handle multiples images?
     createImage (canvas) {
         this.image = new Canvas(canvas);
+        this.currentDrawingTool.workingCanvas = this.image;
     }
 
     /**
