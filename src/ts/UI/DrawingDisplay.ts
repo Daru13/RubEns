@@ -21,8 +21,8 @@ export class DrawingDisplay extends HTMLRenderer {
         let drawingCanvas = $("<canvas>");
         drawingCanvas.attr("id", "drawing_canvas");
 
-        drawingCanvas.width(800);
-        drawingCanvas.height(600);
+        drawingCanvas.attr("width", "800px");
+        drawingCanvas.attr("height", "600px");
 
         this.rootNode.append(drawingCanvas);
 
@@ -30,8 +30,8 @@ export class DrawingDisplay extends HTMLRenderer {
         let workingCanvas = $("<canvas>");
         workingCanvas.attr("id", "working_canvas");
 
-        workingCanvas.width(800);
-        workingCanvas.height(600);
+        workingCanvas.attr("width", "800px");
+        workingCanvas.attr("height", "600px");
 
         this.rootNode.append(workingCanvas);
     }
