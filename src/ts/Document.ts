@@ -31,7 +31,7 @@ export class Document {
     // TODO: handle multiples images?
     createImage (canvas) {
         this.image = new Canvas(canvas);
-        this.currentDrawingTool.workingCanvas = this.image;
+        this.currentDrawingTool.drawingCanvas = this.image;
     }
 
     /**

@@ -17,20 +17,20 @@ export abstract class DrawingTool {
     /**
      * The canvas where the image resides.
      */
-    workingCanvas: Canvas;
+    drawingCanvas: Canvas;
 
     /**
      * The canvas used to preview the operation
      */
-    previewCanvas: Canvas;
+    workingCanvas: Canvas;
 
     /**
      * Basic constructor
      */
     constructor(workingCanvas: Canvas, previewCanvas: Canvas) {
         this.eventHandlers = [];
-        this.workingCanvas = workingCanvas;
-        this.previewCanvas = previewCanvas;
+        this.drawingCanvas = workingCanvas;
+        this.workingCanvas = previewCanvas;
     }
 
 

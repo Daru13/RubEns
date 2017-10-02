@@ -22,63 +22,129 @@ export class EllipseTool extends DrawingTool {
     /**
      * The first point defining the rectangle
      */
-    private first_point: Point;
+    private firstPoint: Point;
 
     /**
      * The second point defining the rectangle
      */
-    private second_point: Point;
+    private secondPoint: Point;
 
 
+    /**
+     * The action made when the user click in the drawing canvas
+     *
+     * @param event The event
+     *
+     * @author Mathieu Fehr
+     */
     onMouseDown(event: MouseEvent) {
-        let pointClicked = this.workingCanvas.getMouseEventCoordinates(event);
+        this.firstPoint = this.drawingCanvas.getMouseEventCoordinates(event);
+        this.firstPoint.x = Math.floor(this.firstPoint.x);
+        this.firstPoint.y = Math.floor(this.firstPoint.y);
+    }
 
-        if(this.first_point === null) {
-            this.first_point = pointClicked;
-        } else if(this.second_point === null) {
-            this.second_point = pointClicked;
-            this.apply(this.workingCanvas, null);
-            this.first_point = null;
-            this.second_point = null;
+
+    /**
+     * The action made when the user release the mouse button in the drawing canvas
+     *
+     * @param event The event triggering this function
+     *
+     * @author Mathieu Fehr
+     */
+    onMouseUp(event: MouseEvent) {
+        this.secondPoint = this.drawingCanvas.getMouseEventCoordinates(event);
+        this.secondPoint.x = Math.floor(this.secondPoint.x);
+        this.secondPoint.y = Math.floor(this.secondPoint.y);
+        this.apply(this.drawingCanvas, null);
+        this.firstPoint = null;
+        this.secondPoint = null;
+    }
+
+
+    /**
+     * The action made when the user move the mouse button in the drawing canvas
+     *
+     * @param event The event triggering this function
+     *
+     * @author Mathieu Fehr
+     */
+    onMouseMove(event: MouseEvent) {
+        if(this.firstPoint === null) {
+            return;
         }
+        this.secondPoint = this.drawingCanvas.getMouseEventCoordinates(event);
+        this.secondPoint.x = Math.floor(this.secondPoint.x);
+        this.secondPoint.y = Math.floor(this.secondPoint.y);
+        this.apply(this.drawingCanvas, null);
     }
 
     /**
      * Basic constructor
+     *
+     * @param workingCanvas The current working canvas
+     * @param previewCanvas The current preview canvas
+     *
+     * @author Mathieu Fehr
      */
     constructor(workingCanvas: Canvas, previewCanvas: Canvas) {
         super(workingCanvas, previewCanvas);
+        this.firstPoint = null;
+        this.secondPoint = null;
+
+        // Add the event handlers to the event manager
         this.eventHandlers.push({
             eventTypes: ["mousedown"],
                 selector: "canvas",
             callback: (event) => this.onMouseDown(<MouseEvent> event)
 
         });
-        this.first_point = null;
-        this.second_point = null;
+        this.eventHandlers.push({
+            eventTypes: ["mouseup"],
+            selector: "canvas",
+            callback: (event) => this.onMouseUp(<MouseEvent> event)
+
+        });
+        this.eventHandlers.push({
+            eventTypes: ["mousemove"],
+            selector: "canvas",
+            callback: (event) => this.onMouseMove(<MouseEvent> event)
+
+        });
+    }
+
+
+    /**
+     * Apply the operation to the given canvas
+     *
+     * @param image         The image where the ellipse is drawn
+     * @param parameters    The parameters used to draw the ellipse (the color, the thickness)
+     */
+    apply(image: Canvas, parameters: DrawingParameters) {
+        EllipseTool.drawEllipse(image, this.firstPoint, this.secondPoint);
     }
 
 
     /**
      * Apply the operation to the image
      *
-     * @param {Canvas} image                    The image where the ellipse is drawn
-     * @param {DrawingParameters} parameters    The parameters given by the user to draw the image
+     * @param image     The image where the ellipse is drawn
+     * @param point1    The first point defining the inscribed rectangle
+     * @param point2    The second point defininf the inscribed rectangle
      *
      * @author Mathieu Fehr
      * // TODO add thickness support
      */
-    apply(image: Canvas, parameters: DrawingParameters) {
+    static drawEllipse(image: Canvas, point1: Point, point2: Point) {
         // Check if the rectangle is defined
-        if(this.first_point === null || this.second_point === null) {
+        if(point1 === null || point2 === null) {
             return;
         }
 
         // Get the rectangle corners
-        let min_x = Math.min(this.first_point.x, this.second_point.x);
-        let min_y = Math.min(this.first_point.y, this.second_point.y);
-        let max_x = Math.max(this.first_point.x, this.second_point.x);
-        let max_y = Math.max(this.first_point.y, this.second_point.y);
+        let min_x = Math.min(point1.x, point2.x);
+        let min_y = Math.min(point1.y, point2.y);
+        let max_x = Math.max(point1.x, point2.x);
+        let max_y = Math.max(point1.y, point2.y);
 
         // The ellipse is defined as (x/a)^2 + (y/b)^2 = 1
         let a = (max_x - min_x)/2;
