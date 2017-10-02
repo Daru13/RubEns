@@ -1,13 +1,17 @@
 import { ImageFormat } from "./ImageFormat"
+import { Point } from "../utils/Point";
 
 export class Canvas {
     // Related canvas and its context
     private canvas          = null;
     private canvas2DContext = null;
 
+    private canvasBoundingRect: ClientRect;
+
     constructor (canvas) {
         this.canvas          = canvas;
         this.canvas2DContext = canvas.getContext("2d");
+        this.canvasBoundingRect = this.canvas.getBoundingClientRect();
     }
 
     getImageData () {
@@ -56,5 +60,24 @@ export class Canvas {
      */
     importImage(image : HTMLImageElement) {
         this.canvas2DContext.drawImage(image,0,0);
+    }
+
+
+    private normalizeCoordinatesForCanvas (coordinates: Point) {
+        let boundingRect = this.canvasBoundingRect;
+
+        coordinates.x *= (boundingRect.right  - boundingRect.left) / this.canvas.width;
+        coordinates.y *= (boundingRect.bottom - boundingRect.top)  / this.canvas.height;
+
+        return coordinates;
+    }
+
+    getMouseEventCoordinates (event: MouseEvent) {
+        let boundingRect = this.canvasBoundingRect;
+
+        let mouseX = (event.clientX - boundingRect.left);
+        let mouseY = (event.clientY - boundingRect.top);
+
+        return this.normalizeCoordinatesForCanvas(new Point(mouseX, mouseY));
     }
 }

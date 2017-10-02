@@ -31,12 +31,13 @@ export class EllipseTool extends DrawingTool {
 
 
     onMouseDown(event: MouseEvent) {
-        if(this.first_point === null) {
-            this.first_point = new Point(event.clientX, event.clientY);
-        } else if(this.second_point === null) {
-            this.second_point = new Point(event.clientX, event.clientY);
-            this.apply(this.workingCanvas, null);
+        let pointClicked = this.workingCanvas.getMouseEventCoordinates(event);
 
+        if(this.first_point === null) {
+            this.first_point = pointClicked;
+        } else if(this.second_point === null) {
+            this.second_point = pointClicked;
+            this.apply(this.workingCanvas, null);
             this.first_point = null;
             this.second_point = null;
         }
