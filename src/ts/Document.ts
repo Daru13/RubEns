@@ -7,12 +7,10 @@ import { EllipseTool } from "./DrawingTools/EllipseTool";
 import { EventManager } from "./UI/EventManager";
 
 export class Document {
-    // Single image per document
-    // TODO: handle multiple images/layers?
-    image: Canvas;
+    drawingCanvas: Canvas;
+    workingCanvas: Canvas;
 
-    readonly parameters: DocumentParameters;
-
+    parameters: DocumentParameters;
     globalDrawingParameters: DrawingParameters;
 
     currentDrawingTool: DrawingTool;
@@ -20,18 +18,23 @@ export class Document {
     //TODO: maybe remove this from this class
     eventManager: EventManager;
 
-    constructor (parameters: DocumentParameters, eventManager: EventManager, image?: Canvas) {
+    constructor (parameters: DocumentParameters, eventManager: EventManager) {
+        this.parameters   = parameters;
         this.eventManager = eventManager;
-        this.currentDrawingTool = new EllipseTool(image,null);
+
+        // Create fresh canvases
+        this.drawingCanvas = new Canvas(document.getElementById("drawing_canvas"));
+        this.workingCanvas = new Canvas(document.getElementById("working_canvas"));
+
+        // Set a tool
+        // TODO: handle tool management
+        this.currentDrawingTool = new EllipseTool(this.drawingCanvas, this.workingCanvas);
         this.currentDrawingTool.registerEvents(this.eventManager);
-        this.parameters = parameters;
-        this.image      = image;
     }
 
-    // TODO: handle multiples images?
-    createImage (canvas) {
-        this.image = new Canvas(canvas);
-        this.currentDrawingTool.drawingCanvas = this.image;
+    createCanvases (canvas) {
+        this.drawingCanvas = new Canvas(canvas);
+        this.currentDrawingTool.drawingCanvas = this.drawingCanvas;
     }
 
     /**
@@ -40,7 +43,7 @@ export class Document {
      * @author Mathieu Fehr
      */
     exportImage () {
-        this.image.exportImage(ImageFormat.png,this.parameters.title);
+        this.drawingCanvas.exportImage(ImageFormat.png,this.parameters.title);
     }
 
 
@@ -100,7 +103,7 @@ export class Document {
                 // TODO change interface when image size is not the same
                 self.parameters.height = img.height;
                 self.parameters.width = img.width;
-                self.image.importImage(img);
+                self.drawingCanvas.importImage(img);
                 onCopyEnd();
             });
             img.src = reader.result;

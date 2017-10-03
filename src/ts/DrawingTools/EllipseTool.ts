@@ -38,7 +38,7 @@ export class EllipseTool extends DrawingTool {
      * @author Mathieu Fehr
      */
     onMouseDown(event: MouseEvent) {
-        this.firstPoint = this.drawingCanvas.getMouseEventCoordinates(event);
+        this.firstPoint = this.workingCanvas.getMouseEventCoordinates(event);
         this.firstPoint.x = Math.floor(this.firstPoint.x);
         this.firstPoint.y = Math.floor(this.firstPoint.y);
     }
@@ -52,7 +52,7 @@ export class EllipseTool extends DrawingTool {
      * @author Mathieu Fehr
      */
     onMouseUp(event: MouseEvent) {
-        this.secondPoint = this.drawingCanvas.getMouseEventCoordinates(event);
+        this.secondPoint = this.workingCanvas.getMouseEventCoordinates(event);
         this.secondPoint.x = Math.floor(this.secondPoint.x);
         this.secondPoint.y = Math.floor(this.secondPoint.y);
         this.apply(this.drawingCanvas, null);
@@ -72,10 +72,11 @@ export class EllipseTool extends DrawingTool {
         if(this.firstPoint === null) {
             return;
         }
-        this.secondPoint = this.drawingCanvas.getMouseEventCoordinates(event);
+        this.secondPoint = this.workingCanvas.getMouseEventCoordinates(event);
         this.secondPoint.x = Math.floor(this.secondPoint.x);
         this.secondPoint.y = Math.floor(this.secondPoint.y);
-        this.apply(this.drawingCanvas, null);
+        this.workingCanvas.clear();
+        this.apply(this.workingCanvas, null);
     }
 
     /**
