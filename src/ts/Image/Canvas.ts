@@ -14,16 +14,33 @@ export class Canvas {
         this.canvasBoundingRect = this.canvas.getBoundingClientRect();
     }
 
+    /**
+     * Get the pixel matrix of the related HTML canvas as an ImageData object.
+     * @return image current canvas data.
+     *
+     * @author Camille Gobert
+     */
     getImageData () {
         return this.canvas2DContext.getImageData(0, 0, this.canvas.width, this.canvas.height);
     }
 
+    /**
+     * Set the pixel matrix of the related HTML canvas from an ImageData object.
+     * @param data  new canvas data.
+     *
+     * @author Camille Gobert
+     */
     setImageData (data: ImageData) {
         this.canvas2DContext.putImageData(data, 0, 0);
     }
 
-    resize () {
-
+    /**
+     * Clear the canvas by setting all the RGBA pixels to (0, 0, 0, 0).
+     *
+     * @author Camille Gobert
+     */
+    clear () {
+        this.canvas2DContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
     /**
