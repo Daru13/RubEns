@@ -27,10 +27,10 @@ export abstract class DrawingTool {
     /**
      * Basic constructor
      */
-    constructor(workingCanvas: Canvas, previewCanvas: Canvas) {
+    constructor (drawingCanvas: Canvas, workingCanvas: Canvas) {
         this.eventHandlers = [];
-        this.drawingCanvas = workingCanvas;
-        this.workingCanvas = previewCanvas;
+        this.drawingCanvas = drawingCanvas;
+        this.workingCanvas = workingCanvas;
     }
 
 
