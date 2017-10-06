@@ -60,6 +60,7 @@ export class EllipseTool extends DrawingTool {
         this.secondPoint.x = Math.floor(this.secondPoint.x);
         this.secondPoint.y = Math.floor(this.secondPoint.y);
         this.apply(this.drawingCanvas, null);
+        this.workingCanvas.clear();
         this.firstPoint = null;
         this.secondPoint = null;
     }
