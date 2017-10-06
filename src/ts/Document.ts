@@ -4,7 +4,10 @@ import { ImageFormat } from "./Image/ImageFormat";
 import { DrawingParameters } from "./DrawingTools/DrawingParameters";
 import { DrawingTool } from "./DrawingTools/DrawingTool";
 import { EllipseTool } from "./DrawingTools/EllipseTool";
+import { LineTool } from "./DrawingTools/LineTools"
 import { EventManager } from "./UI/EventManager";
+import { EllipseTool } from "./EllipseTool"
+
 
 export class Document {
     drawingCanvas: Canvas;
@@ -28,7 +31,8 @@ export class Document {
 
         // Set a tool
         // TODO: handle tool management
-        this.currentDrawingTool = new EllipseTool(this.drawingCanvas, this.workingCanvas);
+        //this.currentDrawingTool = new EllipseTool(this.drawingCanvas, this.workingCanvas);
+        this.currentDrawingTool = new LineTool(this.drawingCanvas, this.workingCanvas);
         this.currentDrawingTool.registerEvents(this.eventManager);
     }
 
