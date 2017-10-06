@@ -4,14 +4,15 @@ export class HTMLRenderer {
     protected parentNode: JQuery;
 
     protected rootNode: JQuery;
-    protected rootNodeId = "html_renderer";
+    protected rootNodeType = "div";
+    protected rootNodeId   = "html_renderer";
 
     constructor (parentNode: JQuery) {
         this.parentNode = parentNode;
     }
 
     createRootNode () {
-        this.rootNode = $("<div>");
+        this.rootNode = $("<" + this.rootNodeType + ">");
         this.rootNode.attr("id", this.rootNodeId);
 
         this.parentNode.append(this.rootNode);
