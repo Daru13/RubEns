@@ -85,19 +85,6 @@ export class EllipseTool extends DrawingTool {
 
 
     /**
-     * The action made when the user's mouse exit the canvas
-     *
-     * @param event The event triggering this function
-     *
-     * @author Mathieu Fehr
-     */
-    onMouseOut(event: MouseEvent) {
-        this.firstPoint = null;
-        this.secondPoint = null;
-    }
-
-
-    /**
      * Basic constructor
      *
      * @param workingCanvas The current working canvas
@@ -129,20 +116,15 @@ export class EllipseTool extends DrawingTool {
         });
         this.eventHandlers.push({
             eventTypes: ["mouseup"],
-            selector: "canvas",
+            selector: "body",
             callback: (event) => this.onMouseUp(<MouseEvent> event)
 
         });
         this.eventHandlers.push({
             eventTypes: ["mousemove"],
-            selector: "canvas",
+            selector: "body",
             callback: (event) => this.onMouseMove(<MouseEvent> event)
 
-        });
-        this.eventHandlers.push({
-            eventTypes: ["mouseout"],
-            selector: "canvas",
-            callback: (event) => this.onMouseOut(<MouseEvent> event)
         });
     }
 
@@ -179,19 +161,7 @@ export class EllipseTool extends DrawingTool {
         let imageDataWidth = imageData.width;
         let imageDataHeight = imageData.height;
 
-        // Check if the points are in the canvas
-        point1.x = Math.max(point1.x,0);
-        point1.y = Math.max(point1.y,0);
-        point2.x = Math.max(point2.x,0);
-        point2.y = Math.max(point2.y,0);
-
-        point1.x = Math.min(point1.x,imageDataWidth);
-        point1.y = Math.min(point1.y,imageDataHeight);
-        point2.x = Math.min(point2.x,imageDataWidth);
-        point2.y = Math.min(point2.y,imageDataHeight);
-
-
-        // Get the rectangle corners
+        // Get the circumscribed rectangle corners
         let min_x = Math.min(point1.x, point2.x);
         let min_y = Math.min(point1.y, point2.y);
         let max_x = Math.max(point1.x, point2.x);
@@ -206,9 +176,15 @@ export class EllipseTool extends DrawingTool {
         let color_g = Math.random() * 255;
         let color_b = Math.random() * 255;
 
+        // The ellipse will be contained
+        let drawing_min_x = Math.max(0,min_x);
+        let drawing_min_y = Math.max(0,min_y);
+        let drawing_max_x = Math.min(imageDataWidth-1,max_x);
+        let drawing_max_y = Math.min(imageDataHeight-1,max_y);
+
         // Draw the ellipse by checking every cell in the inscribed rectangle
-        for(let i = min_x; i <= max_x; i++) {
-            for(let j = min_y; j <= max_y; j++) {
+        for(let i = drawing_min_x; i <= drawing_max_x; i++) {
+            for(let j = drawing_min_y; j <= drawing_max_y; j++) {
                 let x = (i-min_x-a);
                 let y = (j-min_y-b);
                 if((x/a)**2 + (y/b)**2 < 1) {
