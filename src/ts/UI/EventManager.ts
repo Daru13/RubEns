@@ -12,7 +12,9 @@ export class EventManager {
         "click",
         "mousemove",
         "mousedown",
-        "mouseup"
+        "mouseup",
+        "mouseout",
+        "mousein"
     ];
 
     private registeredHandlers: Array<EventHandler>;
