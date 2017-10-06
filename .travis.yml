@@ -21,7 +21,17 @@
   "dist": "precise",
   "os": "linux",
 
-  notifications: {
-    email: false
+  "notifications": {
+    "email": false
   }
+
+  "deploy": {
+      "provider": "pages",
+      "skip_cleanup": true,
+      "local_dir": "/rubens",
+      "github_token": $GITHUB_TOKEN,
+      "on": {
+        "branch": master
+        }
+    }
 }
