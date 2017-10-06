@@ -6,6 +6,8 @@ import { DrawingTool } from "./DrawingTools/DrawingTool";
 import { EllipseTool } from "./DrawingTools/EllipseTool";
 import { LineTool } from "./DrawingTools/LineTools"
 import { EventManager } from "./UI/EventManager";
+import { EllipseTool } from "./EllipseTool"
+
 
 export class Document {
     drawingCanvas: Canvas;
