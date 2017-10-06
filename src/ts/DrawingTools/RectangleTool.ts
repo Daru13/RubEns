@@ -3,20 +3,18 @@ import { Canvas } from "../Image/Canvas";
 import { DrawingParameters } from "./DrawingParameters";
 import { Point } from "../utils/Point";
 
-
 /**
- * Tool used to draw ellipses.
+ * Tool used to draw rectangles.
  *
- * The user select two points, the first one being declared when the mouse button is clicked,
- * and the second one being declared when the mouse button is released.
- * The two points defines a rectangle, and the ellipse drawn is the circumscribed ellipse.
+ * The user select two points, and the rectangle drawn is the rectangle having the two points as corners.
  */
-export class EllipseTool extends DrawingTool {
+export class RectangleTool extends DrawingTool {
 
     /**
      * The first point defining the rectangle
      */
     private firstPoint: Point;
+
 
     /**
      * The second point defining the rectangle
@@ -78,7 +76,6 @@ export class EllipseTool extends DrawingTool {
         this.apply(this.workingCanvas, null);
     }
 
-
     /**
      * Basic constructor
      *
@@ -94,7 +91,6 @@ export class EllipseTool extends DrawingTool {
 
         this.initEventHandlers();
     }
-
 
     /**
      * Setup the event handlers
@@ -123,7 +119,6 @@ export class EllipseTool extends DrawingTool {
         });
     }
 
-
     /**
      * Apply the operation to the given canvas
      *
@@ -141,15 +136,11 @@ export class EllipseTool extends DrawingTool {
         let imageDataWidth = imageData.width;
         let imageDataHeight = imageData.height;
 
-        // Get the circumscribed rectangle corners
+        // Get the rectangle corners
         let min_x = Math.min(this.firstPoint.x, this.secondPoint.x);
         let min_y = Math.min(this.firstPoint.y, this.secondPoint.y);
         let max_x = Math.max(this.firstPoint.x, this.secondPoint.x);
         let max_y = Math.max(this.firstPoint.y, this.secondPoint.y);
-
-        // The ellipse is defined as (x/a)^2 + (y/b)^2 = 1
-        let a = (max_x - min_x)/2;
-        let b = (max_y - min_y)/2;
 
         // The color is currently random
         let color_r = Math.random() * 255;
@@ -165,18 +156,13 @@ export class EllipseTool extends DrawingTool {
         // Draw the ellipse by checking every cell in the inscribed rectangle
         for(let i = drawing_min_x; i <= drawing_max_x; i++) {
             for(let j = drawing_min_y; j <= drawing_max_y; j++) {
-                let x = (i-min_x-a);
-                let y = (j-min_y-b);
-                if((x/a)**2 + (y/b)**2 < 1) {
-                    imageData.data[4 * (i + j * imageDataWidth)] = color_r;
-                    imageData.data[4 * (i + j * imageDataWidth) + 1] = color_g;
-                    imageData.data[4 * (i + j * imageDataWidth) + 2] = color_b;
-                    imageData.data[4 * (i + j * imageDataWidth) + 3] = 255;
-                }
+                imageData.data[4 * (i + j * imageDataWidth)] = color_r;
+                imageData.data[4 * (i + j * imageDataWidth) + 1] = color_g;
+                imageData.data[4 * (i + j * imageDataWidth) + 2] = color_b;
+                imageData.data[4 * (i + j * imageDataWidth) + 3] = 255;
             }
         }
 
         image.setImageData(imageData);
     }
-
 }
