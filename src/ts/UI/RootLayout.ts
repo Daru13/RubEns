@@ -4,6 +4,7 @@ import { DrawingDisplay } from "./DrawingDisplay";
 import { Sidebar } from "./Sidebar";
 import { StatusBar } from "./StatusBar";
 import { HTMLRenderer } from "./HTMLRenderer";
+import { Document } from "../Document";
 
 /**
  * This class represents the root of the UI, which instanciates and communicate
@@ -11,10 +12,10 @@ import { HTMLRenderer } from "./HTMLRenderer";
  */
 export class RootLayout extends HTMLRenderer {
     // Sub-modules of the UI
-    private mainMenu: MainMenu;
-    private drawingDisplay: DrawingDisplay;
-    private sidebar: Sidebar;
-    private statusBar: StatusBar;
+    mainMenu: MainMenu;
+    drawingDisplay: DrawingDisplay;
+    sidebar: Sidebar;
+    statusBar: StatusBar;
 
     protected rootNodeId = "root_layout";
 
@@ -24,11 +25,11 @@ export class RootLayout extends HTMLRenderer {
      *
      * @author Camille Gobert
      */
-    constructor (parentNode: JQuery) {
+    constructor (parentNode: JQuery, document: Document) {
         super(parentNode);
         this.createRootNode();
 
-        this.mainMenu       = new MainMenu(this.rootNode);
+        this.mainMenu       = new MainMenu(this.rootNode, document);
         this.drawingDisplay = new DrawingDisplay(this.rootNode);
         this.sidebar        = new Sidebar(this.rootNode);
         this.statusBar      = new StatusBar(this.rootNode);

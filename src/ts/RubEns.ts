@@ -5,6 +5,10 @@ import { EventManager } from "./UI/EventManager";
 import { SupportChecker } from "./SupportChecker";
 import { RootLayout } from "./UI/RootLayout";
 
+import { LineTool } from "./DrawingTools/LineTool";
+import { EllipseTool } from "./DrawingTools/EllipseTool";
+
+
 export class RubEns {
     static version: string = "0.1";
 
@@ -29,9 +33,6 @@ export class RubEns {
         this.eventManager = new EventManager();
         this.eventManager.startListening();
 
-        // Initiate the UI
-        this.rootLayout = new RootLayout($("body"));
-
         // Debug tests
         this.eventManager.registerEventHandler({
             eventTypes: ["click"],
@@ -49,6 +50,15 @@ export class RubEns {
         if (parameters.createDocumentOnStartup) {
             this.createDocument(new DocumentParameters());
         }
+
+        // Initiate the UI
+        // TODO: do it in a much better way!
+        this.rootLayout = new RootLayout($("body"), this.document);
+        this.rootLayout.mainMenu.toolSelectionMenu.setTools({
+            "LineTool": new LineTool(this.document.drawingCanvas, this.document.workingCanvas),
+            "EllipseTool": new EllipseTool(this.document.drawingCanvas, this.document.workingCanvas)
+        })
+
     }
 
     createDocument (parameters: DocumentParameters) {

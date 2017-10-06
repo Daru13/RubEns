@@ -13,7 +13,7 @@ export class Document {
     parameters: DocumentParameters;
     globalDrawingParameters: DrawingParameters;
 
-    currentDrawingTool: DrawingTool;
+    private currentDrawingTool: DrawingTool;
 
     //TODO: maybe remove this from this class
     eventManager: EventManager;
@@ -28,8 +28,7 @@ export class Document {
 
         // Set a tool
         // TODO: handle tool management
-        this.currentDrawingTool = new EllipseTool(this.drawingCanvas, this.workingCanvas);
-        this.currentDrawingTool.registerEvents(this.eventManager);
+        // this.currentDrawingTool = new EllipseTool(this.drawingCanvas, this.workingCanvas);
     }
 
     createCanvases (canvas) {
@@ -110,5 +109,18 @@ export class Document {
         });
 
         reader.readAsDataURL(file);
+    }
+
+    /**
+     * Updates the current drawing tool and the related event handlers.
+     * @param tool  The new drawing tool.
+     *
+     * @author Camille Gobert
+     */
+    setCurrentDrawingTool (tool: DrawingTool) {
+        this.currentDrawingTool.unregisterEvents(this.eventManager);
+
+        this.currentDrawingTool = tool;
+        tool.registerEvents(this.eventManager);
     }
 }
