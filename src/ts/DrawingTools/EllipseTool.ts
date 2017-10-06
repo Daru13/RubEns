@@ -2,7 +2,6 @@ import { DrawingTool } from "./DrawingTool";
 import { Canvas } from "../Image/Canvas";
 import { DrawingParameters } from "./DrawingParameters";
 import { Point } from "../utils/Point";
-import { EventHandler } from "../UI/EventHandler";
 
 
 /**
@@ -13,11 +12,6 @@ import { EventHandler } from "../UI/EventHandler";
  * The two points defines a rectangle, and the ellipse drawn is the circumscribed ellipse.
  */
 export class EllipseTool extends DrawingTool {
-
-    /**
-     * The list of event handlers.
-     */
-    protected eventHandlers: EventHandler[];
 
     /**
      * The first point defining the rectangle
@@ -137,23 +131,8 @@ export class EllipseTool extends DrawingTool {
      * @param parameters    The parameters used to draw the ellipse (the color, the thickness)
      */
     apply(image: Canvas, parameters: DrawingParameters) {
-        EllipseTool.drawEllipse(image, this.firstPoint, this.secondPoint);
-    }
-
-
-    /**
-     * Apply the operation to the image
-     *
-     * @param image     The image where the ellipse is drawn
-     * @param point1    The first point defining the inscribed rectangle
-     * @param point2    The second point defining the inscribed rectangle
-     *
-     * @author Mathieu Fehr
-     * // TODO add thickness support
-     */
-    static drawEllipse(image: Canvas, point1: Point, point2: Point) {
         // Check if the rectangle is defined
-        if(point1 === null || point2 === null) {
+        if(this.firstPoint === null || this.secondPoint === null) {
             return;
         }
 
@@ -163,10 +142,10 @@ export class EllipseTool extends DrawingTool {
         let imageDataHeight = imageData.height;
 
         // Get the circumscribed rectangle corners
-        let min_x = Math.min(point1.x, point2.x);
-        let min_y = Math.min(point1.y, point2.y);
-        let max_x = Math.max(point1.x, point2.x);
-        let max_y = Math.max(point1.y, point2.y);
+        let min_x = Math.min(this.firstPoint.x, this.secondPoint.x);
+        let min_y = Math.min(this.firstPoint.y, this.secondPoint.y);
+        let max_x = Math.max(this.firstPoint.x, this.secondPoint.x);
+        let max_y = Math.max(this.firstPoint.y, this.secondPoint.y);
 
         // The ellipse is defined as (x/a)^2 + (y/b)^2 = 1
         let a = (max_x - min_x)/2;
