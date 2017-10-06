@@ -145,7 +145,7 @@ export class EllipseTool extends DrawingTool {
      *
      * @param image     The image where the ellipse is drawn
      * @param point1    The first point defining the inscribed rectangle
-     * @param point2    The second point defininf the inscribed rectangle
+     * @param point2    The second point defining the inscribed rectangle
      *
      * @author Mathieu Fehr
      * // TODO add thickness support
