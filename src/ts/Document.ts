@@ -3,10 +3,8 @@ import { DocumentParameters } from "./DocumentParameters";
 import { ImageFormat } from "./Image/ImageFormat";
 import { DrawingParameters } from "./DrawingTools/DrawingParameters";
 import { DrawingTool } from "./DrawingTools/DrawingTool";
-import { EllipseTool } from "./DrawingTools/EllipseTool";
 import { LineTool } from "./DrawingTools/LineTools"
 import { EventManager } from "./UI/EventManager";
-import { EllipseTool } from "./EllipseTool"
 
 
 export class Document {
