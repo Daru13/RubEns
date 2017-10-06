@@ -1,7 +1,7 @@
 .PHONY: build doc clean test
 
 # General build
-all: build doc
+all: build
 
 # Build the application
 build:
