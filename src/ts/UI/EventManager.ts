@@ -10,7 +10,9 @@ export class EventManager {
     // All events which should be handled by this manager must be listed here!
     static handledEvents: Array<string> = [
         "click",
-        "mousemove"
+        "mousemove",
+        "mousedown",
+        "mouseup"
     ];
 
     private registeredHandlers: Array<EventHandler>;

@@ -1,25 +1,46 @@
 import { ImageFormat } from "./ImageFormat"
+import { Point } from "../utils/Point";
 
 export class Canvas {
     // Related canvas and its context
     private canvas          = null;
     private canvas2DContext = null;
 
+    private canvasBoundingRect: ClientRect;
+
     constructor (canvas) {
         this.canvas          = canvas;
         this.canvas2DContext = canvas.getContext("2d");
+        this.canvasBoundingRect = this.canvas.getBoundingClientRect();
     }
 
+    /**
+     * Get the pixel matrix of the related HTML canvas as an ImageData object.
+     * @return image current canvas data.
+     *
+     * @author Camille Gobert
+     */
     getImageData () {
         return this.canvas2DContext.getImageData(0, 0, this.canvas.width, this.canvas.height);
     }
 
+    /**
+     * Set the pixel matrix of the related HTML canvas from an ImageData object.
+     * @param data  new canvas data.
+     *
+     * @author Camille Gobert
+     */
     setImageData (data: ImageData) {
         this.canvas2DContext.putImageData(data, 0, 0);
     }
 
-    resize () {
-
+    /**
+     * Clear the canvas by setting all the RGBA pixels to (0, 0, 0, 0).
+     *
+     * @author Camille Gobert
+     */
+    clear () {
+        this.canvas2DContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
     /**
@@ -56,5 +77,24 @@ export class Canvas {
      */
     importImage(image : HTMLImageElement) {
         this.canvas2DContext.drawImage(image,0,0);
+    }
+
+
+    private normalizeCoordinatesForCanvas (coordinates: Point) {
+        let boundingRect = this.canvasBoundingRect;
+
+        coordinates.x *= (boundingRect.right  - boundingRect.left) / this.canvas.width;
+        coordinates.y *= (boundingRect.bottom - boundingRect.top)  / this.canvas.height;
+
+        return coordinates;
+    }
+
+    getMouseEventCoordinates (event: MouseEvent) {
+        let boundingRect = this.canvasBoundingRect;
+
+        let mouseX = (event.clientX - boundingRect.left);
+        let mouseY = (event.clientY - boundingRect.top);
+
+        return this.normalizeCoordinatesForCanvas(new Point(mouseX, mouseY));
     }
 }

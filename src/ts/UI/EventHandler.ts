@@ -16,7 +16,7 @@ export interface EventHandlerCallback {
  */
 export interface EventHandler {
     // Array of types of events to handle.
-    eventTypes: Array<string>
+    eventTypes: Array<string>;
 
     // Selector in the jQuery format, to filter which events should be handled.
     // This selector will be applied to the root of the document.
@@ -26,7 +26,7 @@ export interface EventHandler {
     // It receives the event as a parameter.
     callback: EventHandlerCallback;
 
-    // Optionnal.
-    // If defined and set to true, ignore this hancler.
+    // Optional.
+    // If defined and set to true, ignore this handler.
     disabled?: boolean;
 }

@@ -1,6 +1,7 @@
 import { Canvas } from "../Image/Canvas";
 import { DrawingParameters } from "./DrawingParameters";
 import { DrawingTool } from "./DrawingTool"
+import { EventManager } from "../UI/EventManager";
 
 /**
  * @author : Josselin GIET
@@ -19,7 +20,11 @@ type Point = {
     y: number
 };
 
-export class DrawLine implements DrawingTool {
+export class DrawLine extends DrawingTool {
+
+    constructor(workingCanvas: Canvas, previewCanvas: Canvas) {
+        super(workingCanvas,previewCanvas);
+    }
 
     // this  function draws a line
 
