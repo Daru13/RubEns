@@ -52,6 +52,10 @@ export class EllipseTool extends DrawingTool {
      * @author Mathieu Fehr
      */
     onMouseUp(event: MouseEvent) {
+        if(this.firstPoint === null) {
+            return;
+        }
+
         this.secondPoint = this.workingCanvas.getMouseEventCoordinates(event);
         this.secondPoint.x = Math.floor(this.secondPoint.x);
         this.secondPoint.y = Math.floor(this.secondPoint.y);
@@ -62,7 +66,7 @@ export class EllipseTool extends DrawingTool {
 
 
     /**
-     * The action made when the user move the mouse button in the drawing canvas
+     * The action made when the user move the mouse in the drawing canvas
      *
      * @param event The event triggering this function
      *
@@ -79,6 +83,20 @@ export class EllipseTool extends DrawingTool {
         this.apply(this.workingCanvas, null);
     }
 
+
+    /**
+     * The action made when the user's mouse exit the canvas
+     *
+     * @param event The event triggering this function
+     *
+     * @author Mathieu Fehr
+     */
+    onMouseOut(event: MouseEvent) {
+        this.firstPoint = null;
+        this.secondPoint = null;
+    }
+
+
     /**
      * Basic constructor
      *
@@ -92,10 +110,20 @@ export class EllipseTool extends DrawingTool {
         this.firstPoint = null;
         this.secondPoint = null;
 
+        this.initEventHandlers();
+    }
+
+
+    /**
+     * Setup the event handlers
+     *
+     * @author Mathieu Fehr
+     */
+    initEventHandlers() {
         // Add the event handlers to the event manager
         this.eventHandlers.push({
             eventTypes: ["mousedown"],
-                selector: "canvas",
+            selector: "canvas",
             callback: (event) => this.onMouseDown(<MouseEvent> event)
 
         });
@@ -110,6 +138,11 @@ export class EllipseTool extends DrawingTool {
             selector: "canvas",
             callback: (event) => this.onMouseMove(<MouseEvent> event)
 
+        });
+        this.eventHandlers.push({
+            eventTypes: ["mouseout"],
+            selector: "canvas",
+            callback: (event) => this.onMouseOut(<MouseEvent> event)
         });
     }
 
@@ -141,6 +174,23 @@ export class EllipseTool extends DrawingTool {
             return;
         }
 
+        // The current image
+        let imageData = image.getImageData();
+        let imageDataWidth = imageData.width;
+        let imageDataHeight = imageData.height;
+
+        // Check if the points are in the canvas
+        point1.x = Math.max(point1.x,0);
+        point1.y = Math.max(point1.y,0);
+        point2.x = Math.max(point2.x,0);
+        point2.y = Math.max(point2.y,0);
+
+        point1.x = Math.min(point1.x,imageDataWidth);
+        point1.y = Math.min(point1.y,imageDataHeight);
+        point2.x = Math.min(point2.x,imageDataWidth);
+        point2.y = Math.min(point2.y,imageDataHeight);
+
+
         // Get the rectangle corners
         let min_x = Math.min(point1.x, point2.x);
         let min_y = Math.min(point1.y, point2.y);
@@ -150,10 +200,6 @@ export class EllipseTool extends DrawingTool {
         // The ellipse is defined as (x/a)^2 + (y/b)^2 = 1
         let a = (max_x - min_x)/2;
         let b = (max_y - min_y)/2;
-
-        // The current image
-        let imageData = image.getImageData();
-        let imageDataWidth = imageData.width;
 
         // The color is currently random
         let color_r = Math.random() * 255;
