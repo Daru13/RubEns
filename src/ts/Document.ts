@@ -23,9 +23,6 @@ export class Document {
         this.parameters   = parameters;
         this.eventManager = eventManager;
 
-        console.log(document.getElementById("drawing_canvas"));
-        console.log(document.getElementById("working_canvas"));
-
         // Create fresh canvases
         // this.createCanvases();
 
