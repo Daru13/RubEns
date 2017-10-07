@@ -14,7 +14,8 @@ export class EventManager {
         "mousedown",
         "mouseup",
         "mouseout",
-        "mousein"
+        "mousein",
+        "keypress"
     ];
 
     private registeredHandlers: Array<EventHandler>;

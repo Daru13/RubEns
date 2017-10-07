@@ -35,17 +35,20 @@ export class RubEns {
 
         // Debug tests
         this.eventManager.registerEventHandler({
-            eventTypes: ["click"],
-            selector: "canvas",
-            callback: (_) => console.log("Click event on canvas.")
-        });
+            eventTypes: ["keypress"],
+            selector: "html",
+            callback: (e) => {
+                e.preventDefault();
+                let ev = <KeyboardEvent> e;
 
-        this.eventManager.registerEventHandler({
-            eventTypes: ["mousemove"],
-            selector: "canvas",
-            callback: (_) => console.log("Move event on canvas.")
+                if (ev.ctrlKey && ev.key.toLowerCase() == "e") {
+                    this.document.exportImage();
+                }
+                if (ev.ctrlKey && ev.key.toLowerCase() == "i") {
+                    this.document.importImage();
+                }
+            }
         });
-
 
         if (parameters.createDocumentOnStartup) {
             this.createDocument(new DocumentParameters());
