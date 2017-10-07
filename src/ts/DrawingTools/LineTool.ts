@@ -6,8 +6,6 @@ import { Point } from "../utils/Point";
 import { EllipseTool } from "./EllipseTool";
 
 
-
-
 export class LineTool extends DrawingTool {
 
     /**
