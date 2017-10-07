@@ -3,7 +3,7 @@ import { DocumentParameters } from "./DocumentParameters";
 import { ImageFormat } from "./Image/ImageFormat";
 import { DrawingParameters } from "./DrawingTools/DrawingParameters";
 import { DrawingTool } from "./DrawingTools/DrawingTool";
-import { LineTool } from "./DrawingTools/LineTools"
+import { LineTool } from "./DrawingTools/LineTool"
 import { EventManager } from "./UI/EventManager";
 
 
@@ -23,9 +23,11 @@ export class Document {
         this.parameters   = parameters;
         this.eventManager = eventManager;
 
+        console.log(document.getElementById("drawing_canvas"));
+        console.log(document.getElementById("working_canvas"));
+
         // Create fresh canvases
-        this.drawingCanvas = new Canvas(document.getElementById("drawing_canvas"));
-        this.workingCanvas = new Canvas(document.getElementById("working_canvas"));
+        // this.createCanvases();
 
         // Set a tool
         // TODO: handle tool management
@@ -34,9 +36,9 @@ export class Document {
         this.currentDrawingTool.registerEvents(this.eventManager);
     }
 
-    createCanvases (canvas) {
-        this.drawingCanvas = new Canvas(canvas);
-        this.currentDrawingTool.drawingCanvas = this.drawingCanvas;
+    createCanvases () {
+        this.drawingCanvas = new Canvas(document.getElementById("drawing_canvas"));
+        this.workingCanvas = new Canvas(document.getElementById("working_canvas"));
     }
 
     /**

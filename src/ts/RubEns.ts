@@ -54,11 +54,13 @@ export class RubEns {
         // Initiate the UI
         // TODO: do it in a much better way!
         this.rootLayout = new RootLayout($("body"), this.document);
+
+        this.document.createCanvases();
+
         this.rootLayout.mainMenu.toolSelectionMenu.setTools({
             "LineTool": new LineTool(this.document.drawingCanvas, this.document.workingCanvas),
             "EllipseTool": new EllipseTool(this.document.drawingCanvas, this.document.workingCanvas)
         })
-
     }
 
     createDocument (parameters: DocumentParameters) {
