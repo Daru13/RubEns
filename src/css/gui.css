@@ -1,9 +1,23 @@
+/******************************************************************
+/* General properties and resets
+/*****************************************************************/
+
+/* Dimensions of all elements shall include padding and borders */
+* {
+    box-sizing: border-box;
+}
+
 #html, #body {
     width: 100%;
     height: 100%;
     margin: 0;
     width: 0;
 }
+
+
+/******************************************************************
+/* Root layout and blocks
+/*****************************************************************/
 
 #root_layout {
     width: 100%;
@@ -12,6 +26,7 @@
     width: 0;
 }
 
+/* Debug border for main blocks */
 #root_layout, #root_layout > * {
     border: 1px solid black;
 }
@@ -21,7 +36,7 @@
     right: 0;
     top: 80px;
     width: 400px;
-    height: 100%;
+    height: calc(100% - 40px - 80px);
     background-color: red;
     z-index: 100;
 }
@@ -56,6 +71,11 @@
     z-index: 40;
 }
 
+
+/******************************************************************
+/* Main canvases (drawing zone)
+/*****************************************************************/
+
 canvas {
     position: absolute;
     top: 50%;
@@ -74,4 +94,32 @@ canvas {
 #working_canvas {
     border: 1px dashed green;
     z-index: 60;
+}
+
+
+/******************************************************************
+/* Main menu
+/*****************************************************************/
+
+#tool_selection_menu {
+    padding: 0 0 0 20px;
+    margin: 0;
+    line-height: 80px;
+    vertical-align: middle;
+}
+
+#tool_selection_menu > li {
+    display: inline-block;
+    margin: 0 20px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+#tool_selection_menu > li:last-child {
+    margin: 0;
+}
+
+#tool_selection_menu .tool_button {
+    margin: 0;
+    padding: 5px;
 }
