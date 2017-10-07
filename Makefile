@@ -1,21 +1,20 @@
 .PHONY: build doc clean test
 
 # General build
-all: build
+all: build doc test
 
 # Build the application
 build:
 	@echo "Building the application..."
 	@mkdir -p build
-	@cp -r -u src/html src/css src/js build
-	@cp src/index.html build/index.html	
+	@cp -r -u src/css src/js src/index.html build
 	@tsc
 
 # Build the web documentation
 doc:
 	@echo "Building the documentation..."
-	@mkdir -p doc
-	@typedoc --out doc
+	@mkdir -p docs
+	@typedoc --logger "none" --out docs
 
 # Test the application, to find errors
 test:
@@ -24,4 +23,5 @@ test:
 
 # Clean files built from the sources
 clean:
-	rm -rf build/*
+	rm -rf build
+	rm -rf docs
