@@ -1,4 +1,5 @@
 import { Canvas } from "../Image/Canvas";
+import { Parameter } from "./ToolParameter";
 import { EventManager } from "../UI/EventManager";
 import { EventHandler } from "../UI/EventHandler";
 

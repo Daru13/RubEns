@@ -3,7 +3,6 @@ import { Canvas } from "../Image/Canvas";
 import { Point } from "../utils/Point";
 import { Ellipse } from "../DrawingPrimitives/Ellipse";
 
-
 /**
  * Tool used to draw ellipses.
  *
@@ -131,7 +130,7 @@ export class EllipseTool extends Tool {
      *
      * @author Mathieu Fehr
      */
-    drawEllipse(image: Canvas) {
+    drawEllipse(image: Canvas, parameters: object) {
         let imageData = image.getImageData();
         Ellipse.drawFromBoundingRect(this.firstPoint, this.secondPoint, imageData);
         image.setImageData(imageData);

@@ -1,5 +1,6 @@
 import { Tool } from "./Tool";
 import { Canvas } from "../Image/Canvas";
+import { Parameter } from "./ToolParameter";
 import { Point } from "../utils/Point";
 import { Rectangle } from "../DrawingPrimitives/Rectangle";
 

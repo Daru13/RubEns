@@ -1,7 +1,6 @@
 import { Canvas } from "./Image/Canvas";
 import { DocumentParameters } from "./DocumentParameters";
 import { ImageFormat } from "./Image/ImageFormat";
-import { DrawingParameters } from "./DrawingTools/DrawingParameters";
 import { Tool } from "./DrawingTools/Tool";
 import { LineTool } from "./DrawingTools/LineTool"
 import { EventManager } from "./UI/EventManager";
@@ -12,7 +11,6 @@ export class Document {
     workingCanvas: Canvas;
 
     parameters: DocumentParameters;
-    globalDrawingParameters: DrawingParameters;
 
     private currentDrawingTool: Tool;
 

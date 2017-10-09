@@ -1,5 +1,8 @@
 import { Canvas } from "../Image/Canvas";
 import { Tool } from "./Tool";
+import { Parameter } from "./ToolParameter";
+import { DrawingTool } from "./DrawingTool";
+import { EventManager } from "../UI/EventManager";
 import { Point } from "../utils/Point";
 import { Line } from "../DrawingPrimitives/Line";
 
