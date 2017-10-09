@@ -130,7 +130,7 @@ export class EllipseTool extends Tool {
      *
      * @author Mathieu Fehr
      */
-    drawEllipse(image: Canvas, parameters: object) {
+    drawEllipse(image: Canvas) {
         let imageData = image.getImageData();
         Ellipse.drawFromBoundingRect(this.firstPoint, this.secondPoint, imageData);
         image.setImageData(imageData);

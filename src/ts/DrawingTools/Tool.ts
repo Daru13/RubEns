@@ -1,5 +1,4 @@
 import { Canvas } from "../Image/Canvas";
-import { Parameter } from "./ToolParameter";
 import { EventManager } from "../UI/EventManager";
 import { EventHandler } from "../UI/EventHandler";
 
@@ -23,6 +22,11 @@ export abstract class Tool {
      * The canvas used to preview the operation
      */
     workingCanvas: Canvas;
+
+    /**
+     * Parameters used by the tools
+     */
+    toolParameter: object;
 
     /**
      * Basic constructor
