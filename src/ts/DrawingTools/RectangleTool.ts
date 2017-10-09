@@ -2,6 +2,7 @@ import { DrawingTool } from "./DrawingTool";
 import { Canvas } from "../Image/Canvas";
 import { DrawingParameters } from "./DrawingParameters";
 import { Point } from "../utils/Point";
+import { Rectangle } from "../DrawingPrimitives/Rectangle";
 
 /**
  * Tool used to draw rectangles.
@@ -126,42 +127,9 @@ export class RectangleTool extends DrawingTool {
      * @param parameters    The parameters used to draw the ellipse (the color, the thickness)
      */
     apply(image: Canvas, parameters: DrawingParameters) {
-        // Check if the rectangle is defined
-        if(this.firstPoint === null || this.secondPoint === null) {
-            return;
-        }
-
-        // The current image
         let imageData = image.getImageData();
-        let imageDataWidth = imageData.width;
-        let imageDataHeight = imageData.height;
 
-        // Get the rectangle corners
-        let min_x = Math.min(this.firstPoint.x, this.secondPoint.x);
-        let min_y = Math.min(this.firstPoint.y, this.secondPoint.y);
-        let max_x = Math.max(this.firstPoint.x, this.secondPoint.x);
-        let max_y = Math.max(this.firstPoint.y, this.secondPoint.y);
-
-        // The color is currently random
-        let color_r = Math.random() * 255;
-        let color_g = Math.random() * 255;
-        let color_b = Math.random() * 255;
-
-        // The ellipse will be contained
-        let drawing_min_x = Math.max(0,min_x);
-        let drawing_min_y = Math.max(0,min_y);
-        let drawing_max_x = Math.min(imageDataWidth-1,max_x);
-        let drawing_max_y = Math.min(imageDataHeight-1,max_y);
-
-        // Draw the ellipse by checking every cell in the inscribed rectangle
-        for(let i = drawing_min_x; i <= drawing_max_x; i++) {
-            for(let j = drawing_min_y; j <= drawing_max_y; j++) {
-                imageData.data[4 * (i + j * imageDataWidth)] = color_r;
-                imageData.data[4 * (i + j * imageDataWidth) + 1] = color_g;
-                imageData.data[4 * (i + j * imageDataWidth) + 2] = color_b;
-                imageData.data[4 * (i + j * imageDataWidth) + 3] = 255;
-            }
-        }
+        Rectangle.draw(this.firstPoint, this.secondPoint, imageData);
 
         image.setImageData(imageData);
     }

@@ -1,9 +1,7 @@
 import { Canvas } from "../Image/Canvas";
-import { DrawingParameters } from "./DrawingParameters";
 import { DrawingTool } from "./DrawingTool";
-import { EventManager } from "../UI/EventManager";
 import { Point } from "../utils/Point";
-import { EllipseTool } from "./EllipseTool";
+import { Line } from "../DrawingPrimitives/Line";
 
 
 export class LineTool extends DrawingTool {
@@ -119,73 +117,8 @@ export class LineTool extends DrawingTool {
     static draw (image: Canvas, from: Point, to: Point, thickness: number ){
         let imageData = image.getImageData();
 
-        /*
-         * This function plot a pixel in the current canvas (in draw).
-         * This function has to be replaced by a generic one.
-         * param pixel      the pixel to plot
-         * author Josselin GIET
-         */
-        function paintItBlack(pixel: Point) {
-            // The color is currently random
-            let color_r = 0; //Math.random() * 255;
-            let color_g = 0; //Math.random() * 255;
-            let color_b = 0; //Math.random() * 255;
+        Line.draw(imageData,from,to,thickness);
 
-            let coordonee1D : number = (pixel.y*imageData.width+pixel.x)*4;
-            imageData.data[coordonee1D] = color_r;
-            imageData.data[coordonee1D + 1] = color_g;
-            imageData.data[coordonee1D + 2] = color_b;
-            imageData.data[coordonee1D + 3] = 255;
-        }
-
-        let currentPixel: Point = new Point(from.x, from.y);
-        paintItBlack(currentPixel);
-        let dx: number = to.x - from.x;
-        let dy: number = to.y - from.y;
-        let xinc: number = 0;
-        let yinc: number = 0;
-
-        // First we compute in which "direction" x and y increase
-        // between from and to
-        if (dx > 0){
-            xinc = 1;
-        }
-        else{
-            xinc = -1;
-        }
-        if (dy > 0){
-            yinc = 1;
-        }
-        else{
-            yinc = -1;
-        }
-        dx = Math.abs(dx);
-        dy = Math.abs(dy);
-        paintItBlack(from);
-        if (Math.abs(dx) >= Math.abs(dy)) {
-            let cumul: number = dx/2;
-            for(let x = from.x; x != to.x; x += xinc ){
-                currentPixel.x += xinc;
-                cumul += dy;
-                if ( cumul >= dx ){
-                    cumul -= dx;
-                    currentPixel.y += yinc;
-                }
-                paintItBlack(currentPixel);
-            }
-        }
-        else{
-            let cumul: number = dy/2;
-            for(let y = from.y; y != to.y; y += yinc){
-                currentPixel.y += yinc;
-                cumul += dx;
-                if (cumul >= dy){
-                    cumul -= dy;
-                    currentPixel.x += xinc;
-                }
-                paintItBlack(currentPixel);
-            }
-        }
         image.setImageData(imageData);
     }
 }
