@@ -1,8 +1,7 @@
 import { DrawingTool } from "./DrawingTool";
 import { Canvas } from "../Image/Canvas";
-import { DrawingParameters } from "./DrawingParameters";
 import { Point } from "../utils/Point";
-
+import { Parameter } from "./ToolParameter";
 
 /**
  * Tool used to draw ellipses.
@@ -130,7 +129,7 @@ export class EllipseTool extends DrawingTool {
      * @param image         The image where the ellipse is drawn
      * @param parameters    The parameters used to draw the ellipse (the color, the thickness)
      */
-    apply(image: Canvas, parameters: DrawingParameters) {
+    apply(image: Canvas, parameters: object) {
         // Check if the rectangle is defined
         if(this.firstPoint === null || this.secondPoint === null) {
             return;

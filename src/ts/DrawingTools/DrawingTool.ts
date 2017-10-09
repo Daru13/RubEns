@@ -1,5 +1,5 @@
 import { Canvas } from "../Image/Canvas";
-import { DrawingParameters } from "./DrawingParameters";
+import { Parameter } from "./ToolParameter";
 import { EventManager } from "../UI/EventManager";
 import { EventHandler } from "../UI/EventHandler";
 
@@ -38,9 +38,9 @@ export abstract class DrawingTool {
      * Apply the operation to the given canvas.
      *
      * @param {Canvas} image                    The canvas where the operations are applied.
-     * @param {DrawingParameters} parameters    The parameters chosen by the user
+     * @param {ToolParameter} parameters    The parameters chosen by the user
      */
-    abstract apply(image: Canvas, parameters: DrawingParameters);
+    abstract apply(image: Canvas, parameters: object);
 
 
     /**

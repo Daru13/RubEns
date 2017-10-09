@@ -1,5 +1,5 @@
 import { Canvas } from "../Image/Canvas";
-import { DrawingParameters } from "./DrawingParameters";
+import { Parameter } from "./ToolParameter";
 import { DrawingTool } from "./DrawingTool";
 import { EventManager } from "../UI/EventManager";
 import { Point } from "../utils/Point";
@@ -100,7 +100,7 @@ export class LineTool extends DrawingTool {
     }
 
 
-    apply (image: Canvas, parameters: DrawingTool){
+    apply (image: Canvas, parameters: object){
         LineTool.draw(image,this.fromPoint,this.toPoint,1);
     }
 
