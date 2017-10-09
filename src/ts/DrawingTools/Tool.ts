@@ -1,5 +1,4 @@
 import { Canvas } from "../Image/Canvas";
-import { DrawingParameters } from "./DrawingParameters";
 import { EventManager } from "../UI/EventManager";
 import { EventHandler } from "../UI/EventHandler";
 
@@ -7,7 +6,7 @@ import { EventHandler } from "../UI/EventHandler";
 /**
  * A tool available to the user for drawing/modifying the image.
  */
-export abstract class DrawingTool {
+export abstract class Tool {
 
     /**
      * The list of event handlers.
@@ -32,15 +31,6 @@ export abstract class DrawingTool {
         this.drawingCanvas = drawingCanvas;
         this.workingCanvas = workingCanvas;
     }
-
-
-    /**
-     * Apply the operation to the given canvas.
-     *
-     * @param {Canvas} image                    The canvas where the operations are applied.
-     * @param {DrawingParameters} parameters    The parameters chosen by the user
-     */
-    abstract apply(image: Canvas, parameters: DrawingParameters);
 
 
     /**

@@ -1,10 +1,10 @@
 import { Canvas } from "../Image/Canvas";
-import { DrawingTool } from "./DrawingTool";
+import { Tool } from "./Tool";
 import { Point } from "../utils/Point";
 import { Line } from "../DrawingPrimitives/Line";
 
 
-export class LineTool extends DrawingTool {
+export class LineTool extends Tool {
 
     /**
      * The begining point of the segment
@@ -47,7 +47,7 @@ export class LineTool extends DrawingTool {
         this.toPoint = this.workingCanvas.getMouseEventCoordinates(event);
         this.toPoint.x = Math.floor(this.toPoint.x);
         this.toPoint.y = Math.floor(this.toPoint.y);
-        this.apply(this.drawingCanvas,null);
+        this.drawLine(this.drawingCanvas);
         this.fromPoint = null;
         this.toPoint = null;
     }
@@ -67,7 +67,7 @@ export class LineTool extends DrawingTool {
         this.toPoint.x = Math.floor(this.toPoint.x);
         this.toPoint.y = Math.floor(this.toPoint.y);
         this.workingCanvas.clear();
-        this.apply(this.workingCanvas, null);
+        this.drawLine(this.workingCanvas);
     }
 
     constructor(workingCanvas: Canvas, previewCanvas: Canvas) {
@@ -97,27 +97,18 @@ export class LineTool extends DrawingTool {
 
     }
 
-
-    apply (image: Canvas, parameters: DrawingTool){
-        LineTool.draw(image,this.fromPoint,this.toPoint,1);
-    }
-
-
     /**
      * This function draw a line between the pixel from and to.
      * It implements the algorithm of Bresenham
      * (cf. [[https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm]])
      *
      * @param image         the image where the line is drawn
-     * @param from          the starting point
-     * @param to            the ending point
-     * @param thickness     the thickness of the line
      * @author Josselin GIET
      */
-    static draw (image: Canvas, from: Point, to: Point, thickness: number ){
+    drawLine (image: Canvas){
         let imageData = image.getImageData();
 
-        Line.draw(imageData,from,to,thickness);
+        Line.draw(imageData, this.fromPoint, this.toPoint, 1);
 
         image.setImageData(imageData);
     }

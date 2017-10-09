@@ -1,6 +1,5 @@
-import { DrawingTool } from "./DrawingTool";
+import { Tool } from "./Tool";
 import { Canvas } from "../Image/Canvas";
-import { DrawingParameters } from "./DrawingParameters";
 import { Point } from "../utils/Point";
 import { Rectangle } from "../DrawingPrimitives/Rectangle";
 
@@ -9,7 +8,7 @@ import { Rectangle } from "../DrawingPrimitives/Rectangle";
  *
  * The user select two points, and the rectangle drawn is the rectangle having the two points as corners.
  */
-export class RectangleTool extends DrawingTool {
+export class RectangleTool extends Tool {
 
     /**
      * The first point defining the rectangle
@@ -52,7 +51,7 @@ export class RectangleTool extends DrawingTool {
         this.secondPoint = this.workingCanvas.getMouseEventCoordinates(event);
         this.secondPoint.x = Math.floor(this.secondPoint.x);
         this.secondPoint.y = Math.floor(this.secondPoint.y);
-        this.apply(this.drawingCanvas, null);
+        this.drawRectangle(this.drawingCanvas);
         this.workingCanvas.clear();
         this.firstPoint = null;
         this.secondPoint = null;
@@ -74,7 +73,7 @@ export class RectangleTool extends DrawingTool {
         this.secondPoint.x = Math.floor(this.secondPoint.x);
         this.secondPoint.y = Math.floor(this.secondPoint.y);
         this.workingCanvas.clear();
-        this.apply(this.workingCanvas, null);
+        this.drawRectangle(this.workingCanvas);
     }
 
     /**
@@ -124,9 +123,10 @@ export class RectangleTool extends DrawingTool {
      * Apply the operation to the given canvas
      *
      * @param image         The image where the ellipse is drawn
-     * @param parameters    The parameters used to draw the ellipse (the color, the thickness)
+     *
+     * @author Mathieu Fehr
      */
-    apply(image: Canvas, parameters: DrawingParameters) {
+    drawRectangle(image: Canvas) {
         let imageData = image.getImageData();
 
         Rectangle.draw(this.firstPoint, this.secondPoint, imageData);

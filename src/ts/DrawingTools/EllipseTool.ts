@@ -1,8 +1,7 @@
-import { DrawingTool } from "./DrawingTool";
+import { Tool } from "./Tool";
 import { Canvas } from "../Image/Canvas";
-import { DrawingParameters } from "./DrawingParameters";
 import { Point } from "../utils/Point";
-import {Ellipse} from "../DrawingPrimitives/Ellipse";
+import { Ellipse } from "../DrawingPrimitives/Ellipse";
 
 
 /**
@@ -12,7 +11,7 @@ import {Ellipse} from "../DrawingPrimitives/Ellipse";
  * and the second one being declared when the mouse button is released.
  * The two points defines a rectangle, and the ellipse drawn is the circumscribed ellipse.
  */
-export class EllipseTool extends DrawingTool {
+export class EllipseTool extends Tool {
 
     /**
      * The first point defining the rectangle
@@ -54,7 +53,7 @@ export class EllipseTool extends DrawingTool {
         this.secondPoint = this.workingCanvas.getMouseEventCoordinates(event);
         this.secondPoint.x = Math.floor(this.secondPoint.x);
         this.secondPoint.y = Math.floor(this.secondPoint.y);
-        this.apply(this.drawingCanvas, null);
+        this.drawEllipse(this.drawingCanvas);
         this.workingCanvas.clear();
         this.firstPoint = null;
         this.secondPoint = null;
@@ -76,7 +75,7 @@ export class EllipseTool extends DrawingTool {
         this.secondPoint.x = Math.floor(this.secondPoint.x);
         this.secondPoint.y = Math.floor(this.secondPoint.y);
         this.workingCanvas.clear();
-        this.apply(this.workingCanvas, null);
+        this.drawEllipse(this.workingCanvas);
     }
 
 
@@ -129,9 +128,10 @@ export class EllipseTool extends DrawingTool {
      * Apply the operation to the given canvas
      *
      * @param image         The image where the ellipse is drawn
-     * @param parameters    The parameters used to draw the ellipse (the color, the thickness)
+     *
+     * @author Mathieu Fehr
      */
-    apply(image: Canvas, parameters: DrawingParameters) {
+    drawEllipse(image: Canvas) {
         let imageData = image.getImageData();
         Ellipse.drawFromBoundingRect(this.firstPoint, this.secondPoint, imageData);
         image.setImageData(imageData);

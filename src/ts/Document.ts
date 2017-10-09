@@ -2,7 +2,7 @@ import { Canvas } from "./Image/Canvas";
 import { DocumentParameters } from "./DocumentParameters";
 import { ImageFormat } from "./Image/ImageFormat";
 import { DrawingParameters } from "./DrawingTools/DrawingParameters";
-import { DrawingTool } from "./DrawingTools/DrawingTool";
+import { Tool } from "./DrawingTools/Tool";
 import { LineTool } from "./DrawingTools/LineTool"
 import { EventManager } from "./UI/EventManager";
 
@@ -14,7 +14,7 @@ export class Document {
     parameters: DocumentParameters;
     globalDrawingParameters: DrawingParameters;
 
-    private currentDrawingTool: DrawingTool;
+    private currentDrawingTool: Tool;
 
     //TODO: maybe remove this from this class
     eventManager: EventManager;
@@ -119,7 +119,7 @@ export class Document {
      *
      * @author Camille Gobert
      */
-    setCurrentDrawingTool (tool: DrawingTool) {
+    setCurrentDrawingTool (tool: Tool) {
         this.currentDrawingTool.unregisterEvents(this.eventManager);
 
         this.currentDrawingTool = tool;

@@ -1,6 +1,6 @@
 import * as $ from "jquery";
 import { HTMLRenderer } from "./HTMLRenderer";
-import { DrawingTool } from "../DrawingTools/DrawingTool";
+import { Tool } from "../DrawingTools/Tool";
 import { Document } from "../Document";
 
 export class ToolSelectionMenu extends HTMLRenderer {
@@ -40,7 +40,7 @@ export class ToolSelectionMenu extends HTMLRenderer {
         this.updateRootNode();
     }
 
-    private static createToolNode (tool: DrawingTool) {
+    private static createToolNode (tool: Tool) {
         let toolName = tool.constructor.name;
         console.log("Node of tool" + toolName + " is created");
 
