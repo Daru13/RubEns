@@ -18,7 +18,11 @@ export class Line {
      * @author Josselin GIET
      */
     static draw(image: ImageData, from: Point, to: Point, thickness: number) {
+
         function paintItBlack(pixel: Point) {
+            if(pixel.x < 0 || pixel.x > image.width-1 || pixel.y < 0 || pixel.y > image.height-1) {
+                return;
+            }
             // The color is currently random
             let color_r = 0; //Math.random() * 255;
             let color_g = 0; //Math.random() * 255;
