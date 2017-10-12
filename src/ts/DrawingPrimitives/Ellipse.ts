@@ -17,7 +17,7 @@ export class Ellipse {
      * @author Mathieu Fehr
      */
     // TODO add parameters
-    static drawFromBoundingRect(firstPoint: Point, secondPoint: Point, image: ImageData) {
+    static drawFromBoundingRect(image: ImageData, firstPoint: Point, secondPoint: Point) {
 
         // Get the circumscribed rectangle upper-left and bottom-right corners
         let min_x = Math.min(firstPoint.x, secondPoint.x);
@@ -31,7 +31,7 @@ export class Ellipse {
         let height = max_y - min_y;
 
         // Draw the ellipse using these parameters
-        Ellipse.drawFromCenter(center, width, height, image);
+        Ellipse.drawFromCenter(image, center, width, height);
     }
 
 
@@ -45,14 +45,14 @@ export class Ellipse {
      *
      * @author Mathieu Fehr
      */
-    static drawFromCenter(center: Point, width: number, height: number, image: ImageData) {
+    static drawFromCenter(image: ImageData, center: Point, width: number, height: number) {
 
         // Compute the equation parameters
         let a = width/2;
         let b = height/2;
 
         // And draw the ellipse with the equation
-        Ellipse.drawFromEquation(center, a, b, image);
+        Ellipse.drawFromEquation(image, center, a, b);
     }
 
     /**
@@ -66,7 +66,7 @@ export class Ellipse {
      *
      * @author Mathieu Fehr
      */
-    static drawFromEquation(center: Point, a: number, b: number, image: ImageData) {
+    static drawFromEquation(image: ImageData, center: Point, a: number, b: number) {
 
         // The current image
         let imageWidth = image.width;

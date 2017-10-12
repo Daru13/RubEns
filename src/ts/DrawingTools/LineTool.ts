@@ -1,114 +1,41 @@
 import { Canvas } from "../Image/Canvas";
-import { Tool } from "./Tool";
 import { Point } from "../utils/Point";
 import { Line } from "../DrawingPrimitives/Line";
+import { SimpleShapeTool } from "./SimpleShapeTool";
 
-
-export class LineTool extends Tool {
-
-    /**
-     * The begining point of the segment
-     */
-    private toPoint : Point;
-
-    /**
-     * The ending point of the segment
-     */
-    private fromPoint : Point;
-
+/**
+ * Tool used to draw lines.
+ *
+ * The user selects two points, defining the line the user will draw.
+ */
+export class LineTool extends SimpleShapeTool {
 
     /**
-     * The action made when the user user click in the drawing canvas
+     * Basic constructor.
      *
-     * @param event The event triggering this function
+     * @param workingCanvas The current working canvas
+     * @param previewCanvas The current preview canvas
      *
-     * @author Josselin GIET
+     * @author Mathieu Fehr
      */
-    onMouseDown(event: MouseEvent){
-        if (this.fromPoint !== null){
-            return;
-        }
-        this.fromPoint = this.workingCanvas.getMouseEventCoordinates(event);
-        this.fromPoint.x = Math.floor(this.fromPoint.x);
-        this.fromPoint.y = Math.floor(this.fromPoint.y);
-    }
-
-    /**
-     * The action made when the user release the mouse button in the drawing canvas
-     *
-     * @param event The event triggering this function
-     *
-     * @author Josselin GIET
-     */
-    onMouseUp(event: MouseEvent){
-        if (this.fromPoint === null){
-            return;
-        }
-        this.toPoint = this.workingCanvas.getMouseEventCoordinates(event);
-        this.toPoint.x = Math.floor(this.toPoint.x);
-        this.toPoint.y = Math.floor(this.toPoint.y);
-        this.drawLine(this.drawingCanvas);
-        this.fromPoint = null;
-        this.toPoint = null;
-    }
-
-    /**
-     * The action made when the user move the mouse button in the drawing canvas
-     *
-     * @param event The event triggering this function
-     *
-     * @author Josselin GIET
-     */
-    onMouseMove(event: MouseEvent){
-        if(this.fromPoint === null){
-            return;
-        }
-        this.toPoint = this.workingCanvas.getMouseEventCoordinates(event);
-        this.toPoint.x = Math.floor(this.toPoint.x);
-        this.toPoint.y = Math.floor(this.toPoint.y);
-        this.workingCanvas.clear();
-        this.drawLine(this.workingCanvas);
-    }
-
     constructor(workingCanvas: Canvas, previewCanvas: Canvas) {
-        super(workingCanvas,previewCanvas);
-        this.toPoint = null;
-        this.fromPoint = null;
-
-        // Add the event handlers to the event manager
-        this.eventHandlers.push({
-            eventTypes: ["mousedown"],
-                selector: "canvas",
-            callback: (event) => this.onMouseDown(<MouseEvent> event)
-
-        });
-        this.eventHandlers.push({
-            eventTypes: ["mouseup"],
-            selector: "canvas",
-            callback: (event) => this.onMouseUp(<MouseEvent> event)
-
-        });
-        this.eventHandlers.push({
-            eventTypes: ["mousemove"],
-            selector: "canvas",
-            callback: (event) => this.onMouseMove(<MouseEvent> event)
-
-        });
-
+        super(workingCanvas, previewCanvas);
     }
 
+
     /**
-     * This function draw a line between the pixel from and to.
-     * It implements the algorithm of Bresenham
-     * (cf. [[https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm]])
+     * Draw a line in the given canvas.
      *
-     * @param image         the image where the line is drawn
-     * @author Josselin GIET
+     * @param image         The image where the shape is drawn
+     * @param firstPoint    The first point selected by the user
+     * @param secondPoint   The second point selected by the user
+     *
+     * @author Mathieu Fehr
      */
-    drawLine (image: Canvas){
+    drawShape(image: Canvas, firstPoint: Point, secondPoint: Point) {
         let imageData = image.getImageData();
 
-        Line.draw(imageData, this.fromPoint, this.toPoint, 1);
+        Line.draw(imageData, firstPoint, secondPoint, 1);
 
         image.setImageData(imageData);
     }
