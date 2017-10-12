@@ -7,7 +7,8 @@ import { RootLayout } from "./UI/RootLayout";
 
 import { LineTool } from "./DrawingTools/LineTool";
 import { EllipseTool } from "./DrawingTools/EllipseTool";
-import {RectangleTool} from "./DrawingTools/RectangleTool";
+import { RectangleTool } from "./DrawingTools/RectangleTool";
+import { FreeHandTool } from "./DrawingTools/FreeHandTool";
 
 
 export class RubEns {
@@ -64,7 +65,8 @@ export class RubEns {
         this.rootLayout.mainMenu.toolSelectionMenu.setTools({
             "LineTool": new LineTool(this.document.drawingCanvas, this.document.workingCanvas),
             "EllipseTool": new EllipseTool(this.document.drawingCanvas, this.document.workingCanvas),
-            "RectangleTool": new RectangleTool(this.document.drawingCanvas, this.document.workingCanvas)
+            "RectangleTool": new RectangleTool(this.document.drawingCanvas, this.document.workingCanvas),
+            "FreeHandTool": new FreeHandTool(this.document.drawingCanvas, this.document.workingCanvas)
         })
     }
 
