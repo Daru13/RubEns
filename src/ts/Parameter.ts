@@ -1,7 +1,9 @@
-import { Color } from "../utils/Color";
+import { Color } from "./utils/Color";
 
 export interface Parameter<T> {
     value: T;
+
+    name?: string;
     hidden?: boolean;
 }
 
