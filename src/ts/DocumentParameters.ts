@@ -1,4 +1,4 @@
-import { Parameter } from "./DrawingTools/ToolParameter";
+import { Parameter } from "./Parameter";
 
 export class DocumentParameters {
     // Title (required)
