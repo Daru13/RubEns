@@ -1,4 +1,4 @@
-import { NumberParameter } from "./ToolParameter";
+import { NumberParameter } from "../Parameter";
 
 export class EllipseParameters {
     thickness: NumberParameter;
