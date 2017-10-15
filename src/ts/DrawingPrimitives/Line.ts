@@ -23,28 +23,27 @@ export class Line {
             if(pixel.x < 0 || pixel.x > image.width-1 || pixel.y < 0 || pixel.y > image.height-1) {
                 return;
             }
-
             // The color is currently random
             let color_r = 0; //Math.random() * 255;
             let color_g = 0; //Math.random() * 255;
             let color_b = 0; //Math.random() * 255;
 
-            let coordinate1D = (pixel.y*image.width+pixel.x)*4;
-            image.data[coordinate1D] = color_r;
-            image.data[coordinate1D + 1] = color_g;
-            image.data[coordinate1D + 2] = color_b;
-            image.data[coordinate1D + 3] = 255;
+            let coordonee1D = (pixel.y*image.width+pixel.x)*4;
+            image.data[coordonee1D] = color_r;
+            image.data[coordonee1D + 1] = color_g;
+            image.data[coordonee1D + 2] = color_b;
+            image.data[coordonee1D + 3] = 255;
         }
 
-        let currentPixel = new Point(from.x, from.y);
+        let currentPixel: Point = new Point(from.x, from.y);
         paintItBlack(currentPixel);
-        let dx = Math.abs(to.x - from.x);
-        let dy = Math.abs(to.y - from.y);
+        let dx = to.x - from.x;
+        let dy = to.y - from.y;
+        let xInc = 0;
+        let yInc = 0;
 
         // First we compute in which "direction" x and y increase
         // between from and to
-        let xInc, yInc;
-
         if (dx > 0){
             xInc = 1;
         }
@@ -57,11 +56,12 @@ export class Line {
         else{
             yInc = -1;
         }
-
+        dx = Math.abs(dx);
+        dy = Math.abs(dy);
 
         if (Math.abs(dx) >= Math.abs(dy)) {
             let cumul = dx/2;
-            for(let x = from.x; x != to.x; x += xInc){
+            for(let x = from.x; x != to.x; x += xInc ){
                 currentPixel.x += xInc;
                 cumul += dy;
                 if ( cumul >= dx ){
