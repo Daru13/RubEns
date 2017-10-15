@@ -32,8 +32,15 @@ export class DrawingDisplay extends HTMLRenderer {
 
         workingCanvas.attr("width", "800px");
         workingCanvas.attr("height", "600px");
-
         this.rootNode.append(workingCanvas);
+
+        // Selection canvas
+        let selectionCanvas = $("<canvas>");
+        selectionCanvas.attr("id", "selection_canvas");
+
+        selectionCanvas.attr("width", "800px");
+        selectionCanvas.attr("height", "600px");
+        this.rootNode.append(selectionCanvas);
     }
 
     updateRootNode () {

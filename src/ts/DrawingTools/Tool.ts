@@ -1,6 +1,7 @@
 import { Canvas } from "../Image/Canvas";
 import { EventManager } from "../UI/EventManager";
 import { EventHandler } from "../UI/EventHandler";
+import {ImageWorkspace} from "../ImageWorkspace";
 
 
 /**
@@ -14,29 +15,23 @@ export abstract class Tool {
     protected eventHandlers: EventHandler[];
 
     /**
-     * The canvas where the image resides.
+     * The image workspace, where the operations are displayed
      */
-    drawingCanvas: Canvas;
-
-    /**
-     * The canvas used to preview the operation
-     */
-    workingCanvas: Canvas;
+    workspace: ImageWorkspace;
 
     /**
      * Basic constructor
      */
-    constructor (drawingCanvas: Canvas, workingCanvas: Canvas) {
+    constructor (workspace: ImageWorkspace) {
         this.eventHandlers = [];
-        this.drawingCanvas = drawingCanvas;
-        this.workingCanvas = workingCanvas;
+        this.workspace = workspace
     }
 
 
     /**
      * Register all necessary events handlers required by the tool.
      *
-     * @param {EventManager} eventManager   The manager dispatching the events.
+     * @param eventManager The manager dispatching the events.
      *
      * @author Mathieu Fehr
      */
@@ -50,7 +45,7 @@ export abstract class Tool {
     /**
      * See documentation of registerEvents, and change register with unregister.
      *
-     * @param {EventManager} eventManager   The manager dispatching the events.
+     * @param eventManager The manager dispatching the events.
      *
      * @author Mathieu Fehr
      */

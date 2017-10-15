@@ -1,6 +1,7 @@
 import { Tool } from "./Tool";
 import { Canvas } from "../Image/Canvas";
 import { Point } from "../utils/Point";
+import {ImageWorkspace} from "../ImageWorkspace";
 
 
 /**
@@ -26,13 +27,12 @@ export abstract class SimpleShapeTool extends Tool {
     /**
      * Basic constructor.
      *
-     * @param workingCanvas The current working canvas
-     * @param previewCanvas The current preview canvas
+     * @param workspace The image workspace, where the operations are displayed
      *
      * @author Mathieu Fehr
      */
-    constructor(workingCanvas: Canvas, previewCanvas: Canvas) {
-        super(workingCanvas, previewCanvas);
+    constructor(workspace: ImageWorkspace) {
+        super(workspace);
         this.firstPoint = null;
         this.secondPoint = null;
 
@@ -76,7 +76,7 @@ export abstract class SimpleShapeTool extends Tool {
      * @author Mathieu Fehr
      */
     onMouseDown(event: MouseEvent) {
-        this.firstPoint = this.workingCanvas.getMouseEventCoordinates(event);
+        this.firstPoint = this.workspace.workingCanvas.getMouseEventCoordinates(event);
         this.firstPoint.x = Math.floor(this.firstPoint.x);
         this.firstPoint.y = Math.floor(this.firstPoint.y);
     }
@@ -94,11 +94,11 @@ export abstract class SimpleShapeTool extends Tool {
             return;
         }
 
-        this.secondPoint = this.workingCanvas.getMouseEventCoordinates(event);
+        this.secondPoint = this.workspace.workingCanvas.getMouseEventCoordinates(event);
         this.secondPoint.x = Math.floor(this.secondPoint.x);
         this.secondPoint.y = Math.floor(this.secondPoint.y);
-        this.drawShape(this.drawingCanvas, this.firstPoint, this.secondPoint);
-        this.workingCanvas.clear();
+        this.drawShape(this.workspace.drawingCanvas, this.firstPoint, this.secondPoint);
+        this.workspace.workingCanvas.clear();
         this.firstPoint = null;
         this.secondPoint = null;
     }
@@ -115,11 +115,11 @@ export abstract class SimpleShapeTool extends Tool {
         if(this.firstPoint === null) {
             return;
         }
-        this.secondPoint = this.workingCanvas.getMouseEventCoordinates(event);
+        this.secondPoint = this.workspace.workingCanvas.getMouseEventCoordinates(event);
         this.secondPoint.x = Math.floor(this.secondPoint.x);
         this.secondPoint.y = Math.floor(this.secondPoint.y);
-        this.workingCanvas.clear();
-        this.drawShape(this.workingCanvas, this.firstPoint, this.secondPoint);
+        this.workspace.workingCanvas.clear();
+        this.drawShape(this.workspace.workingCanvas, this.firstPoint, this.secondPoint);
     }
 
 

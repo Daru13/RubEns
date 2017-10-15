@@ -2,6 +2,7 @@ import {Tool} from "./Tool";
 import {Point} from "../utils/Point";
 import {Canvas} from "../Image/Canvas";
 import {Line} from "../DrawingPrimitives/Line";
+import {ImageWorkspace} from "../ImageWorkspace";
 
 
 /**
@@ -20,13 +21,12 @@ export class FreeHandTool extends Tool {
     /**
      * Basic constructor
      *
-     * @param workingCanvas The current working canvas
-     * @param previewCanvas The current preview canvas
+     * @param workspace The image workspace, where the operations are displayed
      *
      * @author Mathieu Fehr
      */
-    constructor(workingCanvas: Canvas, previewCanvas: Canvas) {
-        super(workingCanvas, previewCanvas);
+    constructor(workspace: ImageWorkspace) {
+        super(workspace);
         this.lastPosition = null;
 
         this.initEventHandlers();
@@ -45,7 +45,7 @@ export class FreeHandTool extends Tool {
             return;
         }
 
-        this.lastPosition = this.workingCanvas.getMouseEventCoordinates(event);
+        this.lastPosition = this.workspace.workingCanvas.getMouseEventCoordinates(event);
         this.lastPosition.x = Math.floor(this.lastPosition.x);
         this.lastPosition.y = Math.floor(this.lastPosition.y);
     }
@@ -60,10 +60,10 @@ export class FreeHandTool extends Tool {
         if(this.lastPosition === null) {
             return;
         }
-        let currentPosition = this.workingCanvas.getMouseEventCoordinates(event);
+        let currentPosition = this.workspace.workingCanvas.getMouseEventCoordinates(event);
         currentPosition.x = Math.floor(currentPosition.x);
         currentPosition.y = Math.floor(currentPosition.y);
-        this.drawLine(this.drawingCanvas, currentPosition);
+        this.drawLine(this.workspace.drawingCanvas, currentPosition);
         this.lastPosition = currentPosition;
     }
 

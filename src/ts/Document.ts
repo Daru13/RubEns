@@ -4,11 +4,11 @@ import { ImageFormat } from "./Image/ImageFormat";
 import { Tool } from "./DrawingTools/Tool";
 import { LineTool } from "./DrawingTools/LineTool"
 import { EventManager } from "./UI/EventManager";
+import {ImageWorkspace} from "./ImageWorkspace";
 
 
 export class Document {
-    drawingCanvas: Canvas;
-    workingCanvas: Canvas;
+    imageWorkspace: ImageWorkspace;
 
     parameters: DocumentParameters;
 
@@ -21,19 +21,17 @@ export class Document {
         this.parameters   = parameters;
         this.eventManager = eventManager;
 
-        // Create fresh canvases
-        // this.createCanvases();
+        this.imageWorkspace = new ImageWorkspace();
 
-        // Set a tool
-        // TODO: handle tool management
-        //this.currentDrawingTool = new EllipseTool(this.drawingCanvas, this.workingCanvas);
-        this.currentDrawingTool = new LineTool(this.drawingCanvas, this.workingCanvas);
+        this.currentDrawingTool = new LineTool(this.imageWorkspace);
         this.currentDrawingTool.registerEvents(this.eventManager);
     }
 
     createCanvases () {
-        this.drawingCanvas = new Canvas(<HTMLCanvasElement> document.getElementById("drawing_canvas"));
-        this.workingCanvas = new Canvas(<HTMLCanvasElement> document.getElementById("working_canvas"));
+        this.imageWorkspace.drawingCanvas = new Canvas(<HTMLCanvasElement> document.getElementById("drawing_canvas"));
+        this.imageWorkspace.workingCanvas = new Canvas(<HTMLCanvasElement> document.getElementById("working_canvas"));
+        this.imageWorkspace.selectionCanvas = new Canvas(<HTMLCanvasElement> document.getElementById("selection_canvas"));
+        this.imageWorkspace.selection = new Uint8Array(this.parameters.height * this.parameters.width);
     }
 
     /**
@@ -42,7 +40,7 @@ export class Document {
      * @author Mathieu Fehr
      */
     exportImage () {
-        this.drawingCanvas.exportImage(ImageFormat.png,this.parameters.title);
+        this.imageWorkspace.drawingCanvas.exportImage(ImageFormat.png,this.parameters.title);
     }
 
 
@@ -102,7 +100,7 @@ export class Document {
                 // TODO change interface when image size is not the same
                 self.parameters.height = img.height;
                 self.parameters.width = img.width;
-                self.drawingCanvas.importImage(img);
+                self.imageWorkspace.drawingCanvas.importImage(img);
                 onCopyEnd();
             });
             img.src = reader.result;

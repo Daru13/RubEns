@@ -2,6 +2,7 @@ import { Canvas } from "../Image/Canvas";
 import { Point } from "../utils/Point";
 import { Rectangle } from "../DrawingPrimitives/Rectangle";
 import { SimpleShapeTool } from "./SimpleShapeTool";
+import {ImageWorkspace} from "../ImageWorkspace";
 
 /**
  * Tool used to draw rectangles.
@@ -13,13 +14,12 @@ export class RectangleTool extends SimpleShapeTool {
     /**
      * Basic constructor.
      *
-     * @param workingCanvas The current working canvas
-     * @param previewCanvas The current preview canvas
+     * @param workspace The image workspace, where the operations are displayed
      *
      * @author Mathieu Fehr
      */
-    constructor(workingCanvas: Canvas, previewCanvas: Canvas) {
-        super(workingCanvas, previewCanvas);
+    constructor(workspace: ImageWorkspace) {
+        super(workspace);
     }
 
 
