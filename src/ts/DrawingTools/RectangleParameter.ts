@@ -1,5 +1,5 @@
 import { NumberParameter } from "../Parameter";
 
-export class LineParameters {
+export class RectangleParameter {
     thickness: NumberParameter;
 }
