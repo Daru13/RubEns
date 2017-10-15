@@ -1,18 +1,37 @@
 import { ImageFormat } from "./ImageFormat"
 import { Point } from "../utils/Point";
 
-export class Canvas {
-    // Related canvas and its context
-    private canvas          = null;
-    private canvas2DContext = null;
 
+/**
+ * This class represent a displayable HTML5 canvas.
+ */
+export class Canvas {
+
+    /**
+     * The HTML canvas
+     */
+    private canvas: HTMLCanvasElement  = null;
+
+    /**
+     * The Rendering context of the canvas
+     */
+    private canvas2DContext: CanvasRenderingContext2D = null;
+
+    /**
+     * The bounding rect of the canvas
+     */
     private canvasBoundingRect: ClientRect;
 
-    constructor (canvas) {
+
+    /**
+     * Basic constructor
+     */
+    constructor (canvas: HTMLCanvasElement) {
         this.canvas          = canvas;
         this.canvas2DContext = canvas.getContext("2d");
         this.canvasBoundingRect = this.canvas.getBoundingClientRect();
     }
+
 
     /**
      * Get the pixel matrix of the related HTML canvas as an ImageData object.
@@ -24,6 +43,7 @@ export class Canvas {
         return this.canvas2DContext.getImageData(0, 0, this.canvas.width, this.canvas.height);
     }
 
+
     /**
      * Set the pixel matrix of the related HTML canvas from an ImageData object.
      * @param data  new canvas data.
@@ -34,6 +54,7 @@ export class Canvas {
         this.canvas2DContext.putImageData(data, 0, 0);
     }
 
+
     /**
      * Clear the canvas by setting all the RGBA pixels to (0, 0, 0, 0).
      *
@@ -43,11 +64,12 @@ export class Canvas {
         this.canvas2DContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
+
     /**
      * Export the current image in the specified format
      *
-     * @param {ImageFormat} format  The format of the file.
-     * @param {string} fileName     The name of the file, without its extension.
+     * @param format  The format of the file.
+     * @param fileName     The name of the file, without its extension.
      *
      * @author Mathieu Fehr
      */
@@ -71,7 +93,7 @@ export class Canvas {
      * Import the image in the specified format.
      * The image should have the same size as the canvas.
      *
-     * @param {Image} image The image to import
+     * @param image The image to import
      *
      * @author Mathieu Fehr
      */
@@ -80,21 +102,26 @@ export class Canvas {
     }
 
 
-    private normalizeCoordinatesForCanvas (coordinates: Point) {
-        let boundingRect = this.canvasBoundingRect;
-
-        coordinates.x *= (boundingRect.right  - boundingRect.left) / this.canvas.width;
-        coordinates.y *= (boundingRect.bottom - boundingRect.top)  / this.canvas.height;
-
-        return coordinates;
-    }
-
+    /**
+     * Get the position of a mouse event relative to the canvas,
+     *
+     * @param   event The mouse event
+     *
+     * @return The position of the mouse event relative to the canvas.
+     *
+     * @author Camille Gobert
+     */
     getMouseEventCoordinates (event: MouseEvent) {
         let boundingRect = this.canvasBoundingRect;
 
         let mouseX = (event.clientX - boundingRect.left);
         let mouseY = (event.clientY - boundingRect.top);
 
-        return this.normalizeCoordinatesForCanvas(new Point(mouseX, mouseY));
+        let coordinates = new Point(mouseX, mouseY);
+
+        coordinates.x *= (boundingRect.right  - boundingRect.left) / this.canvas.width;
+        coordinates.y *= (boundingRect.bottom - boundingRect.top)  / this.canvas.height;
+
+        return coordinates;
     }
 }

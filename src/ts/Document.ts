@@ -32,8 +32,8 @@ export class Document {
     }
 
     createCanvases () {
-        this.drawingCanvas = new Canvas(document.getElementById("drawing_canvas"));
-        this.workingCanvas = new Canvas(document.getElementById("working_canvas"));
+        this.drawingCanvas = new Canvas(<HTMLCanvasElement> document.getElementById("drawing_canvas"));
+        this.workingCanvas = new Canvas(<HTMLCanvasElement> document.getElementById("working_canvas"));
     }
 
     /**

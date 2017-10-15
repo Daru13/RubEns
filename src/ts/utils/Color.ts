@@ -1,3 +1,6 @@
+/**
+ * Class representing a rgb color
+ */
 export class Color {
     red  : number;
     green: number;

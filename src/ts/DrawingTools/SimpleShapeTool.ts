@@ -2,6 +2,7 @@ import { Tool } from "./Tool";
 import { Canvas } from "../Image/Canvas";
 import { Point } from "../utils/Point";
 
+
 /**
  * Abstract tool used to draw simple shapes, like rectangles, ellipses or lines.
  *

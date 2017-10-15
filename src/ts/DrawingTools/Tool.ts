@@ -24,11 +24,6 @@ export abstract class Tool {
     workingCanvas: Canvas;
 
     /**
-     * Parameters used by the tools
-     */
-    toolParameter: object;
-
-    /**
      * Basic constructor
      */
     constructor (drawingCanvas: Canvas, workingCanvas: Canvas) {

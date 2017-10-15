@@ -3,10 +3,16 @@ import {Point} from "../utils/Point";
 import {Canvas} from "../Image/Canvas";
 import {Line} from "../DrawingPrimitives/Line";
 
+
+/**
+ * Tool used for free-hand drawing.
+ *
+ * The user click to start the drawing, and release the mouse button to stop
+ */
 export class FreeHandTool extends Tool {
 
     /**
-     * The last position of the mouse, when drawing
+     * The last known position of the mouse
      */
     private lastPosition: Point;
 
@@ -26,6 +32,7 @@ export class FreeHandTool extends Tool {
         this.initEventHandlers();
     }
 
+
     /**
      * The action made when the user click.
      *
@@ -42,6 +49,7 @@ export class FreeHandTool extends Tool {
         this.lastPosition.x = Math.floor(this.lastPosition.x);
         this.lastPosition.y = Math.floor(this.lastPosition.y);
     }
+
 
     /**
      * The action made when the user move the mouse.
