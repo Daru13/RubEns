@@ -12,7 +12,7 @@ import { Document } from "../Document";
  * with the UI in order to change it.
  */
 export abstract class Parameter extends HTMLRenderer {
-    protected rootNodeType    = "input";
+    protected rootNodeType    = "div";
     protected rootNodeClasses = "parameter";
 
     protected document: Document;
@@ -47,11 +47,14 @@ export abstract class Parameter extends HTMLRenderer {
             return;
         }
 
-        console.log("Label to be appended: " + parameterName, this.rootNode);
+        console.log("Label to be appended: " + parameterName);
+        console.log("To:", this.rootNode);
 
         let labelNode = $("<label>");
         labelNode.html(parameterName);
 
         this.rootNode.append(labelNode);
     }
+
+    protected abstract appendControlElement ();
 }

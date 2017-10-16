@@ -71,7 +71,7 @@ export class Sidebar extends HTMLRenderer {
         this.globalParametersField.addParameter(param1);
         this.globalParametersField.addParameter(param2);
 
-        // this.globalParametersField.addParameter(param3);
+        this.globalParametersField.addParameter(param3);
     }
 
     updateCurrentToolParametersField () {
