@@ -14,7 +14,7 @@ build:
 doc:
 	@echo "Building the documentation..."
 	@mkdir -p docs
-	@typedoc --logger "none" --out docs src
+	@typedoc --logger "none" --out docs --name "RubEns" src
 
 # Test the application, to find errors
 test:
