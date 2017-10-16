@@ -36,7 +36,7 @@ export abstract class Parameter extends HTMLRenderer {
     }
 
     /**
-     * Append a <label> element containing the parameter name inside the <input> root node.
+     * Create and append a label element containing the parameter name to the root node.
      * If the parameter has no name or an empty name, no label is appended.
      *
      * @author Camille Gobert
@@ -56,5 +56,11 @@ export abstract class Parameter extends HTMLRenderer {
         this.rootNode.append(labelNode);
     }
 
+    /**
+     * Abstract method meant to create and append an UI element to control the parameter value.
+     * It must be implemented by the concrete child classes extending this one.
+     *
+     * @author Camille Gobert
+     */
     protected abstract appendControlElement ();
 }

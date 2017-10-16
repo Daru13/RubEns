@@ -11,17 +11,46 @@ import { RectangleTool } from "./DrawingTools/RectangleTool";
 import { FreeHandTool } from "./DrawingTools/FreeHandTool";
 
 
+/**
+ * Most general class of the project, representing the whole application.
+ *
+ * It manages and bonds components shared by various parts of the app,
+ * such as documents, UI elements, the event manager.
+ */
 export class RubEns {
+    /**
+     * Version of the application.
+     */
     static version: string = "0.1";
 
+    /**
+     * Application-level parameters.
+     */
     readonly parameters: RubEnsParameters;
 
-    // Currently modified document
+    /**
+     * Currently loaded document.
+     */
     /*private*/ document: Document = null;
 
+    /**
+     * Event manager of the application.
+     */
     private eventManager: EventManager;
+
+    /**
+     * Top-level UI element.
+     */
     private rootLayout: RootLayout;
 
+    /**
+     * Instanciates and initializes a new RubEns object.
+     * It check the support of various APIs, start the event manager, setup tools and the UI.
+     * @param  {RubEnsParameters} parameters Set of parameters to use.
+     * @return {RubEns}                      Fresh instance of RubEns.
+     *
+     * @author Camille Gobert
+     */
     constructor (parameters: RubEnsParameters) {
 
         // Check the support of the used API
@@ -70,10 +99,17 @@ export class RubEns {
         })
     }
 
+    /**
+     * Create a new document, set as the current one.
+     * @param  {DocumentParameters} parameters Set of document parameters.
+     *
+     * @author Camille Gobert
+     */
     createDocument (parameters: DocumentParameters) {
         this.document = new Document(parameters, this.eventManager);
     }
 
+    // TODO
     loadDocument (document: Document) {
         this.document = document;
     }

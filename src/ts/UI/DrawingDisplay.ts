@@ -10,6 +10,11 @@ export class DrawingDisplay extends HTMLRenderer {
         this.updateRootNode();
     }
 
+    /**
+     * Create all canvases in a common block element, itself appended to the root node.
+     *
+     * @author Camille Gobert
+     */
     createRootNode () {
         // Canvas container
         this.rootNode = $("<div>");

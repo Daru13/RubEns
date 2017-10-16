@@ -2,12 +2,16 @@ import { EventHandler, EventHandlerCallback } from "./EventHandler";
 import * as $ from "jquery";
 
 /**
- * This class is an important part of the Controller,  meant to handle all events
- * from the user interface and to redistribute them to the Model classes.
+ * Generic event manager, dispatching events to registrer event handlers.
+ * 
+ * It is meant to be a central part of the Controller part of the MVC model,
+ * allowing in particular the View and the Model to communicate over events.
  */
 export class EventManager {
-    // Static list of handled events
-    // All events which should be handled by this manager must be listed here!
+    /**
+     * Static list of handled events
+     * All events which should be handled by this manager must be listed here!
+     */
     static handledEvents: Array<string> = [
         "click",
         "mousemove",
@@ -21,15 +25,23 @@ export class EventManager {
     private registeredHandlers: Array<EventHandler>;
     private isListening: boolean;
 
+    /**
+     * Instanciates and initializes a new EventManager object.
+     * Note that it does not start listening for events until the [[startListening]] method is called.
+     * @return {EventManager} Fresh instance of EventManager.
+     *
+     * @author Camille Gobert
+     */
     constructor () {
         this.registeredHandlers = [];
         console.log("Registered handlers list created:", this.registeredHandlers);
+
         this.isListening = false;
     }
 
     /**
      * Add an event handler to the manager.
-     * @param handler   Event handler to register.
+     * @param {EventHandler} handler Event handler to register.
      *
      * @author Camille Gobert
      */
@@ -39,9 +51,9 @@ export class EventManager {
 
     /**
      * Remove an event handler from the event manager.
-     * @param handler   Event handler to unregister.
-     * @return The event handler which has been removed, or undefined if
-     *         if could not be found among the registered handlers.
+     * @param {EventHandler} handler  Event handler to unregister.
+     * @return                        The event handler which has been removed,
+     *                                or undefined if it could not be found.
      *
      * @author Camille Gobert
      */
@@ -56,7 +68,7 @@ export class EventManager {
 
     /**
      * Internally dispatch an event to matching, registered event handlers.
-     * @param event   Event to dispatch.
+     * @param {Event} event Event to dispatch.
      *
      * @author Camille Gobert
      */

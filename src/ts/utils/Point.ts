@@ -1,25 +1,24 @@
 /**
- * Class representing a point
+ * 2D Point data type.
  */
 export class Point {
 
     /**
-     * The coordinate in the x axis
+     * The coordinate of the X axis.
      */
     x: number;
 
 
     /**
-     * The coordinate in the y axis
+     * The coordinate of the X axis.
      */
     y: number;
 
 
     /**
-     * Construct a new point
-     *
-     * @param {number} x    The coordinate in the x axis
-     * @param {number} y    The coordinate in the y axis
+     * Instanciates and initializes a new Point object.
+     * @param {number} x    X coordinate.
+     * @param {number} y    Y coordinate.
      *
      * @author Mathieu Fehr
      */
@@ -30,9 +29,8 @@ export class Point {
 
 
     /**
-     * Get the euclidean distance between two points
-     *
-     * @param {Point} other     The other point
+     * Compute the euclidean distance to another point..
+     * @param {Point} other The other point.
      *
      * @author Mathieu Fehr
      */

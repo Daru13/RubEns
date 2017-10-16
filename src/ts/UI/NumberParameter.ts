@@ -8,8 +8,7 @@ import { Document } from "../Document";
  * UI element representing a single numerical parameter.
  */
 export class NumberParameter extends Parameter {
-    protected rootNodeType    = "input";
-    protected rootNodeClasses = super.rootNodeClasses + " number_param";
+    protected rootNodeClasses = this.rootNodeClasses + " number_param";
 
     protected parameter: Params.NumberParameter;
 
@@ -24,36 +23,36 @@ export class NumberParameter extends Parameter {
      */
     constructor (parentNode: JQuery, document: Document, parameter: Params.NumberParameter) {
         super(parentNode, document, parameter);
-        this.parameter = parameter;
-
-        this.addNodeAttributes();
 
         this.createRootNode();
         this.appendLabelElement();
+        this.appendControlElement();
     }
 
     /**
-     * Build the internal list of attributes to set to the node HTML element,
-     * based on properties of NumberParameter objects.
+     * Create an element allowing the user to control the value of the parameter,
+     * and append it to the root node.
      *
      * @author Camille Gobert
      */
-    private addNodeAttributes () {
-        this.rootNodeAttributes["type"]  = "number";
-        this.rootNodeAttributes["value"] = this.parameter.value;
+    protected appendControlElement () {
+        let numberInput = $("<input>");
 
-        // If specified by the parameter object, add additional attributes
+        numberInput.attr("type", "number");
+        numberInput.attr("value", this.parameter.value);
+
         if (this.parameter.min) {
-            this.rootNodeAttributes["min"] = this.parameter.min;
+            numberInput.attr("min", this.parameter.min);
         }
 
-        if (this.parameter.min) {
-            this.rootNodeAttributes["max"] = this.parameter.max;
+        if (this.parameter.max) {
+            numberInput.attr("max", this.parameter.max);
         }
 
         if (this.parameter.step) {
-            this.rootNodeAttributes["step"] = this.parameter.step;
+            numberInput.attr("step", this.parameter.step);
         }
-    }
 
+        this.rootNode.append(numberInput);
+    }
 }

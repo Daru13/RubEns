@@ -6,17 +6,41 @@ import { LineTool } from "./DrawingTools/LineTool"
 import { EventManager } from "./UI/EventManager";
 import {ImageWorkspace} from "./ImageWorkspace";
 
-
+/**
+ * Document representing an open image and all its metadata.
+ *
+ * It includes all the information related to an image, as well as methods used
+ * to interract with it (such as importing, exporting and editing it).
+ */
 export class Document {
+    /**
+     * Workspace containing the image and related data and canvases.
+     */
     imageWorkspace: ImageWorkspace;
 
+    /**
+     * Parameters of the document.
+     */
     parameters: DocumentParameters;
 
+    /**
+     * Currently selected tool.
+     */
     private currentDrawingTool: Tool;
 
-    //TODO: maybe remove this from this class
+    /**
+     * Reference to the application event manager.
+     */
     eventManager: EventManager;
 
+    /**
+     * Instanciates and initializes a new Document object.
+     * @param  {DocumentParameters} parameters   Document parameters to use.
+     * @param  {EventManager}       eventManager Instance of the event manager.
+     * @return {Document}                        Fresh instance of document.
+     *
+     * @author Camille Gobert
+     */
     constructor (parameters: DocumentParameters, eventManager: EventManager) {
         this.parameters   = parameters;
         this.eventManager = eventManager;
@@ -27,6 +51,7 @@ export class Document {
         this.currentDrawingTool.registerEvents(this.eventManager);
     }
 
+    // TODO: move this to the ImageWorkspace instance!
     createCanvases () {
         this.imageWorkspace.drawingCanvas = new Canvas(<HTMLCanvasElement> document.getElementById("drawing_canvas"));
         this.imageWorkspace.workingCanvas = new Canvas(<HTMLCanvasElement> document.getElementById("working_canvas"));
@@ -35,7 +60,7 @@ export class Document {
     }
 
     /**
-     * Export the current image in png format
+     * Export the current image in png format.
      *
      * @author Mathieu Fehr
      */
@@ -45,7 +70,8 @@ export class Document {
 
 
     /**
-     * Ask the user for an image, and load it
+     * Ask the user for an image, and start to load it.
+     * Once loaded, the [[onImageLoad]] callback method is called.
      *
      * @author Mathieu Fehr
      */
@@ -64,9 +90,8 @@ export class Document {
     }
 
     /**
-     * Action to do when an image is loaded by the user in an html input node
-     *
-     * @param { HTMLInputElement } inputNode    The html input node, which has a file loaded
+     * Callback function called whenever an image has been loaded.
+     * @param {HTMLInputElement} inputNode The HTML input node containing the file.
      *
      * @author Mathieu Fehr
      */
@@ -83,10 +108,9 @@ export class Document {
     }
 
     /**
-     * Copy a loaded and correct image file in a canvas.
-     *
-     * @param {File} file                       The loaded file
-     * @param {HTMLInputElement} onCopyEnd      The callback function
+     * Copy a loaded and valid image file in a canvas.
+     * @param {File}             file           Loaded file containing the image.
+     * @param {HTMLInputElement} onCopyEnd      Callback function called when the copy has ended.
      *
      * @author Mathieu Fehr
      */
@@ -111,7 +135,7 @@ export class Document {
 
     /**
      * Updates the current drawing tool and the related event handlers.
-     * @param tool  The new drawing tool.
+     * @param {Tool} tool The new drawing tool.
      *
      * @author Camille Gobert
      */

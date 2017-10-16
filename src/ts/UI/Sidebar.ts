@@ -15,13 +15,23 @@ import { NumberParameter } from "./NumberParameter";
 export class Sidebar extends HTMLRenderer {
     protected rootNodeId = "sidebar";
 
+    /**
+     * Related document instance.
+     */
     document: Document;
 
+    /**
+     * Instance of the global parameters field.
+     */
     globalParametersField: ParametersField;
+
+    /**
+     * Instance of the current tool parameters field.
+     */
     currentToolParametersField: ParametersField;
 
     /**
-     * Instanciates and initialize a new, empty Sidebar object.
+     * Instanciates and initializes a new Sidebar object and its sub-modules.
      * @param  {JQuery}   parentNode Parent node owning current instance.
      * @param  {Document} document   Related document instance.
      * @return {Sidebar}             Fresh instance of Sidebar.
@@ -40,11 +50,21 @@ export class Sidebar extends HTMLRenderer {
         this.updateRootNode();
     }
 
+    /**
+     * Update all sub-modules of the sidebar.
+     *
+     * @author Camille Gobert
+     */
     updateRootNode () {
         this.updateGlobalParametersField();
         this.updateCurrentToolParametersField();
     }
 
+    /**
+     * Update the global parameters field.
+     *
+     * @author Camille Gobert
+     */
     updateGlobalParametersField () {
         // Temporary debug code
         let param1 = {
@@ -74,6 +94,11 @@ export class Sidebar extends HTMLRenderer {
         this.globalParametersField.addParameter(param3);
     }
 
+    /**
+     * Update the current tool parameters field.
+     *
+     * @author Camille Gobert
+     */
     updateCurrentToolParametersField () {
         // TODO
     }

@@ -1,12 +1,11 @@
 /**
- * Class used to check support of some API for old browsers
+ * Class used to check the support of certain APIs in older browsers.
  */
 export class SupportChecker {
 
     /**
      * Check the support of everything the app needs
-     *
-     * @return return true if the browser support the necessary APIs
+     * @return {boolean} `true` if the browser supports the APIs, `false` otherwise.
      *
      * @author Mathieu Fehr
      */
@@ -15,9 +14,8 @@ export class SupportChecker {
     }
 
     /**
-     * Check the support of the api used for loading files
-     *
-     * @returns return true if the browser support the necessary APIs
+     * Check the support of the API used for loading files
+     * @return {boolean} `true` if the browser supports it, `false` otherwise.
      */
     static checkFileAPISupport() : boolean {
         return  "File" in window &&
