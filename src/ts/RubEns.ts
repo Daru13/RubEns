@@ -69,7 +69,8 @@ export class RubEns {
             eventTypes: ["keypress"],
             selector: "html",
             callback: (e) => {
-                e.preventDefault();
+                // TODO: prevent default behaviour without blocking  
+                // e.preventDefault();
                 let ev = <KeyboardEvent> e;
 
                 if (ev.ctrlKey && ev.key.toLowerCase() == "e") {
