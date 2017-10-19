@@ -3,6 +3,8 @@ import { HTMLRenderer } from "./HTMLRenderer";
 import * as Params from "../Parameter";
 import { Parameter } from "./Parameter";
 import { NumberParameter } from "./NumberParameter";
+import { StringParameter } from "./StringParameter";
+import { ColorParameter } from "./ColorParameter";
 import { Document } from "../Document";
 
 /**
@@ -44,7 +46,7 @@ export class ParametersField extends HTMLRenderer {
 
         this.document = document;
 
-        this.parameters = [];
+        this.parameters        = [];
         this.wrappedParameters = [];
     }
 
@@ -59,17 +61,19 @@ export class ParametersField extends HTMLRenderer {
     private wrapAndDisplayParameter (parameter: Params.Parameter<any>) {
         // TODO: do it differently?
 
-        let wrapperClassesPerType = {
+        let wrapperClassesPerKind = {
             "number": NumberParameter,
+            "string": StringParameter,
+            "color": ColorParameter
         };
 
-        let parameterType = typeof parameter.value;
-        if (! (parameterType in wrapperClassesPerType)) {
-            console.log("Parameter of type " + parameterType + " has no wrapper class!");
+        let parameterKind = parameter.kind;
+        if (! (parameterKind in wrapperClassesPerKind)) {
+            console.log("Parameter of kind " + parameterKind + " has no wrapper class!");
             return null;
         }
 
-        return new wrapperClassesPerType[parameterType](this.rootNode, this.document, parameter);
+        return new wrapperClassesPerKind[parameterKind](this.rootNode, this.document, parameter);
     }
 
     /**

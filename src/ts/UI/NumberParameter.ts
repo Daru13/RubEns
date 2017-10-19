@@ -17,7 +17,7 @@ export class NumberParameter extends Parameter {
      * @param  {JQuery}          parentNode Parent node owning current instance.
      * @param  {NumberParameter} parameter  Parameter to display.
      * @param  {Document}        document   Related document instance.
-     * @return {NumberParameter}            Fresh instance of Parameter.
+     * @return {NumberParameter}            Fresh instance of NumberParameter.
      *
      * @author Camille Gobert
      */
