@@ -3,22 +3,22 @@ import { Point } from "../utils/Point";
 
 
 /**
- * This class represent a displayable HTML5 canvas.
+ * This class abstracts an HTML5 canvas.
  */
 export class Canvas {
 
     /**
-     * The HTML canvas
+     * The HTML canvas node.
      */
     private canvas: HTMLCanvasElement  = null;
 
     /**
-     * The Rendering context of the canvas
+     * The 2D context of the canvas.
      */
     private canvas2DContext: CanvasRenderingContext2D = null;
 
     /**
-     * The bounding rect of the canvas
+     * The bounding rectangle of the canvas.
      */
     private canvasBoundingRect: ClientRect;
 
@@ -35,7 +35,7 @@ export class Canvas {
 
     /**
      * Get the pixel matrix of the related HTML canvas as an ImageData object.
-     * @return image current canvas data.
+     * @return {ImageData} Raw data of the canvas.
      *
      * @author Camille Gobert
      */
@@ -46,7 +46,7 @@ export class Canvas {
 
     /**
      * Set the pixel matrix of the related HTML canvas from an ImageData object.
-     * @param data  new canvas data.
+     * @param {ImageData} data New canvas raw data.
      *
      * @author Camille Gobert
      */
@@ -67,13 +67,12 @@ export class Canvas {
 
     /**
      * Export the current image in the specified format
-     *
-     * @param format  The format of the file.
-     * @param fileName     The name of the file, without its extension.
+     * @param {ImageFormat} format    The format of the file.
+     * @param {string}      fileName  The name of the file, without its extension.
      *
      * @author Mathieu Fehr
      */
-    exportImage (format : ImageFormat, fileName : string) {
+    exportImage (format: ImageFormat, fileName: string) {
         // TODO add test to travis
         // The html node is used to trigger the download from the web page
         let htmlNode = document.createElement("a");
@@ -92,22 +91,19 @@ export class Canvas {
     /**
      * Import the image in the specified format.
      * The image should have the same size as the canvas.
-     *
-     * @param image The image to import
+     * @param {HTMLImageElement} image The image to import
      *
      * @author Mathieu Fehr
      */
-    importImage(image : HTMLImageElement) {
+    importImage(image: HTMLImageElement) {
         this.canvas2DContext.drawImage(image,0,0);
     }
 
 
     /**
      * Get the position of a mouse event relative to the canvas,
-     *
-     * @param   event The mouse event
-     *
-     * @return The position of the mouse event relative to the canvas.
+     * @param  {MouseEnvet} event The mouse event
+     * @return                    The position of the mouse event relative to the canvas.
      *
      * @author Camille Gobert
      */

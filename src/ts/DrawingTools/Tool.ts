@@ -1,7 +1,7 @@
 import { Canvas } from "../Image/Canvas";
 import { EventManager } from "../UI/EventManager";
 import { EventHandler } from "../UI/EventHandler";
-import {ImageWorkspace} from "../ImageWorkspace";
+import { ImageWorkspace } from "../ImageWorkspace";
 
 
 /**

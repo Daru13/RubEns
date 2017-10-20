@@ -1,26 +1,20 @@
-
 import {Canvas} from "./Image/Canvas";
 
 
 /**
- * The image workspace of the application
+ * Workspace of a [[Document]] instance, managing the various canvases used to display and edit an image.
+ *
+ * This includes the preview canvas used by drawing tools and the current selection.
  */
 export class ImageWorkspace {
 
-    constructor() {
-        this.drawingCanvas = null;
-        this.workingCanvas = null;
-        this.selectionCanvas = null;
-        this.selection = null;
-    }
-
     /**
-     * Canvas used to display current image
+     * Canvas used to display the actual image.
      */
     drawingCanvas: Canvas;
 
     /**
-     * Canvas used by tools to preview operations
+     * Canvas used to preview drawing operations made by the current tool.
      */
     workingCanvas: Canvas;
 
@@ -30,7 +24,20 @@ export class ImageWorkspace {
     selectionCanvas: Canvas;
 
     /**
-     * The current selection
+     * The current selection.
      */
     selection: Uint8Array;
+
+    /**
+     * Instanciates and initializes a new ImageWorkspace object.
+     * @return {ImageWorkspace} Fresh instance of ImageWorkspace.
+     *
+     * @author Mathieu Fehr
+     */
+    constructor() {
+        this.drawingCanvas = null;
+        this.workingCanvas = null;
+        this.selectionCanvas = null;
+        this.selection = null;
+    }
 }

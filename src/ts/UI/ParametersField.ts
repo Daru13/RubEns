@@ -3,25 +3,37 @@ import { HTMLRenderer } from "./HTMLRenderer";
 import * as Params from "../Parameter";
 import { Parameter } from "./Parameter";
 import { NumberParameter } from "./NumberParameter";
+import { StringParameter } from "./StringParameter";
+import { ColorParameter } from "./ColorParameter";
 import { Document } from "../Document";
 
 /**
  * UI element representing a set of related parameters.
  *
  * It manages a list of parameters represented by instances of Parameters
- * and display them in a single <form> element.s
+ * and display them in a single <form> element.
  */
 export class ParametersField extends HTMLRenderer {
     protected rootNodeType    = "form";
     protected rootNodeClasses = "parameters_field";
 
+    /**
+     * Related document instance.
+     */
     private document: Document;
 
+    /**
+     * List of parameters (of any type) which should be displayed by the UI.
+     */
     private parameters: Params.Parameter<any>[];
+
+    /**
+     * List of UI parameter objects actually displayed in the UI.
+     */
     private wrappedParameters: Parameter[];
 
     /**
-     * Instanciates and initialize a new, empty ParametersField object.
+     * Instanciates and initializes a new, empty ParametersField object.
      * @param  {JQuery}   parentNode Parent node owning current instance.
      * @param  {Document} document   Related document instance.
      * @return {ParametersField}     Fresh instance of Parameter.
@@ -34,34 +46,60 @@ export class ParametersField extends HTMLRenderer {
 
         this.document = document;
 
-        this.parameters = [];
+        this.parameters        = [];
         this.wrappedParameters = [];
     }
-    
-    // TODO: clean this code
+
+    /**
+     * Wrap a parameter into an UI parameter, whose root node is appended to
+     * the current root node, and thus displayed once created.
+     * @param  {Params.Parameter<any>} parameter Parameter to wrap.
+     * @return {Parameter}                       UI parameter (wrapper).
+     *
+     * @author Camille Gobert
+     */
     private wrapAndDisplayParameter (parameter: Params.Parameter<any>) {
-        let wrapperClassesPerType = {
+        // TODO: do it differently?
+
+        let wrapperClassesPerKind = {
             "number": NumberParameter,
+            "string": StringParameter,
+            "color": ColorParameter
         };
 
-        let parameterType = typeof parameter.value;
-        if (! (parameterType in wrapperClassesPerType)) {
-            console.log("Parameter of type " + parameterType + " has no wrapper class!");
+        let parameterKind = parameter.kind;
+        if (! (parameterKind in wrapperClassesPerKind)) {
+            console.log("Parameter of kind " + parameterKind + " has no wrapper class!");
             return null;
         }
 
-        return new wrapperClassesPerType[parameterType](this.rootNode, this.document, parameter);
+        return new wrapperClassesPerKind[parameterKind](this.rootNode, this.document, parameter);
     }
 
+    /**
+     * Wrap all non-hidden parameter into UI parameters, using the
+     * [[wrapAndDisplayParameter]] method, and save them into the related attribute.
+     *
+     * @author Camille Gobert
+     */
     private wrapAndDisplayAllParameters () {
         this.wrappedParameters = [];
 
         for (let parameter of this.parameters) {
+            if (parameter.hidden) {
+                continue;
+            }
+
             let wrappedParameter = this.wrapAndDisplayParameter(parameter);
             this.wrappedParameters.push(wrappedParameter);
         }
     }
 
+    /**
+     * Empty the root node and re-wrap and append all parameters.
+     *
+     * @author Camille Gobert
+     */
     updateRootNode () {
         this.rootNode.empty();
         this.wrapAndDisplayAllParameters();

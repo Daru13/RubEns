@@ -12,7 +12,7 @@ import { Document } from "../Document";
  * with the UI in order to change it.
  */
 export abstract class Parameter extends HTMLRenderer {
-    protected rootNodeType    = "input";
+    protected rootNodeType    = "div";
     protected rootNodeClasses = "parameter";
 
     protected document: Document;
@@ -36,7 +36,7 @@ export abstract class Parameter extends HTMLRenderer {
     }
 
     /**
-     * Append a <label> element containing the parameter name inside the <input> root node.
+     * Create and append a label element containing the parameter name to the root node.
      * If the parameter has no name or an empty name, no label is appended.
      *
      * @author Camille Gobert
@@ -47,11 +47,20 @@ export abstract class Parameter extends HTMLRenderer {
             return;
         }
 
-        console.log("Label to be appended: " + parameterName, this.rootNode);
+        console.log("Label to be appended: " + parameterName);
+        console.log("To:", this.rootNode);
 
         let labelNode = $("<label>");
         labelNode.html(parameterName);
 
         this.rootNode.append(labelNode);
     }
+
+    /**
+     * Abstract method meant to create and append an UI element to control the parameter value.
+     * It must be implemented by the concrete child classes extending this one.
+     *
+     * @author Camille Gobert
+     */
+    protected abstract appendControlElement ();
 }

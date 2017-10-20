@@ -20,8 +20,9 @@ export class RootLayout extends HTMLRenderer {
     protected rootNodeId = "root_layout";
 
     /**
-     * Instanciates a new RootLayout, and initializes the sub-modules
+     * Instanciates a new RootLayout, and initializes its sub-modules
      * @param parentNode  Parent HTML node where to set up the UI.
+     * @param document    Rleated document instance.
      *
      * @author Camille Gobert
      */
