@@ -16,8 +16,11 @@ describe('Test of Line drawing primitives', function() {
     });
 
 
-    it('should draw something', function () {
-        Line.draw(imageData, new Point(2,2), new Point(10,10), 1);
+    it('should correctly draw a diagonal line', function () {
+        Line.draw(imageData, new Point(0,0), new Point(10,10), Line.paintItBlack);
+        for(let i = 0; i<=10; i++) {
+            assert.notEqual(imageData.data[4*(i + 30*i) + 3], 0);
+        }
     });
 
 });
