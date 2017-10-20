@@ -1,9 +1,40 @@
 import { Point } from "../utils/Point";
 
+interface ToDraw {
+    (center: Point, image: ImageData): void;
+}
+
 /**
  * Drawing primitives for lines
  */
 export class Line {
+
+
+
+    /**
+     * A Drawing primitive that plots in black a pixel on the canas
+     *
+     * @author Josselin GIET
+     *
+     * @param  {Point}     pixel the pixel to plot
+     * @param  {ImageData} image the ImageData to modify
+     * @return {void}            Returns nothing : works by side-effect
+     */
+    static paintItBlack(pixel: Point, image: ImageData) {
+         if(pixel.x < 0 || pixel.x > image.width-1 || pixel.y < 0 || pixel.y > image.height-1) {
+             return;
+         }
+         // The color is currently random
+         let color_r = 0; //Math.random() * 255;
+         let color_g = 0; //Math.random() * 255;
+         let color_b = 0; //Math.random() * 255;
+
+         let coordonee1D = (pixel.y*image.width+pixel.x)*4;
+         image.data[coordonee1D] = color_r;
+         image.data[coordonee1D + 1] = color_g;
+         image.data[coordonee1D + 2] = color_b;
+         image.data[coordonee1D + 3] = 255;
+     }
 
     /**
      * This function draw a line between the pixel from and to.
@@ -17,26 +48,26 @@ export class Line {
      *
      * @author Josselin GIET
      */
-    static draw(image: ImageData, from: Point, to: Point, thickness: number) {
 
-        function paintItBlack(pixel: Point) {
-            if(pixel.x < 0 || pixel.x > image.width-1 || pixel.y < 0 || pixel.y > image.height-1) {
-                return;
-            }
-            // The color is currently random
-            let color_r = 0; //Math.random() * 255;
-            let color_g = 0; //Math.random() * 255;
-            let color_b = 0; //Math.random() * 255;
+    /**
+     * This function draw a line between the pixel from and to.
+     * It implements the algorithm of Bresenham
+     * (cf. [[https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm]])
+     * @param  {ImageData} image the image where the line is drawn
+     * @param  {Point}     from  the starting point
+     * @param  {Point}     to    the ending point
+     * @param  {toDraw}    brush the function to apply
+     * @return {void}            returns nothing : works by side-effect
+     *
+     * @author Josselin GIET
+     *
+     */
+    static draw(image: ImageData, from: Point, to: Point, brush: ToDraw) {
 
-            let coordonee1D = (pixel.y*image.width+pixel.x)*4;
-            image.data[coordonee1D] = color_r;
-            image.data[coordonee1D + 1] = color_g;
-            image.data[coordonee1D + 2] = color_b;
-            image.data[coordonee1D + 3] = 255;
-        }
+
 
         let currentPixel: Point = new Point(from.x, from.y);
-        paintItBlack(currentPixel);
+        brush(currentPixel, image);
         let dx = to.x - from.x;
         let dy = to.y - from.y;
         let xInc = 0;
@@ -68,7 +99,7 @@ export class Line {
                     cumul -= dx;
                     currentPixel.y += yInc;
                 }
-                paintItBlack(currentPixel);
+                brush(currentPixel, image);
             }
         }
         else{
@@ -80,7 +111,7 @@ export class Line {
                     cumul -= dy;
                     currentPixel.x += xInc;
                 }
-                paintItBlack(currentPixel);
+                brush(currentPixel, image);
             }
         }
     }
