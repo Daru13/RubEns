@@ -18,4 +18,5 @@ NPM should be installed, with these packages:
 - `amd-loader`
 - `typedoc`
 - `jquery` and `@types/jquery`
-
+- `jsdom` and `jsdom-global`
+- `canvas`
