@@ -24,6 +24,8 @@ export class NumberParameter extends Parameter {
     constructor (parentNode: JQuery, document: Document, parameter: Params.NumberParameter) {
         super(parentNode, document, parameter);
 
+        this.controlNodeValue = parameter.value.toString();
+
         this.createRootNode();
         this.appendLabelElement();
         this.appendControlElement();
@@ -36,23 +38,29 @@ export class NumberParameter extends Parameter {
      * @author Camille Gobert
      */
     protected appendControlElement () {
-        let numberInput = $("<input>");
-
-        numberInput.attr("type", "number");
-        numberInput.attr("value", this.parameter.value);
+        super.appendControlElement();
+        this.controlNode.attr("type", "number");
 
         if (this.parameter.min) {
-            numberInput.attr("min", this.parameter.min);
+            this.controlNode.attr("min", this.parameter.min);
         }
 
         if (this.parameter.max) {
-            numberInput.attr("max", this.parameter.max);
+            this.controlNode.attr("max", this.parameter.max);
         }
 
         if (this.parameter.step) {
-            numberInput.attr("step", this.parameter.step);
+            this.controlNode.attr("step", this.parameter.step);
         }
+    }
 
-        this.rootNode.append(numberInput);
+    /**
+     * Update the raw parameter value by retrieving and parsing the control element value.
+     *
+     * @author Camille Gobert
+     */
+    updateParameterValueFromControlElement () {
+        let newParameterValue = <string> this.controlNode.val();
+        this.parameter.value = parseFloat(newParameterValue);
     }
 }

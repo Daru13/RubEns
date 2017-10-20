@@ -28,7 +28,7 @@ export interface EventHandler {
      * Selector in the jQuery format, to filter which events should be handled.
      * This selector will be applied to the root of the document.
      */
-    selector: string;
+    selector: JQuery | string;
 
     /**
      * Callback function called when an event is accepted by the selector.

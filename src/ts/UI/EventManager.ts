@@ -3,7 +3,7 @@ import * as $ from "jquery";
 
 /**
  * Generic event manager, dispatching events to registrer event handlers.
- * 
+ *
  * It is meant to be a central part of the Controller part of the MVC model,
  * allowing in particular the View and the Model to communicate over events.
  */
@@ -19,7 +19,8 @@ export class EventManager {
         "mouseup",
         "mouseout",
         "mousein",
-        "keypress"
+        "keypress",
+        "change"
     ];
 
     private registeredHandlers: Array<EventHandler>;

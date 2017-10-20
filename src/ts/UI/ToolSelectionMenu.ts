@@ -105,7 +105,7 @@ export class ToolSelectionMenu extends HTMLRenderer {
     /**
      * Method which must be called when a click occurs on a tool node.
      * @param  {Event}  event Related click event.
-     * 
+     *
      * @author Camille Gobert
      */
     onToolClick (event: Event) {

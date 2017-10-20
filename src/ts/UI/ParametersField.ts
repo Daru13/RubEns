@@ -73,7 +73,13 @@ export class ParametersField extends HTMLRenderer {
             return null;
         }
 
-        return new wrapperClassesPerKind[parameterKind](this.rootNode, this.document, parameter);
+        // Wrap the raw parameter in an UI parameter
+        let wrappedParameter = new wrapperClassesPerKind[parameterKind](this.rootNode, this.document, parameter);
+
+        // Start handling parameter changes
+        wrappedParameter.startHandlingChanges();
+
+        return wrappedParameter;
     }
 
     /**
@@ -155,6 +161,12 @@ export class ParametersField extends HTMLRenderer {
      * @author Camille Gobert
      */
     clearParameters () {
+        // Remove all event handlers before clearing UI parameters
+        for (let wrappedParameter of this.wrappedParameters) {
+            wrappedParameter.stopHandlingChanges();
+        }
+
+        // Clear the list of parameters once it is done
         this.parameters = [];
 
         this.updateRootNode();

@@ -24,6 +24,8 @@ export class StringParameter extends Parameter {
     constructor (parentNode: JQuery, document: Document, parameter: Params.StringParameter) {
         super(parentNode, document, parameter);
 
+        this.controlNodeValue = parameter.value;
+
         this.createRootNode();
         this.appendLabelElement();
         this.appendControlElement();
@@ -36,17 +38,15 @@ export class StringParameter extends Parameter {
      * @author Camille Gobert
      */
     protected appendControlElement () {
-        let stringInput = $("<input>");
-
-        stringInput.attr("type", "text");
-        stringInput.attr("value", this.parameter.value);
+        super.appendControlElement();
+        this.controlNode.attr("type", "text");
 
         if (this.parameter.minLength) {
-            stringInput.attr("minlength", this.parameter.minLength);
+            this.controlNode.attr("minlength", this.parameter.minLength);
         }
 
         if (this.parameter.maxLength) {
-            stringInput.attr("maxlength", this.parameter.maxLength);
+            this.controlNode.attr("maxlength", this.parameter.maxLength);
         }
 
         if (this.parameter.pattern) {
@@ -54,9 +54,7 @@ export class StringParameter extends Parameter {
             let pattern               = this.parameter.pattern.toString();
             let patternWithoutSlashes = pattern.substr(1, pattern.length - 2);
 
-            stringInput.attr("pattern", patternWithoutSlashes);
+            this.controlNode.attr("pattern", patternWithoutSlashes);
         }
-
-        this.rootNode.append(stringInput);
     }
 }

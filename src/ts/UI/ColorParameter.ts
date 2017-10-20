@@ -24,6 +24,8 @@ export class ColorParameter extends Parameter {
     constructor (parentNode: JQuery, document: Document, parameter: Params.ColorParameter) {
         super(parentNode, document, parameter);
 
+        this.controlNodeValue = parameter.value;
+
         this.createRootNode();
         this.appendLabelElement();
         this.appendControlElement();
@@ -36,11 +38,7 @@ export class ColorParameter extends Parameter {
      * @author Camille Gobert
      */
     protected appendControlElement () {
-        let colorInput = $("<input>");
-
-        colorInput.attr("type", "color");
-        // colorInput.attr("value", this.parameter.value);
-
-        this.rootNode.append(colorInput);
+        super.appendControlElement();
+        this.controlNode.attr("type", "color");
     }
 }

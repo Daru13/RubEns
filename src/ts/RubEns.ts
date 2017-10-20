@@ -69,7 +69,7 @@ export class RubEns {
             eventTypes: ["keypress"],
             selector: "html",
             callback: (e) => {
-                // TODO: prevent default behaviour without blocking  
+                // TODO: prevent default behaviour without blocking
                 // e.preventDefault();
                 let ev = <KeyboardEvent> e;
 
