@@ -115,7 +115,7 @@ export class FreeHandTool extends Tool {
      */
     drawLine(image: Canvas, currentPosition: Point) {
         let imageData = image.getImageData();
-        Line.draw(imageData, this.lastPosition, currentPosition, 1);
+        Line.draw(imageData, this.lastPosition, currentPosition, Line.paintItBlack);
         image.setImageData(imageData);
     }
 }

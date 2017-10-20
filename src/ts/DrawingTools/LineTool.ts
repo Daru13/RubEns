@@ -35,7 +35,7 @@ export class LineTool extends SimpleShapeTool {
     drawShape(image: Canvas, firstPoint: Point, secondPoint: Point) {
         let imageData = image.getImageData();
 
-        Line.draw(imageData, firstPoint, secondPoint, 1);
+        Line.draw(imageData, firstPoint, secondPoint, Line.paintItBlack);
 
         image.setImageData(imageData);
     }

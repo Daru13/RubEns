@@ -2,6 +2,15 @@
   "language": "node_js",
   "node_js": 8.5.0,
 
+  "env": "CXX=g++-4.8",
+
+  "addons": {
+    "apt": {
+      "sources": ubuntu-toolchain-r-test,
+      "packages": ["g++-4.8", "libgif-dev"]
+    }
+  },
+
   "install": [
     "npm install typescript -g",
     "npm install mocha -g",
@@ -9,7 +18,10 @@
     "npm install amd-loader -g",
     "npm install typedoc -g",
     "npm install jquery -g",
-    "npm install --save-dev @types/jquery"
+    "npm install --save-dev @types/jquery",
+    "npm install jsdom",
+    "npm install jsdom-global",
+    "npm install canvas"
   ],
 
   "script": [

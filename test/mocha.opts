@@ -1,1 +1,2 @@
 --require amd-loader
+--require jsdom-global
