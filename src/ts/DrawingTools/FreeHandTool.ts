@@ -3,6 +3,9 @@ import {Point} from "../utils/Point";
 import {Canvas} from "../Image/Canvas";
 import {Line} from "../DrawingPrimitives/Line";
 import {ImageWorkspace} from "../ImageWorkspace";
+import { Ellipse } from "../DrawingPrimitives/Ellipse"
+import { Rectangle } from "../DrawingPrimitives/Rectangle"
+import { LineParameters } from "./LineParameters"
 
 
 /**
@@ -11,6 +14,14 @@ import {ImageWorkspace} from "../ImageWorkspace";
  * The user click to start the drawing, and release the mouse button to stop
  */
 export class FreeHandTool extends Tool {
+
+    /**
+     * Parameters of the current brush
+     *
+     * @author Josselin GIET
+     *
+     */
+    parameters: LineParameters = new LineParameters();
 
     /**
      * The last known position of the mouse
@@ -106,6 +117,20 @@ export class FreeHandTool extends Tool {
         });
     }
 
+    /**
+     * Returns a function to apply on canvas
+     * @param  {LineParameters} param thickness and color
+     * @return {ToDraw}               a function to apply on canvas
+     *
+     * @author Josselin GIET
+     */
+    static getLambda(param: LineParameters){
+        let brush = function(center: Point, image: ImageData){
+            Ellipse.drawFromCenter(image, center, param.thickness.value, param.thickness.value)
+        }
+        return brush
+    }
+
 
     /**
      * Draw a line from this.lastPosition to currentPosition on the given canvas
@@ -115,7 +140,7 @@ export class FreeHandTool extends Tool {
      */
     drawLine(image: Canvas, currentPosition: Point) {
         let imageData = image.getImageData();
-        Line.draw(imageData, this.lastPosition, currentPosition, Line.paintItBlack);
+        Line.draw(imageData, this.lastPosition, currentPosition, FreeHandTool.getLambda(this.parameters));
         image.setImageData(imageData);
     }
 }
