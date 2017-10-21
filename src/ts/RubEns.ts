@@ -93,10 +93,10 @@ export class RubEns {
         this.document.createCanvases();
 
         this.rootLayout.mainMenu.toolSelectionMenu.setTools({
-            "LineTool": new LineTool(this.document.imageWorkspace),
-            "EllipseTool": new EllipseTool(this.document.imageWorkspace),
-            "RectangleTool": new RectangleTool(this.document.imageWorkspace),
-            "FreeHandTool": new FreeHandTool(this.document.imageWorkspace)
+            "Line": new LineTool(this.document.imageWorkspace),
+            "Ellipse": new EllipseTool(this.document.imageWorkspace),
+            "Rectangle": new RectangleTool(this.document.imageWorkspace),
+            "Pen": new FreeHandTool(this.document.imageWorkspace)
         })
     }
 

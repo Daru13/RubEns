@@ -4,6 +4,12 @@ import { Tool } from "../DrawingTools/Tool";
 import { Document } from "../Document";
 
 /**
+ * Type of a set of named tools, used by [[ToolSelectionMenu]] to list tools to display in the UI.
+ * Keys represent tool names, values represent related instances of Tool.
+ */
+export type NamedToolSet = { [toolName: string]: Tool };
+
+/**
  * UI element representing the tool selection menu.
  *
  * It manages a list of tools, defined elsewhere, and handles the change of current tool,
@@ -14,9 +20,9 @@ export class ToolSelectionMenu extends HTMLRenderer {
     protected rootNodeType = "ul";
 
     /**
-     * List of known tools to display in the UI.
+     * Set of named tools, to display in the UI.
      */
-    private tools: object;
+    private tools: NamedToolSet;
 
     /**
      * Related document intance.
@@ -44,7 +50,7 @@ export class ToolSelectionMenu extends HTMLRenderer {
     constructor (parentNode: JQuery, document: Document) {
         super(parentNode);
 
-        this.tools    = [];
+        this.tools    = {};
         this.document = document;
 
         this.createRootNode();
@@ -61,19 +67,21 @@ export class ToolSelectionMenu extends HTMLRenderer {
     updateRootNode () {
         this.rootNode.empty();
 
-        for (let tool in this.tools) {
-            let toolNode = ToolSelectionMenu.createToolNode(this.tools[tool]);
+        for (let toolName in this.tools) {
+            let tool = this.tools[toolName];
+
+            let toolNode = ToolSelectionMenu.createToolNode(tool, toolName);
             this.rootNode.append(toolNode);
         }
     }
 
     /**
      * Update the list of known tools, and update the root node afterwards.
-     * @param  {object} tools [description]
+     * @param  {object} tools Map of
      *
      * @author Camille Gobert
      */
-    setTools (tools: object) {
+    setTools (tools: NamedToolSet) {
         this.tools = tools;
         this.updateRootNode();
     }
@@ -81,19 +89,21 @@ export class ToolSelectionMenu extends HTMLRenderer {
     /**
      * Static method for creating a tool node, i.e. a node representing a tool in the UI,
      * able to respond to a click by updating the document current tool.
+     *
+     * Note that this method assumes every tool has a different class (name),
+     * as it uses it to identify every single tool selection button in the UI..
      * @param  {Tool}   tool Tool to represent with a tool node.
      * @return {JQuery}      Fresh tool node.
      *
      * @author Camille Gobert
      */
-    private static createToolNode (tool: Tool) {
-        let toolName = tool.constructor.name;
-        console.log("Node of tool" + toolName + " is created");
+    private static createToolNode (tool: Tool, toolName: string) {
+        let toolClassName = tool.constructor.name;
 
         let toolButton = $("<button>");
         toolButton.html(toolName);
         toolButton.attr("type", "button");
-        toolButton.attr("id", toolName);
+        toolButton.attr("id", toolClassName);
         toolButton.addClass("tool_button");
 
         let toolNode = $("<li>");
