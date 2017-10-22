@@ -30,13 +30,14 @@ export class Rectangle {
         let color_g = Math.random() * 255;
         let color_b = Math.random() * 255;
 
-        // The ellipse will be contained
+        // The rectangle will be contained in this box
         let drawing_min_x = Math.max(0,min_x);
         let drawing_min_y = Math.max(0,min_y);
         let drawing_max_x = Math.min(imageDataWidth-1,max_x);
         let drawing_max_y = Math.min(imageDataHeight-1,max_y);
 
-        // Draw the ellipse by checking every cell in the inscribed rectangle
+
+        // Draw the rectangle
         for(let i = drawing_min_x; i <= drawing_max_x; i++) {
             for(let j = drawing_min_y; j <= drawing_max_y; j++) {
                 image.data[4 * (i + j * imageDataWidth)] = color_r;
