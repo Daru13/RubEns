@@ -18,7 +18,7 @@ export class EllipseParameters implements ToolParameters {
         name: "Color"
     };
 
-    borderThickess: Params.NumberParameter = {
+    borderThickness: Params.NumberParameter = {
         kind: Params.ParameterKind.Number,
         value: 1,
         name: "Border thickness",

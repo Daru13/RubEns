@@ -1,8 +1,14 @@
 import { Point } from "../utils/Point";
 
-interface ToDraw {
-    (center: Point, image: ImageData): void;
-}
+/**
+ * Type of the brush
+ *
+ *  @author Josselin GIET
+ *
+ */
+type Brush = (center: Point, image: ImageData) => void
+
+
 
 /**
  * Drawing primitives for lines
@@ -20,7 +26,7 @@ export class Line {
      * @param  {ImageData} image the ImageData to modify
      * @return {void}            Returns nothing : works by side-effect
      */
-    static paintItBlack(pixel: Point, image: ImageData) {
+    static paintItBlack(pixel: Point, image: ImageData):void {
          if(pixel.x < 0 || pixel.x > image.width-1 || pixel.y < 0 || pixel.y > image.height-1) {
              return;
          }
@@ -36,18 +42,6 @@ export class Line {
          image.data[coordonee1D + 3] = 255;
      }
 
-    /**
-     * This function draw a line between the pixel from and to.
-     * It implements the algorithm of Bresenham
-     * (cf. [[https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm]])
-     *
-     * @param image         the image where the line is drawn
-     * @param from          the starting point
-     * @param to            the ending point
-     * @param thickness     the thickness of the line
-     *
-     * @author Josselin GIET
-     */
 
     /**
      * This function draw a line between the pixel from and to.
@@ -62,7 +56,7 @@ export class Line {
      * @author Josselin GIET
      *
      */
-    static draw(image: ImageData, from: Point, to: Point, brush: ToDraw) {
+    static draw(image: ImageData, from: Point, to: Point, brush: Brush) {
 
 
 

@@ -1,6 +1,8 @@
 import { Canvas } from "../Image/Canvas";
 import { Point } from "../utils/Point";
 import { Line } from "../DrawingPrimitives/Line";
+import { Rectangle } from "../DrawingPrimitives/Rectangle"
+import { Ellipse } from "../DrawingPrimitives/Ellipse"
 import { SimpleShapeTool } from "./SimpleShapeTool";
 import { ImageWorkspace } from "../ImageWorkspace";
 import * as Params from "../Parameter";
@@ -18,7 +20,7 @@ export class LineParameters implements ToolParameters {
         name: "Color"
     };
 
-    thickess: Params.NumberParameter = {
+    thickness: Params.NumberParameter = {
         kind: Params.ParameterKind.Number,
         value: 1,
         name: "Line thickness",
@@ -53,6 +55,21 @@ export class LineTool extends SimpleShapeTool {
 
 
     /**
+     * Returns a function to apply on canvas
+     * @param  {LineParameters} param thickness and color
+     * @return {ToDraw}               a function to apply on canvas
+     *
+     * @author Josselin GIET
+     */
+    static getLambda (param: LineParameters) {
+        let brush = function(center: Point, image: ImageData) {
+            Ellipse.drawFromCenter(image, center, param.thickness.value, param.thickness.value)
+        };
+
+        return brush;
+    }
+
+    /**
      * Draw a line in the given canvas.
      * @param image         The image where the shape is drawn
      * @param firstPoint    The first point selected by the user
@@ -60,10 +77,10 @@ export class LineTool extends SimpleShapeTool {
      *
      * @author Mathieu Fehr
      */
-    drawShape(image: Canvas, firstPoint: Point, secondPoint: Point) {
+     drawShape(image: Canvas, firstPoint: Point, secondPoint: Point) {
         let imageData = image.getImageData();
 
-        Line.draw(imageData, firstPoint, secondPoint, Line.paintItBlack);
+        Line.draw(imageData, firstPoint, secondPoint, LineTool.getLambda(this.parameters));
 
         image.setImageData(imageData);
     }

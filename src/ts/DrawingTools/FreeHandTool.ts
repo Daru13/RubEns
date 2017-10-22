@@ -5,7 +5,7 @@ import {Line} from "../DrawingPrimitives/Line";
 import {ImageWorkspace} from "../ImageWorkspace";
 import * as Params from "../Parameter";
 import { ToolParameters } from "./Tool";
-
+import { Ellipse } from "../DrawingPrimitives/Ellipse";
 
 /**
  * Set of parameters used by [[FreeHandTool]].
@@ -18,7 +18,7 @@ export class FreeHandParameters implements ToolParameters {
         name: "Color"
     };
 
-    thickess: Params.NumberParameter = {
+    thickness: Params.NumberParameter = {
         kind: Params.ParameterKind.Number,
         value: 1,
         name: "Pencil thickness",
@@ -136,6 +136,21 @@ export class FreeHandTool extends Tool {
         });
     }
 
+    /**
+     * Returns a function to apply on canvas
+     * @param  {LineParameters} param thickness and color
+     * @return {ToDraw}               a function to apply on canvas
+     *
+     * @author Josselin GIET
+     */
+    static getLambda (param: FreeHandParameters) {
+        let brush = function(center: Point, image: ImageData) {
+            Ellipse.drawFromCenter(image, center, param.thickness.value, param.thickness.value)
+        };
+
+        return brush;
+    }
+
 
     /**
      * Draw a line from this.lastPosition to currentPosition on the given canvas.
@@ -147,7 +162,7 @@ export class FreeHandTool extends Tool {
      */
     drawLine(image: Canvas, currentPosition: Point) {
         let imageData = image.getImageData();
-        Line.draw(imageData, this.lastPosition, currentPosition, Line.paintItBlack);
+        Line.draw(imageData, this.lastPosition, currentPosition, FreeHandTool.getLambda(this.parameters));
         image.setImageData(imageData);
     }
 }
