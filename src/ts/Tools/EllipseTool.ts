@@ -1,8 +1,6 @@
-import { Canvas } from "../Image/Canvas";
 import { Point } from "../utils/Point";
 import { SimpleShapeTool } from "./SimpleShapeTool";
 import { Ellipse } from "../DrawingPrimitives/Ellipse";
-import {ImageWorkspace} from "../ImageWorkspace";
 import * as Params from "../Parameter";
 import { ToolParameters } from "./Tool";
 
@@ -64,17 +62,16 @@ export class EllipseTool extends SimpleShapeTool {
     /**
      * Draw an ellipse in the given canvas.
      *
-     * @param image         The image where the shape is drawn
      * @param firstPoint    The first point selected by the user
      * @param secondPoint   The second point selected by the user
      *
      * @author Mathieu Fehr
      */
-    drawShape(image: Canvas, firstPoint: Point, secondPoint: Point) {
-        let imageData = image.getImageData();
+    drawShape(firstPoint: Point, secondPoint: Point) {
+        let imageData = new ImageData(this.workspace.width, this.workspace.height);
 
         Ellipse.drawFromBoundingRect(imageData, firstPoint, secondPoint);
 
-        image.setImageData(imageData);
+        this.workspace.workingCanvas.setImageData(imageData);
     }
 }

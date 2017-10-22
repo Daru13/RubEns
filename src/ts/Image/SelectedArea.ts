@@ -11,12 +11,12 @@ export class SelectedArea {
     /**
      * The width of the image where the selection is applied
      */
-    width: Number;
+    width: number;
 
     /**
      * The height of the image where the selection is applied
      */
-    height: Number;
+    height: number;
 
     /**
      * Instantiates and initializes a new SelectedArea object, given a width and a height
@@ -27,5 +27,15 @@ export class SelectedArea {
         this.width = width;
         this.height = height;
         this.data = new Uint8Array(width * height);
+        this.reset();
+    }
+
+
+    /**
+     * Reset the selection.
+     * This is the same than selecting everything.
+     */
+    reset() {
+        this.data.fill(255);
     }
 }

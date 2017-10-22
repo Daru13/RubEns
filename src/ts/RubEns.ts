@@ -10,6 +10,7 @@ import { LineTool } from "./Tools/LineTool";
 import { EllipseTool } from "./Tools/EllipseTool";
 import { RectangleTool } from "./Tools/RectangleTool";
 import { FreeHandTool } from "./Tools/FreeHandTool";
+import {RectangleSelectionTool} from "./Tools/RectangleSelectionTool";
 
 
 /**
@@ -129,7 +130,8 @@ export class RubEns {
             new LineTool(),
             new EllipseTool(),
             new RectangleTool(),
-            new FreeHandTool()
+            new FreeHandTool(),
+            new RectangleSelectionTool()
         ];
     }
 

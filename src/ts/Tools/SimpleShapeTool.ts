@@ -92,11 +92,8 @@ export abstract class SimpleShapeTool extends Tool {
             return;
         }
 
-        this.secondPoint = this.workspace.workingCanvas.getMouseEventCoordinates(event);
-        this.secondPoint.x = Math.floor(this.secondPoint.x);
-        this.secondPoint.y = Math.floor(this.secondPoint.y);
-        this.drawShape(this.workspace.drawingCanvas, this.firstPoint, this.secondPoint);
-        this.workspace.workingCanvas.clear();
+        this.workspace.applyWorkingCanvas();
+
         this.firstPoint = null;
         this.secondPoint = null;
     }
@@ -116,19 +113,18 @@ export abstract class SimpleShapeTool extends Tool {
         this.secondPoint = this.workspace.workingCanvas.getMouseEventCoordinates(event);
         this.secondPoint.x = Math.floor(this.secondPoint.x);
         this.secondPoint.y = Math.floor(this.secondPoint.y);
-        this.workspace.workingCanvas.clear();
-        this.drawShape(this.workspace.workingCanvas, this.firstPoint, this.secondPoint);
+
+        this.drawShape(this.firstPoint, this.secondPoint);
     }
 
 
     /**
-     * Draw the shape to the given canvas.
+     * Draw the shape in the working canvas
      *
-     * @param image         The image where the shape is drawn
      * @param firstPoint    The first point selected by the user
      * @param secondPoint   The second point selected by the user
      *
      * @author Mathieu Fehr
      */
-    abstract drawShape(image: Canvas, firstPoint: Point, secondPoint: Point);
+    abstract drawShape(firstPoint: Point, secondPoint: Point);
 }

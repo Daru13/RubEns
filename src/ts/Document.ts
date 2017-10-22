@@ -51,6 +51,8 @@ export class Document {
 
     // TODO: move this to the ImageWorkspace instance!
     createCanvases () {
+        this.imageWorkspace.width = this.parameters.width;
+        this.imageWorkspace.height = this.parameters.height;
         this.imageWorkspace.drawingCanvas = new Canvas(<HTMLCanvasElement> document.getElementById("drawing_canvas"));
         this.imageWorkspace.workingCanvas = new Canvas(<HTMLCanvasElement> document.getElementById("working_canvas"));
         this.imageWorkspace.selectionCanvas = new Canvas(<HTMLCanvasElement> document.getElementById("selection_canvas"));

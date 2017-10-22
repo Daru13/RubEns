@@ -1,8 +1,6 @@
-import { Canvas } from "../Image/Canvas";
 import { Point } from "../utils/Point";
 import { Rectangle } from "../DrawingPrimitives/Rectangle";
 import { SimpleShapeTool } from "./SimpleShapeTool";
-import { ImageWorkspace } from "../ImageWorkspace";
 import * as Params from "../Parameter";
 import { ToolParameters } from "./Tool";
 
@@ -62,17 +60,16 @@ export class RectangleTool extends SimpleShapeTool {
     /**
      * Draw a rectangle in the given canvas.
      *
-     * @param image         The image where the shape is drawn
      * @param firstPoint    The first point selected by the user
      * @param secondPoint   The second point selected by the user
      *
      * @author Mathieu Fehr
      */
-    drawShape(image: Canvas, firstPoint: Point, secondPoint: Point) {
-        let imageData = image.getImageData();
+    drawShape(firstPoint: Point, secondPoint: Point) {
+        let imageData = new ImageData(this.workspace.width, this.workspace.height);
 
         Rectangle.draw(firstPoint, secondPoint, imageData);
 
-        image.setImageData(imageData);
+        this.workspace.workingCanvas.setImageData(imageData);
     }
 }
