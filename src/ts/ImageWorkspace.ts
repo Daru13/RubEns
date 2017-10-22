@@ -1,4 +1,5 @@
-import {Canvas} from "./Image/Canvas";
+import { Canvas } from "./Image/Canvas";
+import { SelectedArea } from "./Image/SelectedArea";
 
 
 /**
@@ -26,7 +27,7 @@ export class ImageWorkspace {
     /**
      * The current selection.
      */
-    selection: Uint8Array;
+    selectedArea: SelectedArea;
 
     /**
      * Instanciates and initializes a new ImageWorkspace object.
@@ -38,6 +39,6 @@ export class ImageWorkspace {
         this.drawingCanvas = null;
         this.workingCanvas = null;
         this.selectionCanvas = null;
-        this.selection = null;
+        this.selectedArea = null;
     }
 }

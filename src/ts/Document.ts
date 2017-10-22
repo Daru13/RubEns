@@ -1,10 +1,11 @@
 import { Canvas } from "./Image/Canvas";
 import { DocumentParameters } from "./DocumentParameters";
 import { ImageFormat } from "./Image/ImageFormat";
-import { Tool } from "./DrawingTools/Tool";
-import { LineTool } from "./DrawingTools/LineTool"
+import { Tool } from "./Tools/Tool";
+import { LineTool } from "./Tools/LineTool"
 import { EventManager } from "./UI/EventManager";
-import {ImageWorkspace} from "./ImageWorkspace";
+import { ImageWorkspace } from "./ImageWorkspace";
+import { SelectedArea } from "./Image/SelectedArea";
 
 /**
  * Document representing an open image and all its metadata.
@@ -53,7 +54,7 @@ export class Document {
         this.imageWorkspace.drawingCanvas = new Canvas(<HTMLCanvasElement> document.getElementById("drawing_canvas"));
         this.imageWorkspace.workingCanvas = new Canvas(<HTMLCanvasElement> document.getElementById("working_canvas"));
         this.imageWorkspace.selectionCanvas = new Canvas(<HTMLCanvasElement> document.getElementById("selection_canvas"));
-        this.imageWorkspace.selection = new Uint8Array(this.parameters.height * this.parameters.width);
+        this.imageWorkspace.selectedArea = new SelectedArea(this.parameters.width, this.parameters.height);
     }
 
     /**

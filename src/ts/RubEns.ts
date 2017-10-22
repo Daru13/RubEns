@@ -5,11 +5,11 @@ import { EventManager } from "./UI/EventManager";
 import { SupportChecker } from "./SupportChecker";
 import { RootLayout } from "./UI/RootLayout";
 
-import { Tool } from "./DrawingTools/Tool";
-import { LineTool } from "./DrawingTools/LineTool";
-import { EllipseTool } from "./DrawingTools/EllipseTool";
-import { RectangleTool } from "./DrawingTools/RectangleTool";
-import { FreeHandTool } from "./DrawingTools/FreeHandTool";
+import { Tool } from "./Tools/Tool";
+import { LineTool } from "./Tools/LineTool";
+import { EllipseTool } from "./Tools/EllipseTool";
+import { RectangleTool } from "./Tools/RectangleTool";
+import { FreeHandTool } from "./Tools/FreeHandTool";
 
 
 /**

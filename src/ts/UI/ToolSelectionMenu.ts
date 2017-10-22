@@ -1,6 +1,6 @@
 import * as $ from "jquery";
 import { HTMLRenderer } from "./HTMLRenderer";
-import { Tool } from "../DrawingTools/Tool";
+import { Tool } from "../Tools/Tool";
 import { Document } from "../Document";
 
 
