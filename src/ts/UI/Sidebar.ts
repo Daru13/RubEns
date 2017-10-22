@@ -54,7 +54,6 @@ export class Sidebar extends HTMLRenderer {
             selector: $("body"),
             callback: (event) => {
                 this.updateCurrentToolParametersField();
-                console.log("rubens_toolchanged catched");
         }});
 
         this.updateRootNode();
@@ -76,6 +75,7 @@ export class Sidebar extends HTMLRenderer {
      * @author Camille Gobert
      */
     updateGlobalParametersField () {
+    /*
         // Temporary debug code
         let param1 = {
             value: 0,
@@ -124,6 +124,7 @@ export class Sidebar extends HTMLRenderer {
         };
 
         this.globalParametersField.addParameter(param5);
+        */
     }
 
     /**
