@@ -2,6 +2,7 @@ import { Canvas } from "../Image/Canvas";
 import { EventManager } from "../UI/EventManager";
 import { EventHandler } from "../UI/EventHandler";
 import { ImageWorkspace } from "../ImageWorkspace";
+import * as Params from "../Parameter";
 
 /**
  * Abstract type for a set of tool parameters.

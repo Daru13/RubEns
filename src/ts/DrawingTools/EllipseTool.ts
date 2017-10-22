@@ -42,6 +42,8 @@ export class EllipseParameters implements ToolParameters {
  */
 export class EllipseTool extends SimpleShapeTool {
 
+    readonly name = "Ellipse";
+
     /**
      * Set of parameters of this tool.
      */
@@ -51,12 +53,10 @@ export class EllipseTool extends SimpleShapeTool {
     /**
      * Basic constructor.
      *
-     * @param workspace The image workspace, where the operations are displayed
-     *
      * @author Mathieu Fehr
      */
-    constructor(workspace: ImageWorkspace) {
-        super(workspace);
+    constructor () {
+        super();
         this.parameters = new EllipseParameters();
     }
 

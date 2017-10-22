@@ -34,6 +34,8 @@ export class LineParameters implements ToolParameters {
  */
 export class LineTool extends SimpleShapeTool {
 
+    readonly name = "Line";
+
     /**
      * Set of parameters of this tool.
      */
@@ -41,12 +43,11 @@ export class LineTool extends SimpleShapeTool {
 
     /**
      * Basic constructor.
-     * @param workspace The image workspace, where the operations are displayed
      *
      * @author Mathieu Fehr
      */
-    constructor(workspace: ImageWorkspace) {
-        super(workspace);
+    constructor () {
+        super();
         this.parameters = new LineParameters();
     }
 

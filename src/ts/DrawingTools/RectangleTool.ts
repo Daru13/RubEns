@@ -41,6 +41,8 @@ export class RectangleParameters implements ToolParameters {
  */
 export class RectangleTool extends SimpleShapeTool {
 
+    readonly name = "Rectangle";
+
     /**
      * Set of parameters of this tool.
      */
@@ -49,12 +51,10 @@ export class RectangleTool extends SimpleShapeTool {
     /**
      * Basic constructor.
      *
-     * @param workspace The image workspace, where the operations are displayed
-     *
      * @author Mathieu Fehr
      */
-    constructor(workspace: ImageWorkspace) {
-        super(workspace);
+    constructor () {
+        super();
         this.parameters = new RectangleParameters();
     }
 

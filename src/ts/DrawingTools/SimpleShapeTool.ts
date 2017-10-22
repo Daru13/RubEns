@@ -27,12 +27,10 @@ export abstract class SimpleShapeTool extends Tool {
     /**
      * Basic constructor.
      *
-     * @param workspace The image workspace, where the operations are displayed
-     *
      * @author Mathieu Fehr
      */
-    constructor(workspace: ImageWorkspace) {
-        super(workspace);
+    constructor () {
+        super();
         this.firstPoint = null;
         this.secondPoint = null;
 
