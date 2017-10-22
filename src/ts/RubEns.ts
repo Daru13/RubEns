@@ -5,6 +5,7 @@ import { EventManager } from "./UI/EventManager";
 import { SupportChecker } from "./SupportChecker";
 import { RootLayout } from "./UI/RootLayout";
 
+import { Tool } from "./DrawingTools/Tool";
 import { LineTool } from "./DrawingTools/LineTool";
 import { EllipseTool } from "./DrawingTools/EllipseTool";
 import { RectangleTool } from "./DrawingTools/RectangleTool";
@@ -44,27 +45,60 @@ export class RubEns {
     private rootLayout: RootLayout;
 
     /**
+     * List of all available [[Tool]] instances.
+     */
+    private tools: Tool[];
+
+    /**
      * Instanciates and initializes a new RubEns object.
-     * It check the support of various APIs, start the event manager, setup tools and the UI.
+     *
+     * This method calls various intiialization functions defined in this class,
+     * in order to setup various parts of the app (e.g. tools, UI, document).
      * @param  {RubEnsParameters} parameters Set of parameters to use.
      * @return {RubEns}                      Fresh instance of RubEns.
      *
      * @author Camille Gobert
      */
     constructor (parameters: RubEnsParameters) {
+        this.checkAPISupport();
 
-        // Check the support of the used API
+        this.parameters = parameters;
+
+        this.initEventManager();
+        this.initTools();
+        this.initDocument();
+        this.initUserInterface();
+
+        // TODO: move this elsewhere!
+        this.document.createCanvases();
+    }
+
+
+    /**
+     * Perform various checks to detect if all required features are avilable or not.
+     *
+     * @author Camille Gobert
+     */
+    checkAPISupport () {
         // TODO: change error message
         let APISupported = SupportChecker.checkSupport();
         if (! APISupported) {
-            alert("RubEns is not supported on this browser");
+            alert("RubEns is not fully supported on this browser");
         }
+    }
 
+
+    /**
+     * Create and set up the event manager, which starts listening for events.
+     *
+     * @author Camille Gobert
+     */
+    initEventManager () {
         // Start handling events in the UI
         this.eventManager = new EventManager();
         this.eventManager.startListening();
 
-        // Debug tests
+        // Debug code
         this.eventManager.registerEventHandler({
             eventTypes: ["keypress"],
             selector: "html",
@@ -81,24 +115,37 @@ export class RubEns {
                 }
             }
         });
+    }
 
-        if (parameters.createDocumentOnStartup) {
-            this.createDocument(new DocumentParameters());
-        }
 
-        // Initiate the UI
-        // TODO: do it in a much better way!
-        this.rootLayout = new RootLayout($("body"), this.document);
-
-        this.document.createCanvases();
-
-        this.rootLayout.mainMenu.toolSelectionMenu.setTools([
+    /**
+     * Initialize the list of available tools.
+     * This method should save an instance of every exposed [[Tool]] object.
+     *
+     * @author Camille Gobert
+     */
+    initTools () {
+        this.tools = [
             new LineTool(),
             new EllipseTool(),
             new RectangleTool(),
             new FreeHandTool()
-        ]);
+        ];
     }
+
+
+    /**
+     * Initialize the user interface.
+     * Note that this method requires tools and document to already exist!
+     *
+     * @author Camille Gobert
+     */
+    initUserInterface () {
+        this.rootLayout = new RootLayout($("body"), this.document);
+
+        this.rootLayout.mainMenu.toolSelectionMenu.setTools(this.tools);
+    }
+
 
     /**
      * Create a new document, set as the current one.
@@ -110,14 +157,15 @@ export class RubEns {
         this.document = new Document(parameters, this.eventManager);
     }
 
-    // TODO
-    loadDocument (document: Document) {
-        this.document = document;
+    /**
+     *
+     * Initialize the current document the right way.
+     *
+     * @author Camille Gobert
+     */
+    initDocument () {
+        if (this.parameters.createDocumentOnStartup) {
+            this.createDocument(new DocumentParameters());
+        }
     }
-
-    initEventManager () {
-
-    }
-
-    initDocument () {}
 }
