@@ -21,12 +21,12 @@ export class Document {
     /**
      * Parameters of the document.
      */
-    parameters: DocumentParameters;
+    private parameters: DocumentParameters;
 
     /**
      * Currently selected tool.
      */
-    private currentDrawingTool: Tool;
+    private currentTool: Tool;
 
     /**
      * Reference to the application event manager.
@@ -46,9 +46,6 @@ export class Document {
         this.eventManager = eventManager;
 
         this.imageWorkspace = new ImageWorkspace();
-
-        this.currentDrawingTool = new LineTool(this.imageWorkspace);
-        this.currentDrawingTool.registerEvents(this.eventManager);
     }
 
     // TODO: move this to the ImageWorkspace instance!
@@ -134,15 +131,29 @@ export class Document {
     }
 
     /**
-     * Updates the current drawing tool and the related event handlers.
+     * Returns the current tool.
+     * @return {Tool} The current tool.
+     *
+     * @author Camille Gobert
+     */
+    getCurrentTool () {
+        return this.currentTool;
+    }
+
+    /**
+     * Updates the current tool and the related event handlers.
      * @param {Tool} tool The new drawing tool.
      *
      * @author Camille Gobert
      */
-    setCurrentDrawingTool (tool: Tool) {
-        this.currentDrawingTool.unregisterEvents(this.eventManager);
+    setCurrentTool (tool: Tool) {
+        if (this.currentTool) {
+            this.currentTool.unregisterEvents(this.eventManager);
+        }
 
-        this.currentDrawingTool = tool;
+        tool.workspace = this.imageWorkspace;
+        this.currentTool = tool;
+
         tool.registerEvents(this.eventManager);
     }
 }

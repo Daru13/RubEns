@@ -107,6 +107,11 @@ export class ParametersField extends HTMLRenderer {
      * @author Camille Gobert
      */
     updateRootNode () {
+        // Remove all event handlers before setting them up again
+        for (let wrappedParameter of this.wrappedParameters) {
+            wrappedParameter.stopHandlingChanges();
+        }
+
         this.rootNode.empty();
         this.wrapAndDisplayAllParameters();
     }
@@ -132,6 +137,23 @@ export class ParametersField extends HTMLRenderer {
      */
     addParameter (parameter: Params.Parameter<any>) {
         this.parameters.push(parameter);
+
+        this.updateRootNode();
+    }
+
+    // TODO: better type and implement the method below
+
+    /**
+     * Add all given parameters at the end of the internal list of parameters,
+     * and update the view to reflect the changes.
+     * @param {Iterable<Params.Parameter<any>>} parameters Iterable set of parameters to add.
+     *
+     * @author Camille Gobert
+     */
+    addAllParameters (parameters: Iterable<Params.Parameter<any>>) {
+        for (let parameter of parameters) {
+            this.parameters.push(parameter);
+        }
 
         this.updateRootNode();
     }

@@ -20,7 +20,8 @@ export class EventManager {
         "mouseout",
         "mousein",
         "keypress",
-        "change"
+        "change",
+        "rubens_toolchanged"
     ];
 
     private registeredHandlers: Array<EventHandler>;

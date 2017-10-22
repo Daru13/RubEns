@@ -3,11 +3,6 @@ import { HTMLRenderer } from "./HTMLRenderer";
 import { Tool } from "../DrawingTools/Tool";
 import { Document } from "../Document";
 
-/**
- * Type of a set of named tools, used by [[ToolSelectionMenu]] to list tools to display in the UI.
- * Keys represent tool names, values represent related instances of Tool.
- */
-export type NamedToolSet = { [toolName: string]: Tool };
 
 /**
  * UI element representing the tool selection menu.
@@ -20,9 +15,9 @@ export class ToolSelectionMenu extends HTMLRenderer {
     protected rootNodeType = "ul";
 
     /**
-     * Set of named tools, to display in the UI.
+     * Set of tools, to display in the UI.
      */
-    private tools: NamedToolSet;
+    private tools: Tool[];
 
     /**
      * Related document intance.
@@ -50,7 +45,7 @@ export class ToolSelectionMenu extends HTMLRenderer {
     constructor (parentNode: JQuery, document: Document) {
         super(parentNode);
 
-        this.tools    = {};
+        this.tools    = [];
         this.document = document;
 
         this.createRootNode();
@@ -67,21 +62,19 @@ export class ToolSelectionMenu extends HTMLRenderer {
     updateRootNode () {
         this.rootNode.empty();
 
-        for (let toolName in this.tools) {
-            let tool = this.tools[toolName];
-
-            let toolNode = ToolSelectionMenu.createToolNode(tool, toolName);
+        for (let tool of this.tools) {
+            let toolNode = ToolSelectionMenu.createToolNode(tool);
             this.rootNode.append(toolNode);
         }
     }
 
     /**
      * Update the list of known tools, and update the root node afterwards.
-     * @param  {object} tools Map of
+     * @param  {Tool[]} tools List of [[Tool]] instances.
      *
      * @author Camille Gobert
      */
-    setTools (tools: NamedToolSet) {
+    setTools (tools: Tool[]) {
         this.tools = tools;
         this.updateRootNode();
     }
@@ -97,13 +90,14 @@ export class ToolSelectionMenu extends HTMLRenderer {
      *
      * @author Camille Gobert
      */
-    private static createToolNode (tool: Tool, toolName: string) {
+    private static createToolNode (tool: Tool) {
+        let toolName      = tool.name;
         let toolClassName = tool.constructor.name;
 
         let toolButton = $("<button>");
         toolButton.html(toolName);
         toolButton.attr("type", "button");
-        toolButton.attr("id", toolClassName);
+        toolButton.attr("data-tool-classname", toolClassName);
         toolButton.addClass("tool_button");
 
         let toolNode = $("<li>");
@@ -119,10 +113,23 @@ export class ToolSelectionMenu extends HTMLRenderer {
      * @author Camille Gobert
      */
     onToolClick (event: Event) {
-        // Get the clicked tool name
-        let toolName = $(event.target).attr("id");
-        console.log("clicked id: " + toolName);
+        // Get the clicked tool instance
+        let toolClassName = $(event.target).attr("data-tool-classname");
 
-        this.document.setCurrentDrawingTool(this.tools[toolName]);
+        let tool = this.tools.find((t) => t.constructor.name === toolClassName);
+        if (! tool) {
+            console.log("Error: tool " + toolClassName + " could not be loaded.");
+            return;
+        }
+
+        // Update the current tool of the document
+        this.document.setCurrentTool(tool);
+
+        console.log("New selected tool:");
+        console.log(tool);
+
+        // Notify the UI the tool has changed with an event
+        let evt = new CustomEvent("rubens_toolchanged", {bubbles: true});
+        this.rootNode[0].dispatchEvent(evt);
     }
 }

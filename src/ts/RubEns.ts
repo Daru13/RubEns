@@ -92,12 +92,12 @@ export class RubEns {
 
         this.document.createCanvases();
 
-        this.rootLayout.mainMenu.toolSelectionMenu.setTools({
-            "Line": new LineTool(this.document.imageWorkspace),
-            "Ellipse": new EllipseTool(this.document.imageWorkspace),
-            "Rectangle": new RectangleTool(this.document.imageWorkspace),
-            "Pen": new FreeHandTool(this.document.imageWorkspace)
-        })
+        this.rootLayout.mainMenu.toolSelectionMenu.setTools([
+            new LineTool(),
+            new EllipseTool(),
+            new RectangleTool(),
+            new FreeHandTool()
+        ]);
     }
 
     /**
@@ -114,4 +114,10 @@ export class RubEns {
     loadDocument (document: Document) {
         this.document = document;
     }
+
+    initEventManager () {
+
+    }
+
+    initDocument () {}
 }

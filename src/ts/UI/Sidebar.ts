@@ -46,7 +46,16 @@ export class Sidebar extends HTMLRenderer {
         this.document = document;
 
         this.globalParametersField      = new ParametersField(this.rootNode, document);
-        this.currentToolParametersField = null;
+        this.currentToolParametersField = new ParametersField(this.rootNode, document);
+
+        // TODO: move this elsewhere?
+        this.document.eventManager.registerEventHandler({
+            eventTypes: ["rubens_toolchanged"],
+            selector: $("body"),
+            callback: (event) => {
+                this.updateCurrentToolParametersField();
+                console.log("rubens_toolchanged catched");
+        }});
 
         this.updateRootNode();
     }
@@ -120,9 +129,20 @@ export class Sidebar extends HTMLRenderer {
     /**
      * Update the current tool parameters field.
      *
+     * This method looks for parameters in the document current tool.
+     * If there is no current tool, no current tool parameters are displayed.
      * @author Camille Gobert
      */
     updateCurrentToolParametersField () {
-        // TODO
+        this.currentToolParametersField.clearParameters();
+
+        let currentTool = this.document.getCurrentTool();
+        if (! currentTool) {
+            return;
+        }
+
+        let currentToolParameters = currentTool.parameters;
+        this.currentToolParametersField.addAllParameters(Object.keys(currentToolParameters)
+                                                               .map((key) => currentToolParameters[key]));
     }
 }
