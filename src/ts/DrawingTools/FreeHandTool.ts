@@ -3,30 +3,59 @@ import {Point} from "../utils/Point";
 import {Canvas} from "../Image/Canvas";
 import {Line} from "../DrawingPrimitives/Line";
 import {ImageWorkspace} from "../ImageWorkspace";
+import * as Params from "../Parameter";
+import { ToolParameters } from "./Tool";
+
+
+/**
+ * Set of parameters used by [[FreeHandTool]].
+ * Default values of those parameters are defined in the class implementation.
+ */
+export class FreeHandParameters implements ToolParameters {
+    color: Params.ColorParameter = {
+        kind: Params.ParameterKind.Color,
+        value: "#000000",
+        name: "Color"
+    };
+
+    thickess: Params.NumberParameter = {
+        kind: Params.ParameterKind.Number,
+        value: 1,
+        name: "Pencil thickness",
+        min: 1,
+        step: 1
+    };
+}
 
 
 /**
  * Tool used for free-hand drawing.
  *
- * The user click to start the drawing, and release the mouse button to stop
+ * Draw lines between each consecutive points selected by the user with its
+ * mouse with left-button pressed.
  */
 export class FreeHandTool extends Tool {
 
     /**
-     * The last known position of the mouse
+     * Set of parameters of this tool.
+     */
+    parameters: FreeHandParameters;
+
+    /**
+     * The last known position of the mouse.
      */
     private lastPosition: Point;
 
 
     /**
-     * Basic constructor
-     *
+     * Basic constructor.
      * @param workspace The image workspace, where the operations are displayed
      *
      * @author Mathieu Fehr
      */
     constructor(workspace: ImageWorkspace) {
         super(workspace);
+        this.parameters = new FreeHandParameters();
         this.lastPosition = null;
 
         this.initEventHandlers();
@@ -68,7 +97,7 @@ export class FreeHandTool extends Tool {
     }
 
     /**
-     * The action made when the user release the mouse button
+     * The action made when the user release the mouse button.
      *
      * @Mathieu Fehr
      */
@@ -80,7 +109,7 @@ export class FreeHandTool extends Tool {
 
 
     /**
-     * Setup the event handlers
+     * Setup the event handlers.
      *
      * @author Mathieu Fehr
      */
@@ -108,10 +137,12 @@ export class FreeHandTool extends Tool {
 
 
     /**
-     * Draw a line from this.lastPosition to currentPosition on the given canvas
+     * Draw a line from this.lastPosition to currentPosition on the given canvas.
      *
      * @param image             The image where the line will be drawn
      * @param currentPosition   The current position of the mouse
+     *
+     * @author Mathieu Fehr
      */
     drawLine(image: Canvas, currentPosition: Point) {
         let imageData = image.getImageData();

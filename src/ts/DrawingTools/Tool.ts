@@ -3,6 +3,12 @@ import { EventManager } from "../UI/EventManager";
 import { EventHandler } from "../UI/EventHandler";
 import { ImageWorkspace } from "../ImageWorkspace";
 
+/**
+ * Abstract type for a set of tool parameters.
+ * This interface should be implemented by any set of parameters used by a tool.
+ */
+export interface ToolParameters {};
+
 
 /**
  * A tool available to the user for drawing/modifying the image.
@@ -10,27 +16,42 @@ import { ImageWorkspace } from "../ImageWorkspace";
 export abstract class Tool {
 
     /**
+     * The name of the tool.
+     * This information may for instance be used by the UI.
+     */
+    readonly name: string;
+
+    /**
      * The list of event handlers.
      */
     protected eventHandlers: EventHandler[];
 
     /**
-     * The image workspace, where the operations are displayed
+     * The image workspac where to apply the tool operations.
      */
     workspace: ImageWorkspace;
 
     /**
-     * Basic constructor
+     * The set of parameters of the tool.
+     * It may be empty.
      */
-    constructor (workspace: ImageWorkspace) {
+    parameters: ToolParameters;
+
+    /**
+     * Basic constructor.
+     *
+     * @author Mathieu Fehr
+     */
+    constructor () {
         this.eventHandlers = [];
-        this.workspace = workspace
+
+        // Starts with a null value, defined later in time (before any use)
+        this.workspace = null;
     }
 
 
     /**
      * Register all necessary events handlers required by the tool.
-     *
      * @param eventManager The manager dispatching the events.
      *
      * @author Mathieu Fehr
@@ -44,7 +65,6 @@ export abstract class Tool {
 
     /**
      * See documentation of registerEvents, and change register with unregister.
-     *
      * @param eventManager The manager dispatching the events.
      *
      * @author Mathieu Fehr
