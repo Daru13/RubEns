@@ -6,6 +6,7 @@ import * as Params from "../Parameter";
 import { ToolParameters } from "./Tool";
 import { Ellipse } from "../DrawingPrimitives/Ellipse";
 
+
 /**
  * Set of parameters used by [[FreeHandTool]].
  * Default values of those parameters are defined in the class implementation.
@@ -68,7 +69,6 @@ export class FreeHandTool extends Tool {
      * @author Mathieu Fehr
      */
     onMouseDown(event: MouseEvent) {
-
         // This might happen if the user release the mouse button outside of the web browser
         if(this.lastPosition !== null) {
             return;
@@ -93,7 +93,7 @@ export class FreeHandTool extends Tool {
         let currentPosition = this.workspace.workingCanvas.getMouseEventCoordinates(event);
         currentPosition.x = Math.floor(currentPosition.x);
         currentPosition.y = Math.floor(currentPosition.y);
-        this.drawLine(this.workspace.drawingCanvas, currentPosition);
+        this.drawLine(this.workspace.workingCanvas, currentPosition);
         this.lastPosition = currentPosition;
     }
 
@@ -105,6 +105,7 @@ export class FreeHandTool extends Tool {
     onMouseUp(event: MouseEvent) {
         // We first draw the last line
         this.onMouseMove(event);
+        this.workspace.applyWorkingCanvas();
         this.lastPosition = null;
     }
 
