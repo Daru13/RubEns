@@ -44,6 +44,8 @@ export class ImageWorkspace {
      * Apply the working canvas in the drawingCanvas.
      * When a tool want to apply an operation in the drawingCanvas, it should draw it in the
      * working canvas, and then call this function.
+     *
+     * @author Mathieu Fehr
      */
     applyWorkingCanvas() {
         let workingImageData = this.workingCanvas.getImageData();
@@ -65,7 +67,7 @@ export class ImageWorkspace {
     }
 
     /**
-     * Instanciates and initializes a new ImageWorkspace object.
+     * Instantiates and initializes a new ImageWorkspace object.
      * @return {ImageWorkspace} Fresh instance of ImageWorkspace.
      *
      * @author Mathieu Fehr

@@ -1,8 +1,7 @@
-import {Tool} from "./Tool";
-import {Point} from "../utils/Point";
-import {Canvas} from "../Image/Canvas";
-import {Line} from "../DrawingPrimitives/Line";
-import {ImageWorkspace} from "../ImageWorkspace";
+import { Tool } from "./Tool";
+import { Point } from "../utils/Point";
+import { Canvas } from "../Image/Canvas";
+import { Line } from "../DrawingPrimitives/Line";
 import * as Params from "../Parameter";
 import { ToolParameters } from "./Tool";
 import { Ellipse } from "../DrawingPrimitives/Ellipse";
@@ -90,6 +89,7 @@ export class FreeHandTool extends Tool {
         if(this.lastPosition === null) {
             return;
         }
+
         let currentPosition = this.workspace.workingCanvas.getMouseEventCoordinates(event);
         currentPosition.x = Math.floor(currentPosition.x);
         currentPosition.y = Math.floor(currentPosition.y);
@@ -100,7 +100,7 @@ export class FreeHandTool extends Tool {
     /**
      * The action made when the user release the mouse button.
      *
-     * @Mathieu Fehr
+     * @author Mathieu Fehr
      */
     onMouseUp(event: MouseEvent) {
         // We first draw the last line
@@ -139,16 +139,13 @@ export class FreeHandTool extends Tool {
     /**
      * Returns a function to apply on canvas
      * @param  {LineParameters} param thickness and color
-     * @return {ToDraw}               a function to apply on canvas
      *
      * @author Josselin GIET
      */
     static getLambda (param: FreeHandParameters) {
-        let brush = function(center: Point, image: ImageData) {
+        return function(center: Point, image: ImageData) {
             Ellipse.drawFromCenter(image, center, param.thickness.value, param.thickness.value)
         };
-
-        return brush;
     }
 
 
