@@ -68,6 +68,11 @@ export class Ellipse {
      */
     static drawFromEquation(image: ImageData, center: Point, a: number, b: number) {
 
+        center.x = Math.round(center.x);
+        center.y = Math.round(center.y);
+        a = Math.round(a);
+        b = Math.round(b);
+
         // The current image
         let imageWidth = image.width;
         let imageHeight = image.height;
