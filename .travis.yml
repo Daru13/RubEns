@@ -18,6 +18,7 @@
     "npm install amd-loader -g",
     "npm install typedoc -g",
     "npm install jquery -g",
+    "npm install jquery",
     "npm install --save-dev @types/jquery",
     "npm install jsdom",
     "npm install jsdom-global",
