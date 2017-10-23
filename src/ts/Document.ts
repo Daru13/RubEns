@@ -57,6 +57,7 @@ export class Document {
         this.imageWorkspace.workingCanvas = new Canvas(<HTMLCanvasElement> document.getElementById("working_canvas"));
         this.imageWorkspace.selectionCanvas = new Canvas(<HTMLCanvasElement> document.getElementById("selection_canvas"));
         this.imageWorkspace.selectedArea = new SelectedArea(this.parameters.width, this.parameters.height);
+        this.imageWorkspace.selectedArea.selectEverything();
     }
 
     /**

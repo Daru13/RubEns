@@ -11,6 +11,7 @@ import { EllipseTool } from "./Tools/EllipseTool";
 import { RectangleTool } from "./Tools/RectangleTool";
 import { FreeHandTool } from "./Tools/FreeHandTool";
 import {RectangleSelectionTool} from "./Tools/RectangleSelectionTool";
+import {MagicWandTool} from "./Tools/MagicWandTool";
 
 
 /**
@@ -131,7 +132,8 @@ export class RubEns {
             new EllipseTool(),
             new RectangleTool(),
             new FreeHandTool(),
-            new RectangleSelectionTool()
+            new RectangleSelectionTool(),
+            new MagicWandTool()
         ];
     }
 
