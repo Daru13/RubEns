@@ -36,7 +36,7 @@ export class EventManager {
      */
     constructor () {
         this.registeredHandlers = [];
-        console.log("Registered handlers list created:", this.registeredHandlers);
+        // console.log("Registered handlers list created:", this.registeredHandlers);
 
         this.isListening = false;
     }
