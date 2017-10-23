@@ -97,6 +97,7 @@ canvas {
 }
 
 #selection_canvas {
+    border: 1px solid transparent;
     z-index: 70;
 }
 
