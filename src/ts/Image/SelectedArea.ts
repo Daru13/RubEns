@@ -23,7 +23,8 @@ export class SelectedArea {
     height: number;
 
     /**
-     * Instantiates and initializes a new SelectedArea object, given a width and a height
+     * Instantiates and initializes a new SelectedArea object, given a width and a height.
+     * By default, no pixel are selected.
      * @param {number} width    The width of the SelectedArea
      * @param {number} height   The height of the SelectedArea
      *
@@ -33,17 +34,25 @@ export class SelectedArea {
         this.width = width;
         this.height = height;
         this.data = new Uint8Array(width * height);
-        this.reset();
     }
 
 
     /**
-     * Reset the selection.
-     * This is the same than selecting everything.
+     * Select every pixel in the image.
      *
      * @author Mathieu Fehr
      */
-    reset() {
+    selectEverything() {
         this.data.fill(255);
+    }
+
+
+    /**
+     * Select no pixel in the image.
+     *
+     * @author Mathieu Fehr
+     */
+    selectNothing() {
+        this.data.fill(0);
     }
 }
