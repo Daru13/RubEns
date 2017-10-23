@@ -12,6 +12,7 @@ import { RectangleTool } from "./Tools/RectangleTool";
 import { FreeHandTool } from "./Tools/FreeHandTool";
 import {RectangleSelectionTool} from "./Tools/RectangleSelectionTool";
 import {MagicWandTool} from "./Tools/MagicWandTool";
+import {BucketTool} from "./Tools/BucketTool";
 
 
 /**
@@ -133,7 +134,8 @@ export class RubEns {
             new RectangleTool(),
             new FreeHandTool(),
             new RectangleSelectionTool(),
-            new MagicWandTool()
+            new MagicWandTool(),
+            new BucketTool()
         ];
     }
 
