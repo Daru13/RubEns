@@ -61,8 +61,6 @@ export class MagicWandTool extends Tool {
         let imageHeight = this.workspace.height;
         let imageWidth = this.workspace.width;
 
-        let selectionImageData = new ImageData(imageWidth, imageHeight);
-        selectionImageData.data.fill(255);
         let selectedArea = new SelectedArea(imageWidth, imageHeight);
         let imageData = this.workspace.drawingCanvas.getImageData();
 
@@ -95,10 +93,6 @@ export class MagicWandTool extends Tool {
                imageData.data[4 * offset + 2] === b && imageData.data[4 * offset + 3] === a) {
 
                 selectedArea.data[offset] = 255;
-                selectionImageData.data[4 * offset] = 0;
-                selectionImageData.data[4 * offset + 1] = 0;
-                selectionImageData.data[4 * offset + 2] = 0;
-                selectionImageData.data[4 * offset + 3] = 0;
 
                 stack.push(new Point(pixel.x - 1, pixel.y    ));
                 stack.push(new Point(pixel.x + 1, pixel.y    ));
@@ -108,7 +102,7 @@ export class MagicWandTool extends Tool {
         }
 
         this.workspace.selectedArea = selectedArea;
-        this.workspace.selectionCanvas.setImageData(selectionImageData);
+        this.workspace.displaySelection(selectedArea);
     }
 
 }

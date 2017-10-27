@@ -1,5 +1,6 @@
 import { Canvas } from "./Image/Canvas";
 import { SelectedArea } from "./Image/SelectedArea";
+import {Point} from "./utils/Point";
 
 
 /**
@@ -64,6 +65,42 @@ export class ImageWorkspace {
 
         this.drawingCanvas.setImageData(drawingImageData);
         this.workingCanvas.clear();
+    }
+
+    /**
+     * Display a representation of the selection given in parameters.
+     *
+     * @author Mathieu Fehr
+     */
+    displaySelection(selection: SelectedArea) {
+        let imageData = new ImageData(this.width, this.height);
+        imageData.data.fill(0);
+
+        let selectionBorder : Array<Point> = [];
+
+        selection.data.forEach((value, index) => {
+            let x = index % this.width;
+            let y = Math.floor(index / this.width);
+
+            if(x === 0 || y === 0 || x === this.width-1 || y === this.height-1 || value !== 0) {
+                return;
+            }
+
+            for(let i = y-1; i <= y+1; i++) {
+                for(let j = x-1; j <= x+1; j++) {
+                    if(selection.data[i * this.width + j] !== 0) {
+                        selectionBorder.push(new Point(x,y));
+                        return;
+                    }
+                }
+            }
+        });
+
+        for(let p of selectionBorder) {
+            imageData.data[4 * (p.y * this.width + p.x) + 3] = 255;
+        }
+
+        this.selectionCanvas.setImageData(imageData);
     }
 
     /**
