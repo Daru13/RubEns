@@ -3,7 +3,7 @@ import { Rectangle } from "../DrawingPrimitives/Rectangle";
 import { SimpleShapeTool } from "./SimpleShapeTool";
 import * as Params from "../Parameter";
 import { ToolParameters } from "./Tool";
-
+import { Color } from "../utils/Color";
 
 /**
  * Set of parameters used by [[RectangleTool]].
@@ -68,7 +68,8 @@ export class RectangleTool extends SimpleShapeTool {
     drawShape(firstPoint: Point, secondPoint: Point) {
         let imageData = new ImageData(this.workspace.width, this.workspace.height);
 
-        Rectangle.draw(firstPoint, secondPoint, imageData);
+        let color = Color.buildFromHex(this.parameters.color.value);
+        Rectangle.draw(firstPoint, secondPoint, imageData, color);
 
         this.workspace.workingCanvas.setImageData(imageData);
     }
