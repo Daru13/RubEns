@@ -53,7 +53,13 @@ export class MainMenu extends HTMLRenderer {
     setDefaultDocumentActions () {
         let defaultActions = [];
 
-        // TODO: implement saving and loading actions!
+        // TODO: implement new document, saving and loading actions!
+        defaultActions.push({
+            name: "New",
+            apply: (document) => {  },
+            disabled: true
+        });
+
         defaultActions.push({
             name: "Save",
             apply: (document) => {  },
