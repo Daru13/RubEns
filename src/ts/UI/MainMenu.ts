@@ -5,8 +5,12 @@ import { DocumentAction, DocumentActionsMenu } from "./DocumentActionsMenu";
 import { Document } from "../Document";
 
 /**
- * UI element representing a single numerical parameter.
- */
+* Main UI element representing the top main menu of the UI.
+*
+* It is meant to display importants actions and tools to the user,
+* organised in a meaningful way, so that the latter can easily interact
+* with the document by the mean of controls presented in this menu.
+* */
 export class MainMenu extends HTMLRenderer {
     protected rootNodeId = "main_menu";
 
