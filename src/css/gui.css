@@ -106,25 +106,35 @@ canvas {
 /* Main menu
 /*****************************************************************/
 
-#tool_selection_menu {
-    padding: 0 0 0 20px;
+#tool_selection_menu,
+#document_actions_menu {
+    display: inline-block;
+    padding: 0 0 0 15px;
     margin: 0;
     line-height: 80px;
     vertical-align: middle;
 }
 
-#tool_selection_menu > li {
+#document_actions_menu {
+    padding: 0 15px 0 15px;
+    border-right: 2px solid cyan;
+}
+
+#tool_selection_menu > li,
+#document_actions_menu > li {
     display: inline-block;
-    margin: 0 20px 0 0;
+    margin: 0 15px 0 0;
     padding: 0;
     list-style: none;
 }
 
-#tool_selection_menu > li:last-child {
+#tool_selection_menu > li:last-child,
+#document_actions_menu > li:last-child {
     margin: 0;
 }
 
-#tool_selection_menu .tool_button {
+#tool_selection_menu .tool_button,
+#document_actions_menu .document_action_button {
     margin: 0;
-    padding: 5px;
+    padding: 3px;
 }
