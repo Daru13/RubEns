@@ -45,35 +45,35 @@ describe("Test of the user interface:", function () {
     describe("Root layout:", function () {
 
         it("Should create a root layout", function () {
-            JSDOMPromise = JSDOMPromise.then(_ => {
+            JSDOMPromise.then(_ => {
                 assert(rubEns.rootLayout);
                 assert(rubEns.rootLayout.rootNode);
             });
         });
 
         it("Should create a main menu", function () {
-            JSDOMPromise = JSDOMPromise.then(_ => {
+            JSDOMPromise.then(_ => {
                 assert(rubEns.rootLayout.mainMenu);
                 assert(rubEns.rootLayout.mainMenu.rootNode);
             });
         });
 
         it("Should create a drawing display", function () {
-            JSDOMPromise = JSDOMPromise.then(_ => {
+            JSDOMPromise.then(_ => {
                 assert(rubEns.rootLayout.drawingDisplay);
                 assert(rubEns.rootLayout.drawingDisplay.rootNode);
             });
         });
 
         it("Should create a sidebar", function () {
-            JSDOMPromise = JSDOMPromise.then(_ => {
+            JSDOMPromise.then(_ => {
                 assert(rubEns.rootLayout.sidebar);
                 assert(rubEns.rootLayout.sidebar.rootNode);
             });
         });
 
         it("Should create a status bar", function () {
-            JSDOMPromise = JSDOMPromise.then(_ => {
+            JSDOMPromise.then(_ => {
                 assert(rubEns.rootLayout.statusBar);
                 assert(rubEns.rootLayout.statusBar.rootNode);
             });
