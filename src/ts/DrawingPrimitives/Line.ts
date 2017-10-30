@@ -26,7 +26,7 @@ export class Line {
      * @param  {ImageData} image the ImageData to modify
      * @return {void}            Returns nothing : works by side-effect
      */
-    static paintItBlack(pixel: Point, image: ImageData):void {
+    static paintItBlack(pixel: Point, image: ImageData, transparency: number):void {
          if(pixel.x < 0 || pixel.x > image.width-1 || pixel.y < 0 || pixel.y > image.height-1) {
              return;
          }
@@ -39,7 +39,7 @@ export class Line {
          image.data[coordonee1D] = color_r;
          image.data[coordonee1D + 1] = color_g;
          image.data[coordonee1D + 2] = color_b;
-         image.data[coordonee1D + 3] = 255;
+         image.data[coordonee1D + 3] = 255;//Math.floor(transparency);
      }
 
 
@@ -60,6 +60,7 @@ export class Line {
 
 
 
+        /*
         let currentPixel: Point = new Point(from.x, from.y);
         brush(currentPixel, image);
         let dx = to.x - from.x;
@@ -107,6 +108,77 @@ export class Line {
                 }
                 brush(currentPixel, image);
             }
+
         }
+        */
+       Line.bresenham(image,from,to,10)
+    }
+
+    static bresenham(image: ImageData,from: Point, to: Point, thickness: number){
+        function setPixelColor(x,y,transparency){
+            let currentPixel: Point = new Point(x, y);
+            console.log(x);
+            console.log(y);
+            console.log(transparency);
+            Line.paintItBlack(currentPixel,image,Math.floor(transparency));
+        }
+
+        let currentPixel: Point = new Point(from.x, from.y);
+        // brush(currentPixel, image);
+        // First we compute in which "direction" x and y increase
+        // between from and to
+        let x0 = from.x;
+        let x1 = to.x;
+        let y0 = from.y;
+        let y1 = to.y;
+        let dx = to.x - from.x;
+        let dy = to.y - from.y;
+        let xInc = dx > 0 ? 1 : -1;
+        let yInc = dy > 0 ? 1 : -1;
+
+        dx = Math.abs(dx);
+        dy = Math.abs(dy);
+        let err = dx -dy;
+        let ed = dx + dy == 0? 0 : Math.sqrt(dx*dx+dy*dy);
+        let e2 = 0;
+        let x2 = 0;
+        let y2 = 0;
+
+
+        let cont: boolean = true;
+        let wd = Math.floor((thickness+1)/2);
+        // Since there is no "break" instruction in Typescript
+        console.log("Un truc");
+        while (cont ){
+            setPixelColor(x0, y0, Math.max(0,255*(Math.abs(err-dx+dy)/ed - wd + 1)));
+            e2 = err;
+            x2 = x0;
+            if(2*e2 >= -dx) {
+                e2 += dy;
+                y2 = y0;
+                while(e2 < ed*wd && (y1 != y2 || dx > dy)) {
+                    y2 += yInc;
+                    setPixelColor(x0, y2, Math.max(0, 255*(Math.abs(e2)/ed - wd + 1)));
+                    e2 += dx;
+                }
+                if (x0 == x1){ cont = false}
+                e2 = err;
+                err -= dy;
+                x0 += xInc;
+            }
+            if (2*e2 <= dy) {
+                e2 = dx-e2;
+                while (e2 < ed*wd && (x1 != x2 || dx < dy)){
+                    x2 += xInc;
+                    setPixelColor(x2, y0, Math.max(0,255*(Math.abs(e2)/ed-wd+1)));
+                    e2 += dy;
+                }
+                if (y0 == y1){ cont = false}
+                err += dx;
+                y0 += yInc;
+            }
+            console.log("On Continue")
+        }
+        console.log("On a fini");
     }
 }
