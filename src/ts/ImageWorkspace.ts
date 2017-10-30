@@ -94,6 +94,7 @@ export class ImageWorkspace {
 
             // If the pixel is invisible in the image, we set the corresponding selection pixel
             // to the background value, so drawings will only be displayed in the selection.
+            // TODO stop hardcoding the color of the background
             if(imageData.data[4 * (y * this.width + x) + 3] === 0) {
                 imageData.data[4 * (y * this.width + x)    ] = 211;
                 imageData.data[4 * (y * this.width + x) + 1] = 211;
