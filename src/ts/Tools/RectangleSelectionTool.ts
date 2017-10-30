@@ -6,7 +6,7 @@ import { Point } from "../utils/Point";
  * Tool used to draw rectangle selection in the image
  *
  * The user select two points by clicking and then releasing the mouse button, and the
- * rectangle will be drawn between these two points.
+ * selection rectangle will be the rectangle between those two points.
  */
 export class RectangleSelectionTool extends Tool {
 
@@ -131,7 +131,7 @@ export class RectangleSelectionTool extends Tool {
      * @author Mathieu Fehr
      */
     applySelection(firstPoint: Point, secondPoint: Point) {
-        this.previewSelection(firstPoint, secondPoint);
+        //this.previewSelection(firstPoint, secondPoint);
 
         // The current image
         let width = this.workspace.selectedArea.width;
@@ -150,10 +150,11 @@ export class RectangleSelectionTool extends Tool {
         let drawing_max_y = Math.min(height-1,max_y);
 
         this.workspace.selectedArea.data.fill(0);
-
         for(let i = drawing_min_y; i<=drawing_max_y; i++) {
             this.workspace.selectedArea.data.fill(255, i*width + drawing_min_x, i*width + drawing_max_x+1)
         }
+
+        this.workspace.displaySelection(this.workspace.selectedArea);
     }
 
 
@@ -166,30 +167,6 @@ export class RectangleSelectionTool extends Tool {
      * @author Mathieu Fehr
      */
     previewSelection(firstPoint: Point, secondPoint: Point) {
-        let width = this.workspace.selectedArea.width;
-        let height = this.workspace.selectedArea.height;
-
-        let imageData = new ImageData(width, height);
-        imageData.data.fill(255);
-
-        // Get the rectangle corners
-        let min_x = Math.min(firstPoint.x, secondPoint.x);
-        let min_y = Math.min(firstPoint.y, secondPoint.y);
-        let max_x = Math.max(firstPoint.x, secondPoint.x);
-        let max_y = Math.max(firstPoint.y, secondPoint.y);
-
-        // The rectangle will be contained in this box
-        let drawing_min_x = Math.max(0,min_x);
-        let drawing_min_y = Math.max(0,min_y);
-        let drawing_max_x = Math.min(width-1,max_x);
-        let drawing_max_y = Math.min(height-1,max_y);
-
-        for(let i = drawing_min_y; i<=drawing_max_y; i++) {
-            for(let j = drawing_min_x; j<=drawing_max_x; j++) {
-                imageData.data[4*(i*width + j) + 3] = 0;
-            }
-        }
-
-        this.workspace.selectionCanvas.setImageData(imageData);
+        this.applySelection(firstPoint, secondPoint);
     }
 }

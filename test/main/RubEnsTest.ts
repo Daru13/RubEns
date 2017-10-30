@@ -13,64 +13,63 @@ global.$ = require('jquery');
 
 describe("Test of RubEns:", function () {
 
-        let JSDOMPromise: Promise;
-        let rubEns: RubEns;
+    let JSDOMPromise: Promise;
+    let rubEns: RubEns;
 
-        /**
-         * Create a RubEns app, and let it initializes the UI.
-         * It is only done once, as it is not modified in the following tests.
-         *
-         * In order to have the code working, it must first setup a testing environement
-         * which supplies an expected DOM, i.e. a DOM built from the index.html file,
-         * which is assumed to be loaded by the browser before any script loads otherwise.
-         *
-         * Since it is fully asynchronous, every test relies on a promise,
-         * which ensures the DOM and the app have been properly loaded.
-         */
-        before(function() {
-            // Asynchronously load the index.html file for building the DOM
-            JSDOMPromise = JSDOM.fromFile("./src/index.html", {})
-                .then(loadedDOM => {
-                    global.window = loadedDOM.window;
+    /**
+     * Create a RubEns app, and let it initializes the UI.
+     * It is only done once, as it is not modified in the following tests.
+     *
+     * In order to have the code working, it must first setup a testing environement
+     * which supplies an expected DOM, i.e. a DOM built from the index.html file,
+     * which is assumed to be loaded by the browser before any script loads otherwise.
+     *
+     * Since it is fully asynchronous, every test relies on a promise,
+     * which ensures the DOM and the app have been properly loaded.
+     */
+    before(function () {
+        // Asynchronously load the index.html file for building the DOM
+        JSDOMPromise = JSDOM.fromFile("./src/index.html", {})
+            .then(loadedDOM => {
+                global.window = loadedDOM.window;
 
-                    let defaultParameters = new RubEnsParameters();
-                    rubEns = new RubEns(defaultParameters);
-                })
-                .catch(error => {
-                    console.log("Error: JSDOM could not load index.html for setting up the test environement.");
-                    // console.log(error);
-                });
-        });
+                let defaultParameters = new RubEnsParameters();
+                rubEns = new RubEns(defaultParameters);
+            })
+            .catch(error => {
+                console.log("Error: JSDOM could not load index.html for setting up the test environement.");
+                // console.log(error);
+            });
+    });
 
     describe("Main application (RubEns):", function () {
 
         it("Should initialize the event manager", function () {
-            JSDOMPromise = JSDOMPromise.then(_ => {
+            JSDOMPromise.then(_ => {
                 assert(rubEns.eventManager);
             });
         });
 
         it("Should instanciate the tools", function () {
-            JSDOMPromise = JSDOMPromise.then(_ => {
-                assert(rubens.tools);
-                assert(rubens.tools.length > 0);
+            JSDOMPromise.then(_ => {
+                assert(rubEns.tools && rubEns.tools.length > 0);
             });
         });
 
         it("Should create a new document if required, none otherwise", function () {
-            JSDOMPromise = JSDOMPromise.then(_ => {
-                if (rubens.parameters.createDocumentOnStartup) {
-                    assert(rubens.document);
+            JSDOMPromise.then(_ => {
+                if (rubEns.parameters.createDocumentOnStartup) {
+                    assert(rubEns.document);
                 }
                 else {
-                    assert(! rubens.document);
+                    assert(! rubEns.document);
                 }
             });
         });
 
         it("Should initialize the user interface", function () {
-            JSDOMPromise = JSDOMPromise.then(_ => {
-                assert(rubens.rootLayout);
+            JSDOMPromise.then(_ => {
+                assert(rubEns.rootLayout)
             });
         });
     });

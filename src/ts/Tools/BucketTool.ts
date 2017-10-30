@@ -68,4 +68,3 @@ export class BucketTool extends Tool {
         this.workspace.applyWorkingCanvas();
     }
 }
-

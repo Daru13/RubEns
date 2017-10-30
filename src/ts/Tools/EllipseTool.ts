@@ -3,6 +3,7 @@ import { SimpleShapeTool } from "./SimpleShapeTool";
 import { Ellipse } from "../DrawingPrimitives/Ellipse";
 import * as Params from "../Parameter";
 import { ToolParameters } from "./Tool";
+import { Color } from "../utils/Color";
 
 
 /**
@@ -70,7 +71,8 @@ export class EllipseTool extends SimpleShapeTool {
     drawShape(firstPoint: Point, secondPoint: Point) {
         let imageData = new ImageData(this.workspace.width, this.workspace.height);
 
-        Ellipse.drawFromBoundingRect(imageData, firstPoint, secondPoint);
+        let color = Color.buildFromHex(this.parameters.color.value);
+        Ellipse.drawFromBoundingRect(imageData, firstPoint, secondPoint, color);
 
         this.workspace.workingCanvas.setImageData(imageData);
     }

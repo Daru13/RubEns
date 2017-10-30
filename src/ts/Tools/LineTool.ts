@@ -4,6 +4,7 @@ import { Ellipse } from "../DrawingPrimitives/Ellipse"
 import { SimpleShapeTool } from "./SimpleShapeTool";
 import * as Params from "../Parameter";
 import { ToolParameters } from "./Tool";
+import { Color } from "../utils/Color";
 
 
 /**
@@ -60,7 +61,8 @@ export class LineTool extends SimpleShapeTool {
      */
     static getLambda (param: LineParameters) {
         let brush = function(center: Point, image: ImageData) {
-            Ellipse.drawFromCenter(image, center, param.thickness.value, param.thickness.value)
+            let color = Color.buildFromHex(param.color.value);
+            Ellipse.drawFromCenter(image, center, param.thickness.value, param.thickness.value, color);
         };
 
         return brush;

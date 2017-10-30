@@ -5,6 +5,7 @@ import { Line } from "../DrawingPrimitives/Line";
 import * as Params from "../Parameter";
 import { ToolParameters } from "./Tool";
 import { Ellipse } from "../DrawingPrimitives/Ellipse";
+import { Color } from "../utils/Color";
 
 
 /**
@@ -145,7 +146,8 @@ export class FreeHandTool extends Tool {
      */
     static getLambda (param: FreeHandParameters) {
         return function(center: Point, image: ImageData) {
-            Ellipse.drawFromCenter(image, center, param.thickness.value, param.thickness.value)
+            let color = Color.buildFromHex(param.color.value);
+            Ellipse.drawFromCenter(image, center, param.thickness.value, param.thickness.value, color);
         };
     }
 
