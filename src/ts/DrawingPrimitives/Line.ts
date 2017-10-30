@@ -34,6 +34,8 @@ export class Line {
          let color_r = 0; //Math.random() * 255;
          let color_g = 0; //Math.random() * 255;
          let color_b = 0; //Math.random() * 255;
+         console.log("on imprime un pixel de transparence")
+         console.log(transparency);
 
          let coordonee1D = (pixel.y*image.width+pixel.x)*4;
          image.data[coordonee1D] = color_r;
@@ -58,9 +60,8 @@ export class Line {
      */
     static draw(image: ImageData, from: Point, to: Point, brush: Brush) {
 
+        
 
-
-        /*
         let currentPixel: Point = new Point(from.x, from.y);
         brush(currentPixel, image);
         let dx = to.x - from.x;
@@ -110,8 +111,8 @@ export class Line {
             }
 
         }
-        */
-       Line.bresenham(image,from,to,10)
+
+     //  Line.bresenham(image,from,to,10)
     }
 
     static bresenham(image: ImageData,from: Point, to: Point, thickness: number){
@@ -133,8 +134,8 @@ export class Line {
         let y1 = to.y;
         let dx = to.x - from.x;
         let dy = to.y - from.y;
-        let xInc = dx > 0 ? 1 : -1;
-        let yInc = dy > 0 ? 1 : -1;
+        let sx = dx > 0 ? 1 : -1;
+        let sy = dy > 0 ? 1 : -1;
 
         dx = Math.abs(dx);
         dy = Math.abs(dy);
@@ -156,26 +157,28 @@ export class Line {
             if(2*e2 >= -dx) {
                 e2 += dy;
                 y2 = y0;
-                while(e2 < ed*wd && (y1 != y2 || dx > dy)) {
-                    y2 += yInc;
+                //while(e2 < ed*wd && (y1 != y2 || dx > dy)) {
+                while(e2 < ed*wd &&  dx > dy) {
+                    y2 += sy;
                     setPixelColor(x0, y2, Math.max(0, 255*(Math.abs(e2)/ed - wd + 1)));
                     e2 += dx;
                 }
                 if (x0 == x1){ cont = false}
                 e2 = err;
                 err -= dy;
-                x0 += xInc;
+                x0 += sx;
             }
             if (2*e2 <= dy) {
                 e2 = dx-e2;
-                while (e2 < ed*wd && (x1 != x2 || dx < dy)){
-                    x2 += xInc;
+                //while (e2 < ed*wd && (x1 != x2 || dx < dy)){
+                while (e2 < ed*wd && dx < dy ){
+                    x2 += sx;
                     setPixelColor(x2, y0, Math.max(0,255*(Math.abs(e2)/ed-wd+1)));
                     e2 += dy;
                 }
                 if (y0 == y1){ cont = false}
                 err += dx;
-                y0 += yInc;
+                y0 += sy;
             }
             console.log("On Continue")
         }
