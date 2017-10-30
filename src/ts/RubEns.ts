@@ -10,9 +10,10 @@ import { LineTool } from "./Tools/LineTool";
 import { EllipseTool } from "./Tools/EllipseTool";
 import { RectangleTool } from "./Tools/RectangleTool";
 import { FreeHandTool } from "./Tools/FreeHandTool";
-import {RectangleSelectionTool} from "./Tools/RectangleSelectionTool";
-import {MagicWandTool} from "./Tools/MagicWandTool";
-import {BucketTool} from "./Tools/BucketTool";
+import { RectangleSelectionTool } from "./Tools/RectangleSelectionTool";
+import { MagicWandTool } from "./Tools/MagicWandTool";
+import { BucketTool } from "./Tools/BucketTool";
+import { SelectEverythingTool } from "./Tools/SelectEverythingTool";
 
 
 /**
@@ -134,6 +135,7 @@ export class RubEns {
             new RectangleTool(),
             new FreeHandTool(),
             new RectangleSelectionTool(),
+            new SelectEverythingTool(),
             new MagicWandTool(),
             new BucketTool()
         ];
