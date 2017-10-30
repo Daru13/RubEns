@@ -6,7 +6,7 @@ import { Point } from "../utils/Point";
  * Tool used to draw rectangle selection in the image
  *
  * The user select two points by clicking and then releasing the mouse button, and the
- * rectangle will be drawn between these two points.
+ * selection rectangle will be the rectangle between those two points.
  */
 export class RectangleSelectionTool extends Tool {
 
