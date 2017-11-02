@@ -98,7 +98,13 @@ export class RectangleSelectionTool extends Tool {
         this.secondPoint = this.workspace.workingCanvas.getMouseEventCoordinates(event);
         this.secondPoint.x = Math.floor(this.secondPoint.x);
         this.secondPoint.y = Math.floor(this.secondPoint.y);
-        this.applySelection(this.firstPoint, this.secondPoint);
+
+        if(this.firstPoint.x === this.secondPoint.x && this.firstPoint.y === this.secondPoint.y) {
+            this.workspace.clearSelection();
+        } else {
+            this.applySelection(this.firstPoint, this.secondPoint);
+        }
+
         this.firstPoint = null;
         this.secondPoint = null;
     }
@@ -118,7 +124,7 @@ export class RectangleSelectionTool extends Tool {
         this.secondPoint = this.workspace.workingCanvas.getMouseEventCoordinates(event);
         this.secondPoint.x = Math.floor(this.secondPoint.x);
         this.secondPoint.y = Math.floor(this.secondPoint.y);
-        this.previewSelection(this.firstPoint, this.secondPoint);
+        this.applySelection(this.firstPoint, this.secondPoint);
     }
 
 
@@ -155,18 +161,5 @@ export class RectangleSelectionTool extends Tool {
         }
 
         this.workspace.displaySelection(this.workspace.selectedArea);
-    }
-
-
-    /**
-     * Preview the selection in the image.
-     *
-     * @param {Point} firstPoint    The first point selected by the user
-     * @param {Point} secondPoint   The second point selected by the user
-     *
-     * @author Mathieu Fehr
-     */
-    previewSelection(firstPoint: Point, secondPoint: Point) {
-        this.applySelection(firstPoint, secondPoint);
     }
 }

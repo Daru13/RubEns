@@ -45,6 +45,11 @@ export class ImageWorkspace {
      */
     selectionBorderColorShift: number;
 
+    /**
+     * The ID of the interval drawing the selection canvas.
+     */
+    selectionDrawingIntervalID: number;
+
 
     /**
      * Apply the working canvas in the drawingCanvas.
@@ -72,6 +77,24 @@ export class ImageWorkspace {
         this.workingCanvas.clear();
     }
 
+
+    /**
+     * Clear the selection
+     */
+    clearSelection() {
+        if(this.selectionDrawingIntervalID !== null) {
+            window.clearInterval(this.selectionDrawingIntervalID);
+            this.selectionDrawingIntervalID = null;
+        }
+
+        this.selectedArea.data.fill(255);
+        let imageData = this.selectionCanvas.getImageData();
+        imageData.data.fill(0);
+        this.selectionCanvas.setImageData(imageData);
+
+    }
+
+
     /**
      * Display a representation of the selection given in parameters.
      * The selection canvas is equal to the drawing canvas, where the pixels selected have alpha = 0.
@@ -81,6 +104,14 @@ export class ImageWorkspace {
      */
     displaySelection(selection: SelectedArea) {
         let imageData = this.drawingCanvas.getImageData();
+
+        if(this.selectionDrawingIntervalID === null) {
+            this.selectionDrawingIntervalID = window.setInterval(() => {
+                this.selectionBorderColorShift+=3;
+                this.selectionBorderColorShift %= 10;
+                this.displaySelection(this.selectedArea);
+            } ,200);
+        }
 
         selection.data.forEach((value, index) => {
             let x = index % this.width;
@@ -138,12 +169,6 @@ export class ImageWorkspace {
         this.selectionCanvas = null;
         this.selectedArea = null;
         this.selectionBorderColorShift = 0;
-
-        // The selection is redrawn 5 times per seconds, to show an animation
-        setInterval(() => {
-            this.selectionBorderColorShift+=3;
-            this.selectionBorderColorShift %= 10;
-            this.displaySelection(this.selectedArea);
-        } ,200);
+        this.selectionDrawingIntervalID = null;
     }
 }

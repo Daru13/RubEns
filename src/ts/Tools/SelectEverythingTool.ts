@@ -56,7 +56,6 @@ export class SelectEverythingTool extends Tool {
      * @author Mathieu Fehr
      */
     applySelection() {
-        this.workspace.selectedArea.data.fill(255);
-        this.workspace.displaySelection(this.workspace.selectedArea);
+        this.workspace.clearSelection();
     }
 }
