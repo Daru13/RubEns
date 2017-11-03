@@ -31,17 +31,15 @@ export class Line {
              return;
          }
          // The color is currently random
-         let color_r = 0; //Math.random() * 255;
-         let color_g = 0; //Math.random() * 255;
-         let color_b = 0; //Math.random() * 255;
-         console.log("on imprime un pixel de transparence")
-         console.log(transparency);
+         let color_r = 0;
+         let color_g = 0;
+         let color_b = 0;
 
          let coordonee1D = (pixel.y*image.width+pixel.x)*4;
          image.data[coordonee1D] = color_r;
          image.data[coordonee1D + 1] = color_g;
          image.data[coordonee1D + 2] = color_b;
-         image.data[coordonee1D + 3] = 255;//Math.floor(transparency);
+         image.data[coordonee1D + 3] = Math.floor(transparency);
      }
 
 
@@ -118,13 +116,9 @@ export class Line {
     static bresenham(image: ImageData,from: Point, to: Point, thickness: number){
         function setPixelColor(x,y,transparency){
             let currentPixel: Point = new Point(x, y);
-            console.log(x);
-            console.log(y);
-            console.log(transparency);
             Line.paintItBlack(currentPixel,image,Math.floor(transparency));
         }
 
-        let currentPixel: Point = new Point(from.x, from.y);
         // brush(currentPixel, image);
         // First we compute in which "direction" x and y increase
         // between from and to
@@ -149,7 +143,6 @@ export class Line {
         let cont: boolean = true;
         let wd = Math.floor((thickness+1)/2);
         // Since there is no "break" instruction in Typescript
-        console.log("Un truc");
         while (cont ){
             setPixelColor(x0, y0, Math.max(0,255*(Math.abs(err-dx+dy)/ed - wd + 1)));
             e2 = err;
@@ -157,7 +150,6 @@ export class Line {
             if(2*e2 >= -dx) {
                 e2 += dy;
                 y2 = y0;
-                //while(e2 < ed*wd && (y1 != y2 || dx > dy)) {
                 while(e2 < ed*wd &&  dx > dy) {
                     y2 += sy;
                     setPixelColor(x0, y2, Math.max(0, 255*(Math.abs(e2)/ed - wd + 1)));
@@ -170,7 +162,6 @@ export class Line {
             }
             if (2*e2 <= dy) {
                 e2 = dx-e2;
-                //while (e2 < ed*wd && (x1 != x2 || dx < dy)){
                 while (e2 < ed*wd && dx < dy ){
                     x2 += sx;
                     setPixelColor(x2, y0, Math.max(0,255*(Math.abs(e2)/ed-wd+1)));
@@ -180,8 +171,6 @@ export class Line {
                 err += dx;
                 y0 += sy;
             }
-            console.log("On Continue")
         }
-        console.log("On a fini");
     }
 }
