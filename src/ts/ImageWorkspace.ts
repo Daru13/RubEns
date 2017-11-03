@@ -64,12 +64,27 @@ export class ImageWorkspace {
 
         // We select only the pixels that are in the selection
         this.selectedArea.data.forEach((value, index) => {
-            //TODO add support for alpha different than 0 or 255
+            //TODO add support for selection different than 0 or 255
             if(value !== 0 && workingImageData.data[4 * index + 3] !== 0) {
-                drawingImageData.data[4 * index] = workingImageData.data[4 * index];
-                drawingImageData.data[4 * index + 1] = workingImageData.data[4 * index + 1];
-                drawingImageData.data[4 * index + 2] = workingImageData.data[4 * index + 2];
-                drawingImageData.data[4 * index + 3] = workingImageData.data[4 * index + 3];
+                let destRed   = drawingImageData.data[4 * index];
+                let destBlue  = drawingImageData.data[4 * index + 1];
+                let destGreen = drawingImageData.data[4 * index + 2];
+                let destAlpha = drawingImageData.data[4 * index + 3];
+
+                let srcRed   = workingImageData.data[4 * index];
+                let srcBlue  = workingImageData.data[4 * index + 1];
+                let srcGreen = workingImageData.data[4 * index + 2];
+                let srcAlpha = workingImageData.data[4 * index + 3];
+
+                let outAlpha = 255 * srcAlpha + destAlpha * (255 - srcAlpha);
+                let outRed   = (255 * srcRed   * srcAlpha + destRed   * destAlpha * (255 - srcAlpha)) / outAlpha;
+                let outBlue  = (255 * srcBlue  * srcAlpha + destBlue  * destAlpha * (255 - srcAlpha)) / outAlpha;
+                let outGreen = (255 * srcGreen * srcAlpha + destGreen * destAlpha * (255 - srcAlpha)) / outAlpha;
+
+                drawingImageData.data[4 * index] = Math.round(outRed);
+                drawingImageData.data[4 * index + 1] = Math.round(outBlue);
+                drawingImageData.data[4 * index + 2] = Math.round(outGreen);
+                drawingImageData.data[4 * index + 3] = Math.round(outAlpha);
             }
         });
 
