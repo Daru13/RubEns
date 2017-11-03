@@ -1,7 +1,5 @@
 import { Tool } from "./Tool";
-import { Canvas } from "../Image/Canvas";
 import { Point } from "../utils/Point";
-import {ImageWorkspace} from "../ImageWorkspace";
 
 
 /**

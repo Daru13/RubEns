@@ -1,10 +1,8 @@
-import { Color } from "./utils/Color";
-
 export enum ParameterKind {
     Number = "number",
     String = "string",
     Color = "color"
-};
+}
 
 /**
  * Generic interface for a raw parameter which can be exposed by the UI to the user.

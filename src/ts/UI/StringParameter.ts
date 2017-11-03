@@ -1,5 +1,3 @@
-import * as $ from "jquery";
-import { HTMLRenderer } from "./HTMLRenderer";
 import * as Params from "../Parameter";
 import { Parameter } from "./Parameter";
 import { Document } from "../Document";

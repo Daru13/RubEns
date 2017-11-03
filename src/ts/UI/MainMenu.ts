@@ -1,7 +1,6 @@
-import * as $ from "jquery";
 import { HTMLRenderer } from "./HTMLRenderer";
 import { ToolSelectionMenu } from "./ToolSelectionMenu";
-import { DocumentAction, DocumentActionsMenu } from "./DocumentActionsMenu";
+import { DocumentActionsMenu } from "./DocumentActionsMenu";
 import { Document } from "../Document";
 
 /**

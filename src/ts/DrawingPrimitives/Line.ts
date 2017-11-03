@@ -26,7 +26,7 @@ export class Line {
      * @param  {ImageData} image the ImageData to modify
      * @return {void}            Returns nothing : works by side-effect
      */
-    static paintItBlack(pixel: Point, image: ImageData, transparency: number):void {
+    static paintItBlack(pixel: Point, image: ImageData, alpha: number):void {
          if(pixel.x < 0 || pixel.x > image.width-1 || pixel.y < 0 || pixel.y > image.height-1) {
              return;
          }
@@ -39,7 +39,7 @@ export class Line {
          image.data[coordonee1D] = color_r;
          image.data[coordonee1D + 1] = color_g;
          image.data[coordonee1D + 2] = color_b;
-         image.data[coordonee1D + 3] = Math.floor(transparency);
+         image.data[coordonee1D + 3] = Math.floor(alpha);
      }
 
 
