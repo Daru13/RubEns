@@ -24,7 +24,6 @@ export class Line {
      *
      * @param  {Point}     pixel the pixel to plot
      * @param  {ImageData} image the ImageData to modify
-     * @return {void}            Returns nothing : works by side-effect
      */
     static paintItBlack(pixel: Point, image: ImageData, alpha: number):void {
          if(pixel.x < 0 || pixel.x > image.width-1 || pixel.y < 0 || pixel.y > image.height-1) {
@@ -51,7 +50,6 @@ export class Line {
      * @param  {Point}     from  the starting point
      * @param  {Point}     to    the ending point
      * @param  {toDraw}    brush the function to apply
-     * @return {void}            returns nothing : works by side-effect
      *
      * @author Josselin GIET
      *
