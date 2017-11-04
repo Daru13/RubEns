@@ -128,8 +128,7 @@ export abstract class Parameter extends HTMLRenderer {
      * @author Camille Gobert
      */
     updateParameterValueFromControlElement () {
-        let newParameterValue = this.controlNode.val();
-        this.parameter.value = newParameterValue;
+        this.parameter.value = this.controlNode.val();
     }
 
     /**

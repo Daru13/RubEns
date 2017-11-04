@@ -3,10 +3,6 @@ import { HTMLRenderer } from "./HTMLRenderer";
 import { ParametersField } from "./ParametersField";
 import { Document } from "../Document";
 
-import * as Params from "../Parameter";
-import { NumberParameter } from "./NumberParameter";
-import { Color } from "../utils/Color";
-
 /**
  * Main UI element representing the sidebar of the GUI.
  *

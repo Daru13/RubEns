@@ -1,4 +1,3 @@
-import * as $ from "jquery";
 import { MainMenu } from "./MainMenu";
 import { DrawingDisplay } from "./DrawingDisplay";
 import { Sidebar } from "./Sidebar";

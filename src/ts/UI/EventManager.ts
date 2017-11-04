@@ -1,4 +1,4 @@
-import { EventHandler, EventHandlerCallback } from "./EventHandler";
+import { EventHandler} from "./EventHandler";
 import * as $ from "jquery";
 
 /**
