@@ -60,7 +60,7 @@ export class ParametersField extends HTMLRenderer {
      */
     private wrapAndDisplayParameter (parameter: Params.Parameter<any>) {
         // TODO: do it differently?
-
+/*
         let wrapperClassesPerKind = {
             "number": NumberParameter,
             "string": StringParameter,
@@ -72,9 +72,28 @@ export class ParametersField extends HTMLRenderer {
             console.log("Parameter of kind " + parameterKind + " has no wrapper class!");
             return null;
         }
-
+*/
         // Wrap the raw parameter in an UI parameter
-        let wrappedParameter = new wrapperClassesPerKind[parameterKind](this.rootNode, this.document, parameter);
+        //  Kinda dirty fix using a switch statement for fixing an issue in Travis...
+        let parameterKind    = parameter.kind;
+        let wrappedParameter = null;
+
+        switch (parameterKind) {
+            case "number":
+                wrappedParameter = new NumberParameter(this.rootNode, this.document, <Params.NumberParameter> parameter);
+                break;
+            case "string":
+                wrappedParameter = new StringParameter(this.rootNode, this.document, <Params.StringParameter> parameter);
+                break;
+            case "color":
+                wrappedParameter = new ColorParameter(this.rootNode, this.document, <Params.ColorParameter> parameter);
+                break;
+        }
+
+        if (! wrappedParameter) {
+            console.log("Parameter of kind " + parameterKind + " has no wrapper class!");
+            return null;
+        }
 
         // Start handling parameter changes
         wrappedParameter.startHandlingChanges();
