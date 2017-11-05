@@ -72,7 +72,10 @@ export class EllipseTool extends SimpleShapeTool {
         let imageData = new ImageData(this.workspace.width, this.workspace.height);
 
         let color = Color.buildFromHex(this.parameters.color.value);
-        Ellipse.drawFromBoundingRect(imageData, firstPoint, secondPoint, color);
+        let borderThickness = this.parameters.borderThickness.value;
+        let borderColor = Color.buildFromHex(this.parameters.borderColor.value);
+
+        Ellipse.drawFromBoundingRect(imageData, firstPoint, secondPoint, color, borderThickness, borderColor);
 
         this.workspace.workingCanvas.setImageData(imageData);
     }
