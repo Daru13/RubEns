@@ -128,6 +128,10 @@ export class ToolSelectionMenu extends HTMLRenderer {
         console.log("New selected tool:");
         console.log(tool);
 
+        // Update the class of the previously/currently selected tools
+        $(".tool_button.selected").removeClass("selected");
+        $(event.target).addClass("selected");
+
         // Notify the UI the tool has changed with an event
         let evt = new CustomEvent("rubens_toolchanged", {bubbles: true});
         this.rootNode[0].dispatchEvent(evt);

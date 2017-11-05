@@ -24,6 +24,11 @@ export class MainMenu extends HTMLRenderer {
     toolSelectionMenu: ToolSelectionMenu;
 
     /**
+     * Reference to the node containing the app title.
+     */
+    titleNode: JQuery;
+
+    /**
      * Instanciates and initializes a new MainMenu object and its sub-modules.
      * @param  {JQuery}   parentNode Parent node owning current instance.
      * @param  {Document} document   Related document instance.
@@ -37,6 +42,7 @@ export class MainMenu extends HTMLRenderer {
 
         this.documentActionsMenu = new DocumentActionsMenu(this.rootNode, document);
         this.toolSelectionMenu   = new ToolSelectionMenu(this.rootNode, document);
+        this.createTitleNode();
 
         this.setDefaultDocumentActions();
     }
@@ -85,5 +91,26 @@ export class MainMenu extends HTMLRenderer {
         });
 
         this.documentActionsMenu.setActions(defaultActions);
+    }
+
+
+    /**
+     * Create and set up a title node, and prepends it to the main menu.
+     * It simply contains the title of the application, `RubEns`.
+     *
+     * @author Camille Gobert
+     */
+    private createTitleNode () {
+        let title = $("<h1>");
+        title.html("RubEns");
+        // title.attr("id", "app_title");
+
+        this.titleNode = $("<a>");
+        this.titleNode.attr("id", "app_title");
+        this.titleNode.attr("href", "https://github.com/Daru13/RubEns");
+        this.titleNode.attr("target", "blank");
+
+        this.titleNode.append(title);
+        this.rootNode.prepend(this.titleNode);
     }
 }

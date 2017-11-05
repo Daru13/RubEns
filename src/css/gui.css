@@ -1,4 +1,12 @@
 /******************************************************************
+/* External imports
+/*****************************************************************/
+
+/* Font(s) */
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,700');
+@import url('https://fonts.googleapis.com/css?family=Lobster');
+
+/******************************************************************
 /* General properties and resets
 /*****************************************************************/
 
@@ -24,31 +32,10 @@
     height: 100%;
     margin: 0;
     padding: 0;
-}
 
-/* Debug border for main blocks */
-#root_layout, #root_layout > * {
-    border: 1px solid black;
-}
-
-#sidebar {
-    position: absolute;
-    right: 0;
-    top: 80px;
-    width: 400px;
-    height: calc(100% - 40px - 80px);
-    background-color: red;
-    z-index: 100;
-}
-
-#status_bar {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 40px;
-    background-color: green;
-    z-index: 100;
+    font-family: "Roboto";
+    font-weight: 400;
+    color: #F3F5F8;
 }
 
 #main_menu {
@@ -57,7 +44,10 @@
     top: 0;
     width: 100%;
     height: 80px;
-    background-color: blue;
+    background-color: #4C555C;
+    border-bottom: 2px solid #2A2E33;
+    box-shadow: 0 0 10px #2A2A2A;
+    overflow: hidden;
     z-index: 100;
 }
 
@@ -66,9 +56,35 @@
     top: 80px;
     left: 0;
     width: calc(100% - 400px);
-    height: calc(100% - 40px - 80px);
-    background: lightgray;
+    height: calc(100% - 30px - 80px);
+    background: #32383D;
     z-index: 40;
+}
+
+#sidebar {
+    position: absolute;
+    right: 0;
+    top: 80px;
+    width: 400px;
+    height: calc(100% - 30px - 80px);
+    background-color: #5D6870;
+    border-left: 2px solid #2A2E33;
+    box-shadow: 0 0 6px #2A2A2A;
+    z-index: 75;
+}
+
+#status_bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 30px;
+    background-color: #4C555C;
+    border-top: 2px solid #2A2E33;
+    line-height: 30px;
+    vertical-align: middle;
+    /*box-shadow: 0 0 10px #2A2A2A;*/
+    z-index: 100;
 }
 
 
@@ -87,12 +103,14 @@ canvas {
 }
 
 #drawing_canvas {
-    border: 1px solid red;
+    background-color: lightgrey;
+    border: 1px solid black;
+    box-shadow: 0 0 15px #222222;
     z-index: 50;
 }
 
 #working_canvas {
-    border: 1px dashed green;
+    border: 1px solid transparent;
     z-index: 60;
 }
 
@@ -106,6 +124,42 @@ canvas {
 /* Main menu
 /*****************************************************************/
 
+/* Title */
+
+#app_title,
+#app_title:hover,
+#app_title:visited,
+#app_title:active {
+    display: inline-block;
+    height: 100%;
+    margin: 0;
+    padding: 0 15px;
+    border-right: 2px solid #2A2E33;
+    color: #F3F5F8;
+    text-decoration: none;
+    line-height: 76px;
+    vertical-align: middle;
+    transition: 150ms ease-in-out;
+}
+
+#app_title:hover {
+    background-color: #5D6870;
+}
+
+#app_title > * {
+    margin: 0;
+    color: #F3F5F8;
+    font-size: 2.4rem;
+    font-family: "Lobster";
+    font-weight: 400;
+    text-shadow: 0 1px 3px #1D2024;
+    line-height: 76px;
+    vertical-align: middle;
+}
+
+
+/* Menus */
+
 #tool_selection_menu,
 #document_actions_menu {
     display: inline-block;
@@ -117,8 +171,11 @@ canvas {
 
 #document_actions_menu {
     padding: 0 15px 0 15px;
-    border-right: 2px solid cyan;
+    border-right: 2px solid #2A2E33;
 }
+
+
+/* Menus elements */
 
 #tool_selection_menu > li,
 #document_actions_menu > li {
@@ -136,5 +193,110 @@ canvas {
 #tool_selection_menu .tool_button,
 #document_actions_menu .document_action_button {
     margin: 0;
-    padding: 3px;
+    padding: 8px;
+    background-color: #8898A3;
+    border: 2px solid #2A2E33;
+    border-bottom-width: 4px;
+    border-radius: 4px;
+    font-weight: bold;
+    color: #F3F5F8;
+    text-shadow: 0 0 2px #1D2024;
+    animation: 150ms ease-in;
+}
+
+#tool_selection_menu .tool_button.selected,
+#tool_selection_menu .tool_button.selected:hover {
+    background-color: #5D6870;
+    border-bottom-width: 2px;
+}
+
+#tool_selection_menu .tool_button:hover,
+#document_actions_menu .document_action_button:hover {
+    background-color: #6E7B85;
+    border-bottom-width: 2px;
+}
+
+#tool_selection_menu .tool_button:disabled,
+#document_actions_menu .document_action_button:disabled {
+    opacity: 0.5;
+
+    /* Do not override normal properties on hover */
+    background-color: #8898A3;
+    border-bottom-width: 4px;
+}
+
+
+/******************************************************************
+/* Sidebar
+/*****************************************************************/
+
+/* Parameter fields */
+
+.parameters_field {
+    margin: 5px;
+    padding: 0;
+    background-color: #6E7B85;
+    border: 2px solid #2A2E33;
+    border-radius: 5px;
+}
+
+.parameters_field.empty {
+    display: none;
+}
+
+
+/* Parameters */
+
+.parameters_field .parameter {
+    padding: 10px;
+    border-bottom: 2px solid #2A2E33;
+    line-height: 40px;
+    vertical-align: middle;
+}
+
+.parameters_field .parameter:last-child {
+    margin: 0;
+    border-bottom: none;
+}
+
+.parameters_field .parameter:hover {
+    background-color: #8898A3;
+}
+
+.parameters_field .parameter label {
+    display: inline-block;
+    font-size: 1.15rem;
+    text-shadow: 0 0 1px #2A2E33;
+}
+
+.parameters_field .parameter input {
+    display: inline-block;
+    float: right;
+    height: 40px;
+    width: 80px;
+    background-color: #8898A3;
+    border: 2px solid #2A2E33;
+    border-bottom-width: 4px;
+    border-radius: 4px;
+    font-weight: bold;
+    color: #F3F5F8;
+    text-shadow: 0 0 2px #2A2E33;
+}
+
+
+/* Typed parameters */
+
+.parameters_field .parameter input[type="number"] {
+    padding: 5px;
+    font-size: 1.4rem;
+}
+
+.parameters_field .parameter input[type="text"] {
+    min-width: 80px;
+    padding: 5px;
+    font-size: 1.1rem;
+}
+
+.parameters_field .parameter input[type="color"] {
+    padding: 0;
 }

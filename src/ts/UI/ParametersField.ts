@@ -132,6 +132,8 @@ export class ParametersField extends HTMLRenderer {
 
         this.rootNode.empty();
         this.wrapAndDisplayAllParameters();
+
+        this.updateRootNodeEmptyClass();
     }
 
     /**
@@ -210,5 +212,21 @@ export class ParametersField extends HTMLRenderer {
         this.parameters = [];
 
         this.updateRootNode();
+    }
+
+
+    /**
+     * Update the `empty` class of the node, depending on the number of parameters in the field.
+     * The class is presented if and only if the set of parameters is empty.
+     *
+     * @author Camille Gobert
+     */
+    private updateRootNodeEmptyClass () {
+        if (this.parameters.length === 0) {
+            this.rootNode.addClass("empty");
+        }
+        else {
+            this.rootNode.removeClass("empty");
+        }
     }
 }
