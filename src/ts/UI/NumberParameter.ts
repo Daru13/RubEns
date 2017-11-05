@@ -39,15 +39,15 @@ export class NumberParameter extends Parameter {
         super.appendControlElement();
         this.controlNode.attr("type", "number");
 
-        if (this.parameter.min) {
+        if (this.parameter.min !== undefined) {
             this.controlNode.attr("min", this.parameter.min);
         }
 
-        if (this.parameter.max) {
+        if (this.parameter.max !== undefined) {
             this.controlNode.attr("max", this.parameter.max);
         }
 
-        if (this.parameter.step) {
+        if (this.parameter.step !== undefined) {
             this.controlNode.attr("step", this.parameter.step);
         }
     }

@@ -39,15 +39,15 @@ export class StringParameter extends Parameter {
         super.appendControlElement();
         this.controlNode.attr("type", "text");
 
-        if (this.parameter.minLength) {
+        if (this.parameter.minLength !== undefined) {
             this.controlNode.attr("minlength", this.parameter.minLength);
         }
 
-        if (this.parameter.maxLength) {
+        if (this.parameter.maxLength !== undefined) {
             this.controlNode.attr("maxlength", this.parameter.maxLength);
         }
 
-        if (this.parameter.pattern) {
+        if (this.parameter.pattern !== undefined) {
             // Convert pattern to string and remove leading and trailing slashes
             let pattern               = this.parameter.pattern.toString();
             let patternWithoutSlashes = pattern.substr(1, pattern.length - 2);
