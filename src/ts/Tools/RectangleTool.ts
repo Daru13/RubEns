@@ -72,7 +72,6 @@ export class RectangleTool extends SimpleShapeTool {
         let borderColor = Color.buildFromHex(this.parameters.borderColor.value);
         let thickness = this.parameters.borderThickness.value;
 
-        console.log(fillColor);
         Rectangle.draw(firstPoint, secondPoint, imageData, fillColor, borderColor, thickness);
 
         this.workspace.workingCanvas.setImageData(imageData);

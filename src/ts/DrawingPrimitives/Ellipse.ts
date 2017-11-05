@@ -11,9 +11,9 @@ export class Ellipse {
     /**
      * Draw an ellipse given two points defining the bounding rectangle
      *
+     * @param image         The image where the ellipse will be drawn
      * @param firstPoint    The first point defining the bounding rectangle
      * @param secondPoint   The second point defining the bounding rectangle
-     * @param image         The image where the ellipse will be drawn
      * @param {Color} color The inner color of the ellipse.
      *
      * @author Mathieu Fehr
