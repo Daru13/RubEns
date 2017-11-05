@@ -85,7 +85,7 @@ export class Color {
         let green = parseInt(hex.substring(3, 5), 16);
         let blue  = parseInt(hex.substring(5, 7), 16);
 
-        if (red && green && blue) {
+        if (!isNaN(red) && !isNaN(green) && !isNaN(blue)) {
             this.red   = red;
             this.green = green;
             this.blue  = blue;
