@@ -52,8 +52,8 @@ export abstract class Parameter extends HTMLRenderer {
      */
     protected parameterChangeHandler = {
         eventTypes: ["change"],
-        selector: null,
-        callback: (event) => this.onParameterChange(event)
+        selector: this.controlNode,
+        callback: (event) => { this.onParameterChange(event); }
     };
 
     /**
@@ -110,7 +110,7 @@ export abstract class Parameter extends HTMLRenderer {
         // numberInput.attr("type", TODO);
 
         if (this.controlNodeValue) {
-            controlNode.attr("value", this.controlNodeValue);            
+            controlNode.attr("value", this.controlNodeValue);
         }
 
         // Update the oncange callback to match this node
