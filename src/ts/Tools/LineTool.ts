@@ -5,6 +5,7 @@ import { SimpleShapeTool } from "./SimpleShapeTool";
 import * as Params from "../Parameter";
 import { ToolParameters } from "./Tool";
 import { Color } from "../utils/Color";
+import { DocumentParameters } from "../DocumentParameters";
 
 
 /**
@@ -47,14 +48,15 @@ export class LineTool extends SimpleShapeTool {
 
     /**
      * Returns a function to apply on canvas
-     * @param  {LineParameters} param thickness and color
+     * @param {LineParameters}     parameters         thickness and color
+     * @param {DocumentParameters} documentParameters Parameters of current document.
      *
      * @author Josselin GIET
      */
-    static getLambda (param: LineParameters) {
-        return function(center: Point, image: ImageData) {
-            let color = Color.buildFromHex(this.documentParameters.sharedToolParameters.mainColor.value);
-            Ellipse.drawFromCenter(image, center, param.thickness.value, param.thickness.value, color);
+     static getLambda (parameters: LineParameters, documentParameters: DocumentParameters) {
+         return function(center: Point, image: ImageData) {
+            let color = Color.buildFromHex(documentParameters.sharedToolParameters.mainColor.value);
+            Ellipse.drawFromCenter(image, center, parameters.thickness.value, parameters.thickness.value, color);
         };
     }
 
@@ -68,7 +70,7 @@ export class LineTool extends SimpleShapeTool {
      drawShape(firstPoint: Point, secondPoint: Point) {
         let imageData = new ImageData(this.workspace.width, this.workspace.height);
 
-        Line.draw(imageData, firstPoint, secondPoint, LineTool.getLambda(this.parameters));
+        Line.draw(imageData, firstPoint, secondPoint, LineTool.getLambda(this.parameters, this.documentParameters));
 
         this.workspace.workingCanvas.setImageData(imageData);
     }

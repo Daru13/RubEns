@@ -134,8 +134,8 @@ export class FreeHandTool extends Tool {
 
     /**
      * Returns a function to apply on canvas
-     * @param {FreeHandParameters} param thickness and color
-     *
+     * @param {FreeHandParameters} parameters         thickness and color
+     * @param {DocumentParameters} documentParameters Parameters of current document.
      * @author Josselin GIET
      */
     static getLambda (parameters: FreeHandParameters, documentParameters: DocumentParameters) {
