@@ -55,8 +55,9 @@ export class LineTool extends SimpleShapeTool {
      */
      static getLambda (parameters: LineParameters, documentParameters: DocumentParameters) {
          return function(center: Point, image: ImageData) {
-            let color = Color.buildFromHex(documentParameters.sharedToolParameters.mainColor.value);
-            Ellipse.drawFromCenter(image, center, parameters.thickness.value, parameters.thickness.value, color);
+            let color     = Color.buildFromHex(documentParameters.sharedToolParameters.mainColor.value);
+            let thickness = parameters.thickness.value;
+            Ellipse.drawFromCenter(image, center, thickness, thickness, color, 0, 0, color);
         };
     }
 

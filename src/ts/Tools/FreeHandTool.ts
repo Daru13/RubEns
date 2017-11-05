@@ -114,7 +114,7 @@ export class FreeHandTool extends Tool {
         // Add the event handlers to the event manager
         this.eventHandlers.push({
             eventTypes: ["mousedown"],
-            selector: "canvas",
+            selector: "#drawing_display",
             callback: (event) => this.onMouseDown(<MouseEvent> event)
 
         });
@@ -141,7 +141,8 @@ export class FreeHandTool extends Tool {
     static getLambda (parameters: FreeHandParameters, documentParameters: DocumentParameters) {
         return function(center: Point, image: ImageData) {
             let color = Color.buildFromHex(documentParameters.sharedToolParameters.mainColor.value);
-            Ellipse.drawFromCenter(image, center, parameters.thickness.value, parameters.thickness.value, color);
+            let thickness = parameters.thickness.value;
+            Ellipse.drawFromCenter(image, center, thickness, thickness, color, 0, 0, color);
         };
     }
 
