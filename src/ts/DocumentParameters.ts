@@ -1,15 +1,30 @@
+import * as Params from "./Parameter";
+
 export class DocumentParameters {
-    // Title (required)
+    /**
+     * Title of the document.
+     */
     title: string = "New document";
 
-    // Dimensions in pixels (required)
+    /**
+     * Dimensions of the document.
+     */
     width: number  = 800;
     height: number = 600;
 
-    // Tool parameters (global + local to each tool)
-    toolParameters: {
-        global: object;
+    /**
+     * Global parameters, shared by all tools (but still local to the document).
+     */
+    sharedToolParameters = {
+        /**
+         * Main color, i.e. filling color for various tools.
+         */
+        mainColor: {
+            value: "#000000",
+            kind: Params.ParameterKind.Color,
+            name: "Main color"
+        }
 
-        // Tool-specific parameters will be dynamically added to this object
+        // TODO: share more parameters?
     };
 }

@@ -69,8 +69,8 @@ export class RubEns {
         this.parameters = parameters;
 
         this.initEventManager();
-        this.initTools();
         this.initDocument();
+        this.initTools();
         this.initUserInterface();
 
         // TODO: move this elsewhere!
@@ -139,6 +139,24 @@ export class RubEns {
             new MagicWandTool(),
             new BucketTool()
         ];
+
+        this.updateTools();
+    }
+
+
+    /**
+     * Updates every saved [[Tool]] instance, to keep its state up to date.
+     * As of now, simply updates the document parameters of every tool.
+     *
+     * @author Camille Gobert
+     */
+    updateTools () {
+        // Update the reference to document parameters
+        let newDocumentParameters = this.document.parameters;
+
+        for (let tool of this.tools) {
+            tool.documentParameters = newDocumentParameters;
+        }
     }
 
 

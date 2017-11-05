@@ -1,6 +1,7 @@
 import { EventManager } from "../UI/EventManager";
 import { EventHandler } from "../UI/EventHandler";
 import { ImageWorkspace } from "../ImageWorkspace";
+import { DocumentParameters } from "../DocumentParameters";
 
 /**
  * Abstract type for a set of tool parameters.
@@ -31,10 +32,18 @@ export abstract class Tool {
     workspace: ImageWorkspace;
 
     /**
-     * The set of parameters of the tool.
+     * The set of parameters local to the tool.
      * It may be empty.
      */
     parameters: ToolParameters;
+
+    /**
+     * Reference to the parameters of the current document.
+     *
+     * This reference has to be updated whenever a new current document is set.
+     * This update has to be done by the owner of the tool (i.e. RubEns).
+     */
+    documentParameters: DocumentParameters;
 
     /**
      * Basic constructor.

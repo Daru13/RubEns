@@ -21,7 +21,7 @@ export class Document {
     /**
      * Parameters of the document.
      */
-    private parameters: DocumentParameters;
+    readonly parameters: DocumentParameters;
 
     /**
      * Currently selected tool.

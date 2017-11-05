@@ -6,19 +6,13 @@ import * as Params from "../Parameter";
 import { ToolParameters } from "./Tool";
 import { Ellipse } from "../DrawingPrimitives/Ellipse";
 import { Color } from "../utils/Color";
-
+import { DocumentParameters } from "../DocumentParameters";
 
 /**
  * Set of parameters used by [[FreeHandTool]].
  * Default values of those parameters are defined in the class implementation.
  */
 export class FreeHandParameters implements ToolParameters {
-    color: Params.ColorParameter = {
-        kind: Params.ParameterKind.Color,
-        value: "#000000",
-        name: "Color"
-    };
-
     thickness: Params.NumberParameter = {
         kind: Params.ParameterKind.Number,
         value: 1,
@@ -140,14 +134,14 @@ export class FreeHandTool extends Tool {
 
     /**
      * Returns a function to apply on canvas
-     * @param  {LineParameters} param thickness and color
+     * @param {FreeHandParameters} param thickness and color
      *
      * @author Josselin GIET
      */
-    static getLambda (param: FreeHandParameters) {
+    static getLambda (parameters: FreeHandParameters, documentParameters: DocumentParameters) {
         return function(center: Point, image: ImageData) {
-            let color = Color.buildFromHex(param.color.value);
-            Ellipse.drawFromCenter(image, center, param.thickness.value, param.thickness.value, color);
+            let color = Color.buildFromHex(documentParameters.sharedToolParameters.mainColor.value);
+            Ellipse.drawFromCenter(image, center, parameters.thickness.value, parameters.thickness.value, color);
         };
     }
 
@@ -162,7 +156,8 @@ export class FreeHandTool extends Tool {
      */
     drawLine(image: Canvas, currentPosition: Point) {
         let imageData = image.getImageData();
-        Line.draw(imageData, this.lastPosition, currentPosition, FreeHandTool.getLambda(this.parameters));
+        Line.draw(imageData, this.lastPosition, currentPosition,
+                  FreeHandTool.getLambda(this.parameters, this.documentParameters));
         image.setImageData(imageData);
     }
 }

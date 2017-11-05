@@ -12,12 +12,6 @@ import { Color } from "../utils/Color";
  * Default values of those parameters are defined in the class implementation.
  */
 export class LineParameters implements ToolParameters {
-    color: Params.ColorParameter = {
-        kind: Params.ParameterKind.Color,
-        value: "#000000",
-        name: "Color"
-    };
-
     thickness: Params.NumberParameter = {
         kind: Params.ParameterKind.Number,
         value: 1,
@@ -59,7 +53,7 @@ export class LineTool extends SimpleShapeTool {
      */
     static getLambda (param: LineParameters) {
         return function(center: Point, image: ImageData) {
-            let color = Color.buildFromHex(param.color.value);
+            let color = Color.buildFromHex(this.documentParameters.sharedToolParameters.mainColor.value);
             Ellipse.drawFromCenter(image, center, param.thickness.value, param.thickness.value, color);
         };
     }

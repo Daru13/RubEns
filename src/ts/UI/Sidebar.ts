@@ -71,56 +71,11 @@ export class Sidebar extends HTMLRenderer {
      * @author Camille Gobert
      */
     updateGlobalParametersField () {
-    /*
-        // Temporary debug code
-        let param1 = {
-            value: 0,
-            kind: Params.ParameterKind.Number,
-            name: "My awesome number parameter",
-            min: -42,
-            max: 42,
-            step: 2
-        };
+        this.globalParametersField.clearParameters();
 
-        let param2 = {
-            value: 50,
-            kind: Params.ParameterKind.Number,
-            name: "",
-            min: 0,
-            max: 100,
-            step: 0.5
-        };
-
-        this.globalParametersField.addParameter(param1);
-        this.globalParametersField.addParameter(param2);
-
-        let param3 = {
-            value: "FooBar",
-            kind: Params.ParameterKind.String,
-            name: "Baz",
-            hidden: true
-        };
-
-        let param4 = {
-            value: "Test string",
-            kind: Params.ParameterKind.String,
-            name: "Test string input",
-            minLength: 4,
-            maxLength: 16,
-            pattern: /[a-zA-Z]/
-        };
-
-        this.globalParametersField.addParameter(param3);
-        this.globalParametersField.addParameter(param4);
-
-        let param5: Params.ColorParameter = {
-            value: "red",
-            kind: Params.ParameterKind.Color,
-            name: "Color selector"
-        };
-
-        this.globalParametersField.addParameter(param5);
-        */
+        let sharedToolParameters = this.document.parameters.sharedToolParameters;
+        this.globalParametersField.addAllParameters(Object.keys(sharedToolParameters)
+                                                          .map((key) => sharedToolParameters[key]));
     }
 
     /**

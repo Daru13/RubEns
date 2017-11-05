@@ -11,12 +11,6 @@ import { Color } from "../utils/Color";
  * Default values of those parameters are defined in the class implementation.
  */
 export class EllipseParameters implements ToolParameters {
-    color: Params.ColorParameter = {
-        kind: Params.ParameterKind.Color,
-        value: "#000000",
-        name: "Color"
-    };
-
     borderThickness: Params.NumberParameter = {
         kind: Params.ParameterKind.Number,
         value: 1,
@@ -71,7 +65,7 @@ export class EllipseTool extends SimpleShapeTool {
     drawShape(firstPoint: Point, secondPoint: Point) {
         let imageData = new ImageData(this.workspace.width, this.workspace.height);
 
-        let color = Color.buildFromHex(this.parameters.color.value);
+        let color = Color.buildFromHex(this.documentParameters.sharedToolParameters.mainColor.value);
         Ellipse.drawFromBoundingRect(imageData, firstPoint, secondPoint, color);
 
         this.workspace.workingCanvas.setImageData(imageData);
