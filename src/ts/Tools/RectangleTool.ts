@@ -14,7 +14,7 @@ export class RectangleParameters implements ToolParameters {
         kind: Params.ParameterKind.Number,
         value: 1,
         name: "Border thickness",
-        min: 1,
+        min: 0,
         step: 1
     };
 
