@@ -32,7 +32,7 @@ export class SelectEverythingTool extends Tool {
         // Add the event handlers to the event manager
         this.eventHandlers.push({
             eventTypes: ["mousedown"],
-            selector: "canvas",
+            selector: "#drawing_display",
             callback: (event) => this.onMouseDown(<MouseEvent> event)
 
         });
