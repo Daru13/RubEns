@@ -5,6 +5,8 @@ import { StatusBar } from "./StatusBar";
 import { HTMLRenderer } from "./HTMLRenderer";
 import { Document } from "../Document";
 
+import { Popup, PopupParameters } from "./Popup";
+
 /**
  * This class represents the root of the UI, which instanciates and communicate
  * each sub-module of the UI.
@@ -33,5 +35,12 @@ export class RootLayout extends HTMLRenderer {
         this.drawingDisplay = new DrawingDisplay(this.rootNode);
         this.sidebar        = new Sidebar(this.rootNode, document);
         this.statusBar      = new StatusBar(this.rootNode);
+
+        // TODO: debug code, to be removed!
+        /*
+        let popupParams = new PopupParameters();
+        popupParams.title = "My awesome test popup!";
+        let popup = new Popup(this.rootNode, document, popupParams, $("<p>Test paragraph!</p>"));
+        */
     }
 }
