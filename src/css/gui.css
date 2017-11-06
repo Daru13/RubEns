@@ -300,3 +300,71 @@ canvas {
 .parameters_field .parameter input[type="color"] {
     padding: 0;
 }
+
+
+/******************************************************************
+/* Popup(s)
+/*****************************************************************/
+
+.popup {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    font-family: "Roboto";
+    font-weight: 400;
+    color: #F3F5F8;
+    z-index: 150;
+}
+
+.popup_container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 600px;
+    height: 250px;
+    margin-left: -300px;
+    margin-top: -125px;
+    padding: 10px;
+    background-color: #5D6870;
+    border: 2px solid #2A2E33;
+    box-shadow: 0 0 50px #222222;
+    border-radius: 5px;
+    z-index: 200;
+}
+
+.popup_container > * {
+    z-index: 250;
+}
+
+.popup_title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+.popup_close_button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 40px;
+    height: 40px;
+    margin: 0;
+    padding: 5px;
+    background-color: #8898A3;
+    border: 2px solid #2A2E33;
+    border-bottom-width: 4px;
+    border-radius: 4px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #F3F5F8;
+    text-shadow: 0 0 2px #1D2024;
+    animation: 150ms ease-in;
+}
+
+.popup_close_button:hover {
+    background-color: #5D6870;
+    border-bottom-width: 2px;
+}
