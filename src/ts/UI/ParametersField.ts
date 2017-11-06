@@ -94,7 +94,6 @@ export class ParametersField extends HTMLRenderer {
             return null;
         }
 
-        // Start handling parameter changes
         wrappedParameter.startHandlingChanges();
 
         return wrappedParameter;
@@ -125,10 +124,7 @@ export class ParametersField extends HTMLRenderer {
      * @author Camille Gobert
      */
     updateRootNode () {
-        // Remove all event handlers before setting them up again
-        for (let wrappedParameter of this.wrappedParameters) {
-            wrappedParameter.stopHandlingChanges();
-        }
+        this.stopHandlingAllChanges();
 
         this.rootNode.empty();
         this.wrapAndDisplayAllParameters();
@@ -205,9 +201,7 @@ export class ParametersField extends HTMLRenderer {
      */
     clearParameters () {
         // Remove all event handlers before clearing UI parameters
-        for (let wrappedParameter of this.wrappedParameters) {
-            wrappedParameter.stopHandlingChanges();
-        }
+        this.stopHandlingAllChanges();
 
         // Clear the list of parameters once it is done
         this.parameters = [];
@@ -215,6 +209,17 @@ export class ParametersField extends HTMLRenderer {
         this.updateRootNode();
     }
 
+
+    /**
+     * Stop handling changes in all wrapped parameters.
+     *
+     * @author Camille Gobert
+     */
+     stopHandlingAllChanges () {
+         for (let wrappedParameter of this.wrappedParameters) {
+             wrappedParameter.stopHandlingChanges();
+         }
+     }
 
     /**
      * Update the `empty` class of the node, depending on the number of parameters in the field.
