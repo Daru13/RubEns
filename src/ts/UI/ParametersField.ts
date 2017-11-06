@@ -161,7 +161,6 @@ export class ParametersField extends HTMLRenderer {
         this.updateRootNode();
     }
 
-    // TODO: better type and implement the method below
 
     /**
      * Add all given parameters at the end of the internal list of parameters,
@@ -192,6 +191,8 @@ export class ParametersField extends HTMLRenderer {
         if (parameterIndex < 0) {
             return false;
         }
+
+        this.parameters.splice(parameterIndex, 1);
 
         this.updateRootNode();
         return true;
