@@ -61,10 +61,12 @@ export abstract class HTMLRenderer {
 
     /**
      * Create and append the root node to the parent node.
+     * @param {boolean} appendToParent If `true`, append the root node to its parent
+     *                                 immediately after being created and initialized (default).
      *
      * @author Camille Gobert
      */
-    createRootNode () {
+    createRootNode (appendToParent: boolean = true) {
         this.rootNode = $("<" + this.rootNodeType + ">");
 
         // Add optionnal id and class
@@ -82,7 +84,9 @@ export abstract class HTMLRenderer {
             this.rootNode.attr(attribute, attributeValue);
         }
 
-        this.parentNode.append(this.rootNode);
+        if (appendToParent) {
+            this.parentNode.append(this.rootNode);
+        }
     }
 
     /**
