@@ -108,16 +108,62 @@ export class Ellipse {
                 let y = j - center.y;
 
                 // when aEllipse or bEllipse is equal to 0, the code won't enter the if, which is what we want
-                if ((x / aEllipse) ** 2 + (y / bEllipse) ** 2 < 1) {
+                if((x / aEllipse) ** 2 + (y / bEllipse) ** 2 < 1) {
                     image.data[4 * (i + j * imageWidth)]     = color.red;
                     image.data[4 * (i + j * imageWidth) + 1] = color.green;
                     image.data[4 * (i + j * imageWidth) + 2] = color.blue;
                     image.data[4 * (i + j * imageWidth) + 3] = color.alpha;
-                } else if((x / aBorder) ** 2 + (y / bBorder) ** 2 < 1) {
+
+                } else if((x / aEllipse) ** 2 + (y / bEllipse) ** 2 < (1 + Math.sqrt( aEllipse ** (-2) + bEllipse ** (-2)))**2) {
+                    let nbCaseFilled = 0;
+                    for(let dx = -4; dx <= 4; dx++) {
+                        for(let dy = -4; dy <= 4; dy++) {
+                            if(((x + (dx/8)) / aEllipse) ** 2 + ((y + (dy/8)) / bEllipse) ** 2 < 1) {
+                                nbCaseFilled++;
+                            }
+                        }
+                    }
+                    let alpha = nbCaseFilled / 41;
+                    if(nbCaseFilled > 41) {
+                        console.log(nbCaseFilled);
+                    }
+                    if((x / aBorder) ** 2 + (y / bBorder) ** 2 <  1) {
+                        let colorTemp = new Color(color.red, color.blue, color.green, color.alpha * alpha);
+                        let outColor = Color.blend(colorTemp, borderColor);
+                        image.data[4 * (i + j * imageWidth)] = Math.round(outColor.red);
+                        image.data[4 * (i + j * imageWidth) + 1] = Math.round(outColor.green);
+                        image.data[4 * (i + j * imageWidth) + 2] = Math.round(outColor.blue);
+                        image.data[4 * (i + j * imageWidth) + 3] = Math.round(outColor.alpha)
+                    } else {
+                        image.data[4 * (i + j * imageWidth)] = color.red;
+                        image.data[4 * (i + j * imageWidth) + 1] = color.green;
+                        image.data[4 * (i + j * imageWidth) + 2] = color.blue;
+                        image.data[4 * (i + j * imageWidth) + 3] = Math.round(color.alpha * alpha)
+                    }
+
+                } else if((x / aBorder) ** 2 + (y / bBorder) ** 2 <  1) {
                     image.data[4 * (i + j * imageWidth)]     = borderColor.red;
                     image.data[4 * (i + j * imageWidth) + 1] = borderColor.green;
                     image.data[4 * (i + j * imageWidth) + 2] = borderColor.blue;
                     image.data[4 * (i + j * imageWidth) + 3] = borderColor.alpha;
+
+                } else if((x / aBorder) ** 2 + (y / bBorder) ** 2 < (1 + Math.sqrt(aBorder ** (-2) + bBorder ** (-2)))**2) {
+                    let nbCaseFilled = 0;
+                    for(let dx = -4; dx <= 4; dx++) {
+                        for(let dy = -4; dy <= 4; dy++) {
+                            if(((x + (dx/8)) / aBorder) ** 2 + ((y + (dy/8)) / bBorder) ** 2 < 1) {
+                                nbCaseFilled++;
+                            }
+                        }
+                    }
+                    let alpha = nbCaseFilled / 41;
+                    if(nbCaseFilled > 41) {
+                        console.log(nbCaseFilled);
+                    }
+                    image.data[4 * (i + j * imageWidth)] = borderColor.red;
+                    image.data[4 * (i + j * imageWidth) + 1] = borderColor.green;
+                    image.data[4 * (i + j * imageWidth) + 2] = borderColor.blue;
+                    image.data[4 * (i + j * imageWidth) + 3] = Math.round(borderColor.alpha * alpha)
                 }
             }
         }

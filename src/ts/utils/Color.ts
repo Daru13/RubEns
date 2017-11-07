@@ -107,6 +107,9 @@ export class Color {
      * @author Mathieu Fehr
      */
     static blend(src: Color, dest: Color) {
+        if(dest.alpha === 0 && src.alpha === 0) {
+            return new Color(0,0,0,0);
+        }
         let outAlpha =  src.alpha + dest.alpha * (1 - (src.alpha / 255));
         let outRed   = (src.red   * src.alpha + dest.red   * dest.alpha * (1 - (src.alpha / 255))) / outAlpha;
         let outBlue  = (src.blue  * src.alpha + dest.blue  * dest.alpha * (1 - (src.alpha / 255))) / outAlpha;
