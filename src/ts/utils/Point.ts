@@ -37,4 +37,15 @@ export class Point {
     distanceTo(other: Point) {
         return Math.sqrt((this.x - other.x)**2 + (this.y - other.y)**2);
     }
+
+
+    /**
+     * Compute the euclidean distance squared to another point.
+     * @param {Point} other The other point
+     *
+     * @author Mathieu Fehr
+     */
+    distanceTo2(other: Point) {
+        return (this.x - other.x) ** 2 + (this.y - other.y) ** 2;
+    }
 }

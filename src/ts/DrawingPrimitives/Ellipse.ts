@@ -108,7 +108,7 @@ export class Ellipse {
                 let y = j - center.y;
 
                 // when aEllipse or bEllipse is equal to 0, the code won't enter the if, which is what we want
-                if((x / aEllipse) ** 2 + (y / bEllipse) ** 2 < 1) {
+                if((x / aEllipse) ** 2 + (y / bEllipse) ** 2 < (1 - Math.sqrt( aEllipse ** (-2) + bEllipse ** (-2)))**2) {
                     image.data[4 * (i + j * imageWidth)]     = color.red;
                     image.data[4 * (i + j * imageWidth) + 1] = color.green;
                     image.data[4 * (i + j * imageWidth) + 2] = color.blue;
@@ -123,10 +123,8 @@ export class Ellipse {
                             }
                         }
                     }
-                    let alpha = nbCaseFilled / 41;
-                    if(nbCaseFilled > 41) {
-                        console.log(nbCaseFilled);
-                    }
+                    let alpha = nbCaseFilled / 81;
+
                     if((x / aBorder) ** 2 + (y / bBorder) ** 2 <  1) {
                         let colorTemp = new Color(color.red, color.blue, color.green, color.alpha * alpha);
                         let outColor = Color.blend(colorTemp, borderColor);
@@ -141,7 +139,7 @@ export class Ellipse {
                         image.data[4 * (i + j * imageWidth) + 3] = Math.round(color.alpha * alpha)
                     }
 
-                } else if((x / aBorder) ** 2 + (y / bBorder) ** 2 <  1) {
+                } else if((x / aBorder) ** 2 + (y / bBorder) ** 2 < (1 - Math.sqrt(aBorder ** (-2) + bBorder ** (-2)))**2) {
                     image.data[4 * (i + j * imageWidth)]     = borderColor.red;
                     image.data[4 * (i + j * imageWidth) + 1] = borderColor.green;
                     image.data[4 * (i + j * imageWidth) + 2] = borderColor.blue;
@@ -156,10 +154,7 @@ export class Ellipse {
                             }
                         }
                     }
-                    let alpha = nbCaseFilled / 41;
-                    if(nbCaseFilled > 41) {
-                        console.log(nbCaseFilled);
-                    }
+                    let alpha = nbCaseFilled / 81;
                     image.data[4 * (i + j * imageWidth)] = borderColor.red;
                     image.data[4 * (i + j * imageWidth) + 1] = borderColor.green;
                     image.data[4 * (i + j * imageWidth) + 2] = borderColor.blue;
