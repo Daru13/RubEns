@@ -43,6 +43,12 @@ export class FreeHandTool extends Tool {
      */
     private lastPosition: Point;
 
+    /**
+     * The current imageData of the working canvas.
+     * This is used to reduce de cost of the operation
+     */
+    private workingCanvasImageData: ImageData;
+
 
     /**
      * Basic constructor.
@@ -53,6 +59,7 @@ export class FreeHandTool extends Tool {
         super();
         this.parameters = new FreeHandParameters();
         this.lastPosition = null;
+        this.workingCanvasImageData = null;
 
         this.initEventHandlers();
     }
@@ -69,6 +76,7 @@ export class FreeHandTool extends Tool {
             return;
         }
 
+        this.workingCanvasImageData = this.workspace.workingCanvas.getImageData();
         this.lastPosition = this.workspace.workingCanvas.getMouseEventCoordinates(event);
         this.lastPosition.x = Math.floor(this.lastPosition.x);
         this.lastPosition.y = Math.floor(this.lastPosition.y);
@@ -102,6 +110,7 @@ export class FreeHandTool extends Tool {
         this.onMouseMove(event);
         this.workspace.applyWorkingCanvas();
         this.lastPosition = null;
+        this.workingCanvasImageData = null;
     }
 
 
@@ -156,9 +165,11 @@ export class FreeHandTool extends Tool {
      * @author Mathieu Fehr
      */
     drawLine(image: Canvas, currentPosition: Point) {
-        let imageData = image.getImageData();
-        Line.draw(imageData, this.lastPosition, currentPosition,
-                  FreeHandTool.getLambda(this.parameters, this.documentParameters));
-        image.setImageData(imageData);
+        let color = Color.buildFromHex(this.documentParameters.sharedToolParameters.mainColor.value);
+        let thickness = this.parameters.thickness.value / 2;
+
+        Line.draw(this.workingCanvasImageData, this.lastPosition, currentPosition, thickness, color);
+
+        image.setImageData(this.workingCanvasImageData);
     }
 }

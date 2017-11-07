@@ -71,7 +71,10 @@ export class LineTool extends SimpleShapeTool {
      drawShape(firstPoint: Point, secondPoint: Point) {
         let imageData = new ImageData(this.workspace.width, this.workspace.height);
 
-        Line.draw(imageData, firstPoint, secondPoint, LineTool.getLambda(this.parameters, this.documentParameters));
+        let color = Color.buildFromHex(this.documentParameters.sharedToolParameters.mainColor.value);
+        let thickness = this.parameters.thickness.value / 2;
+
+        Line.draw(imageData, firstPoint, secondPoint, thickness, color);
 
         this.workspace.workingCanvas.setImageData(imageData);
     }

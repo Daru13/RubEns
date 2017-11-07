@@ -1,4 +1,5 @@
 import { Point } from "../utils/Point";
+import {Color} from "../utils/Color";
 
 /**
  * Type of the brush
@@ -25,7 +26,7 @@ export class Line {
      * @param  {Point}     pixel the pixel to plot
      * @param  {ImageData} image the ImageData to modify
      */
-    static paintItBlack(pixel: Point, image: ImageData, alpha: number):void {
+    /*static paintItBlack(pixel: Point, image: ImageData, alpha: number):void {
          if(pixel.x < 0 || pixel.x > image.width-1 || pixel.y < 0 || pixel.y > image.height-1) {
              return;
          }
@@ -39,7 +40,7 @@ export class Line {
          image.data[coordonee1D + 1] = color_g;
          image.data[coordonee1D + 2] = color_b;
          image.data[coordonee1D + 3] = Math.floor(alpha);
-     }
+     }*/
 
 
     /**
@@ -54,10 +55,7 @@ export class Line {
      * @author Josselin GIET
      *
      */
-    static draw(image: ImageData, from: Point, to: Point, brush: Brush) {
-
-        
-
+    /*static draw(image: ImageData, from: Point, to: Point, brush: Brush) {
         let currentPixel: Point = new Point(from.x, from.y);
         brush(currentPixel, image);
         let dx = to.x - from.x;
@@ -109,9 +107,9 @@ export class Line {
         }
 
      //  Line.bresenham(image,from,to,10)
-    }
+    }*/
 
-    static bresenham(image: ImageData,from: Point, to: Point, thickness: number){
+    /*static bresenham(image: ImageData,from: Point, to: Point, thickness: number){
         function setPixelColor(x,y,transparency){
             let currentPixel: Point = new Point(x, y);
             Line.paintItBlack(currentPixel,image,Math.floor(transparency));
@@ -170,5 +168,81 @@ export class Line {
                 y0 += sy;
             }
         }
+    }*/
+
+
+    static draw(image: ImageData, from: Point, to: Point, thickness: number, color: Color) {
+        if(from === to) {
+            return;
+        }
+
+        let imageWidth = image.width;
+        let imageHeight = image.height;
+
+        let minX = Math.min(from.x, to.x);
+        let maxX = Math.max(from.x, to.x);
+        let minY = Math.min(from.y, to.y);
+        let maxY = Math.max(from.y, to.y);
+
+        let drawingMinX = Math.ceil(Math.max(0, minX - thickness));
+        let drawingMaxX = Math.floor(Math.min(imageWidth - 1, maxX + thickness));
+        let drawingMinY = Math.ceil(Math.max(0, minY - thickness));
+        let drawingMaxY = Math.floor(Math.min(imageHeight - 1, maxY + thickness));
+
+        for(let x = drawingMinX; x <= drawingMaxX; x++) {
+            for(let y = Math.floor(drawingMinY); y <= Math.ceil(drawingMaxY); y++) {
+                let distanceToLine = Math.sqrt(Line.distanceToLineSquared(from, to, new Point(x,y)));
+                let offset = (y * imageWidth + x) * 4;
+
+                if( distanceToLine < thickness - Math.sqrt(2)) {
+                    let red = image.data[offset];
+                    let blue = image.data[offset + 1];
+                    let green = image.data[offset + 2];
+                    let alpha = image.data[offset + 3];
+                    let outColor = Color.blend(color, new Color(red, blue, green, alpha));
+                    image.data[offset] = outColor.red;
+                    image.data[offset + 1] = outColor.blue;
+                    image.data[offset + 2] = outColor.green;
+                    image.data[offset + 3] = outColor.alpha;
+                } else if(distanceToLine < thickness + Math.sqrt(2)) {
+                    let nbPointsInEllipse = 0;
+                    for(let dx = -4; dx<=4; dx++) {
+                        for(let dy = -4; dy<=4; dy++) {
+                            let distanceToLineSquared = Line.distanceToLineSquared(from, to, new Point(x + dx/4, y + dy/4));
+                            if(distanceToLineSquared < thickness**2) {
+                                nbPointsInEllipse += 1;
+                            }
+                        }
+                    }
+                    let newAlpha = (nbPointsInEllipse / 81) * color.alpha;
+                    if(thickness <= 1) {
+                        newAlpha = Math.min(255,2*newAlpha);
+                    }
+                    let red = image.data[offset];
+                    let blue = image.data[offset + 1];
+                    let green = image.data[offset + 2];
+                    let alpha = image.data[offset + 3];
+                    let outColor = Color.blend(new Color(color.red, color.blue, color.green, newAlpha),
+                                               new Color(red, blue, green, alpha));
+                    image.data[offset] = outColor.red;
+                    image.data[offset + 1] = outColor.blue;
+                    image.data[offset + 2] = outColor.green;
+                    image.data[offset + 3] = outColor.alpha;
+                }
+            }
+        }
+    }
+
+    static distanceToLineSquared(from: Point, to: Point, point: Point): number {
+        let lengthSquared = from.distanceTo2(to);
+        if(lengthSquared === 0) {
+            return from.distanceTo2(point);
+        }
+
+        let t = ((point.x - from.x) * (to.x - from.x) + (point.y - from.y) * (to.y - from.y)) / lengthSquared;
+        t = Math.max(0, Math.min(1, t));
+        let projectionPoint: Point = new Point(from.x + t * (to.x - from.x),
+                                               from.y + t * (to.y - from.y));
+        return point.distanceTo2(projectionPoint);
     }
 }
