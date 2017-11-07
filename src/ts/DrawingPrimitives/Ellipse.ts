@@ -63,7 +63,6 @@ export class Ellipse {
                           width: number, height: number, color: Color,
                           borderWidth: number, borderHeight: number, borderColor: Color) {
 
-        // Compute the equation parameters
         let aEllipse = width/2;
         let bEllipse = height/2;
         let aBorder = borderWidth/2;
@@ -97,10 +96,10 @@ export class Ellipse {
         let imageHeight = image.height;
 
         // The ellipse will be contained in this box in the image
-        let drawing_min_x = Math.ceil(Math.max(0, center.x - aBorder));
-        let drawing_min_y = Math.ceil(Math.max(0, center.y - bBorder));
-        let drawing_max_x = Math.floor(Math.min(imageWidth - 1, center.x + aBorder));
-        let drawing_max_y = Math.floor(Math.min(imageHeight - 1, center.y + bBorder));
+        let drawing_min_x = Math.ceil(Math.max(0, center.x - Math.max(aBorder, aEllipse)));
+        let drawing_min_y = Math.ceil(Math.max(0, center.y - Math.max(bBorder, bEllipse)));
+        let drawing_max_x = Math.floor(Math.min(imageWidth - 1, center.x + Math.max(aBorder, aEllipse)));
+        let drawing_max_y = Math.floor(Math.min(imageHeight - 1, center.y + Math.max(bBorder, bEllipse)));
 
         // Draw the ellipse by checking every cell in the inscribed rectangle
         for (let i = drawing_min_x; i <= drawing_max_x; i++) {
