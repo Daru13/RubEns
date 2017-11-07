@@ -22,7 +22,7 @@
     "npm install --save-dev @types/jquery",
     "npm install jsdom",
     "npm install jsdom-global",
-    "npm install canvas"
+    "npm install canvas@1.6.7"
   ],
 
   "script": [
