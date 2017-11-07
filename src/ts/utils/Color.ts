@@ -93,4 +93,25 @@ export class Color {
             this.alpha = 255;
         }
     }
+
+
+    /**
+     * Blend the color src to the color dest.
+     * The function "add" the color src to the color dest.
+     * Be careful: this function is not commutative.
+     *
+     * @param {Color} src   The color to add on the destination color.
+     * @param {Color} dest  The destination color where the source color will be added.
+     * @return {Color} The color obtained by blending src color with destination color.
+     *
+     * @author Mathieu Fehr
+     */
+    static blend(src: Color, dest: Color) {
+        let outAlpha =  src.alpha + dest.alpha * (1 - (src.alpha / 255));
+        let outRed   = (src.red   * src.alpha + dest.red   * dest.alpha * (1 - (src.alpha / 255))) / outAlpha;
+        let outBlue  = (src.blue  * src.alpha + dest.blue  * dest.alpha * (1 - (src.alpha / 255))) / outAlpha;
+        let outGreen = (src.green * src.alpha + dest.green * dest.alpha * (1 - (src.alpha / 255))) / outAlpha;
+
+        return new Color(outRed, outBlue, outGreen, outAlpha);
+    };
 }
