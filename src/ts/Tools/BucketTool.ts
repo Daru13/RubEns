@@ -1,4 +1,5 @@
 import { Tool } from "./Tool";
+import { Color } from "../utils/Color";
 
 
 /**
@@ -50,18 +51,17 @@ export class BucketTool extends Tool {
     onMouseDown(event: MouseEvent) {
         let imageData = new ImageData(this.workspace.width, this.workspace.height);
 
-        // temporary
-        let randomColorR = Math.random() * 255;
-        let randomColorG = Math.random() * 255;
-        let randomColorB = Math.random() * 255;
 
         this.workspace.selectedArea.data.forEach((value, index, array) => {
-           if(value !== 0) {
-               imageData.data[4 * index    ] = randomColorR;
-               imageData.data[4 * index + 1] = randomColorG;
-               imageData.data[4 * index + 2] = randomColorB;
-               imageData.data[4 * index + 3] = 255;
-           }
+
+            let color = Color.buildFromHex(this.documentParameters.sharedToolParameters.mainColor.value);
+
+            if(value !== 0) {
+                imageData.data[4 * index    ] = color.red;
+                imageData.data[4 * index + 1] = color.green;
+                imageData.data[4 * index + 2] = color.blue;
+                imageData.data[4 * index + 3] = color.alpha;
+            }
         });
 
         this.workspace.workingCanvas.setImageData(imageData);
