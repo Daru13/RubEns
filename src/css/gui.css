@@ -348,26 +348,54 @@ canvas {
     text-align: center;
 }
 
-.popup_close_button {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    width: 40px;
-    height: 40px;
+.popup_content_wrapper {
+    padding: 0 5px;
+}
+
+.popup_control_wrapper {
+    width: 100%;
+    margin: 10px 0 0 0;
+    text-align: center;
+}
+
+.popup button {
     margin: 0;
     padding: 5px;
     background-color: #8898A3;
     border: 2px solid #2A2E33;
     border-bottom-width: 4px;
     border-radius: 4px;
-    font-size: 1.5rem;
     font-weight: bold;
     color: #F3F5F8;
     text-shadow: 0 0 2px #1D2024;
     animation: 150ms ease-in;
 }
 
-.popup_close_button:hover {
+.popup button:hover {
     background-color: #5D6870;
     border-bottom-width: 2px;
+}
+
+.popup_close_button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+}
+
+.popup_control_wrapper button {
+    display: inline-block;
+    margin: 0 10px 0 0;
+    padding: 10px;
+    font-size: 1.2rem;
+}
+
+.popup_control_wrapper button:last-child {
+    margin: 0;
+}
+
+.popup .parameters_field {
+    margin: 0;
 }

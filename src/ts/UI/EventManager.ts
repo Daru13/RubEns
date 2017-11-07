@@ -21,7 +21,8 @@ export class EventManager {
         "mousein",
         "keypress",
         "change",
-        "rubens_toolchanged"
+        "rubens_toolchanged",
+        "rubens_globalparameterschanged"
     ];
 
     private registeredHandlers: Array<EventHandler>;

@@ -11,12 +11,6 @@ import { Document } from "../Document";
  */
  export class PopupParameters {
      /**
-      * Title of the popup, displayed in the container.
-      * An empty string means no title.
-      */
-     title: string = "";
-
-     /**
       * If set to `true`, display a close button on the popup.
       */
      displayCloseButton: boolean = true;
@@ -26,11 +20,21 @@ import { Document } from "../Document";
       */
      darkenBackground: boolean = true;
 
-     /**
-      * If set to `true`, immediately show the popup once it has been created.
-      */
-     showAfterCreation: boolean = true;
+    //  /**
+    //   * If set to `true`, immediately show the popup once it has been created.
+    //   */
+    //  showAfterCreation: boolean = true;
  }
+
+
+/**
+ * Enumeration of accepted display state values for a popup.
+ * It can either be displayed or closed (hidden).
+ */
+ enum PopupState {
+     DISPLAYED = "displayed",
+     CLOSED    = "closed"
+ };
 
 
 /**
@@ -48,11 +52,14 @@ export class Popup extends HTMLRenderer {
     document: Document;
 
     /**
-     * Reference to the content node of the popup.
-     * All the content intended to be displayed into the popup must be placed into this node.
-     * It can stay null if there is none.
+     * Root node of the actual content of the popup.
      */
-    protected contentNode: JQuery = null;
+    protected contentNode: JQuery;
+
+    /**
+     * Reference to the content wrapper node of the popup.
+     */
+    protected contentWrapperNode: JQuery;
 
     /**
      * Reference to the container node of the popup.
@@ -60,21 +67,43 @@ export class Popup extends HTMLRenderer {
     protected containerNode: JQuery;
 
     /**
-     * Reference to the title of the popup.
-     * It can stay null if there is none.
+     * Title of the popup.
      */
-    protected titleNode: JQuery = null;
+    readonly title: string;
+
+    /**
+     * Reference to the title of the popup.
+     * It should be `undefined` if there is none.
+     */
+    protected titleNode: JQuery;
 
     /**
      * Reference to the close button of the popup.
-     * It can stay null if there is none.
+     * It should be `undefined` if there is none.
      */
-    protected closeButtonNode: JQuery = null;
+    protected closeButtonNode: JQuery;
 
     /**
      * Parameters of the popup.
      */
     protected parameters: PopupParameters;
+
+    /**
+     * Display state of the popup: displayed or closed.
+     */
+    protected displayState: PopupState;
+
+    /**
+     * Callback function called when the popup is about to be showed.
+     * It receives the opening popup as its only argument.
+     */
+    onShow: (popup: Popup) => void;
+
+    /**
+     * Callback function called when the popup is about to be closed.
+     * It receives the closing popup as argument.
+     */
+    onClose: (popup: Popup) => void;
 
 
     /**
@@ -89,43 +118,46 @@ export class Popup extends HTMLRenderer {
 
     /**
      * Instanciates and initializes an empty, new Popup object.
-     * @param  {JQuery}          parentNode Parent node owning current instance.
-     * @param  {Document}        document   Related document instance.
-     * @param  {PopupParameters} parameters Set of parameters of the popup.
-     * @param  {JQuery}          content    Initial content of the popup.
-     * @return {Popup}                      Fresh instance of Popup.
+     * @param  {JQuery}          parentNode  Parent node owning current instance.
+     * @param  {Document}        document    Related document instance.
+     * @param  {PopupParameters} parameters  Set of parameters of the popup.
+     * @param  {string}          title       Optionnal title of the popup.
+     * @param  {JQuery}          contentNode Optionnal content of the popup.
+     * @return {Popup}                       Fresh instance of Popup.
      *
      * @author Camille Gobert
      */
-    constructor (parentNode: JQuery, document: Document, parameters: PopupParameters,
-                content: JQuery = null) {
+    constructor (parentNode: JQuery,
+                 document: Document,
+                 parameters: PopupParameters,
+                 title?: string,
+                 contentNode?: JQuery) {
         super(parentNode);
-        this.createRootNode();
+        this.createRootNode(false);
 
-        this.document   = document;
-        this.parameters = parameters;
-
-        if (content) {
-            this.contentNode = content;
-        }
+        this.document    = document;
+        this.parameters  = parameters;
+        this.title       = title;
+        this.contentNode = contentNode;
 
         this.initialize();
     }
 
 
     /**
-     * Set up the popup accordingly to its parameters.
-     * It respects the semantics given in [[PopupParameters]].
+     * Generically set up the popup accordingly to its parameters.
+     * It respects the semantic of [[PopupParameters]].
      *
      * @author Camille Gobert
      */
     protected initialize () {
-        // Always start by creating a container node for the popup
         this.createContainerNode();
 
-        if (this.parameters.title.length > 0) {
-            this.createTitleNode(this.parameters.title);
+        if (this.title !== undefined) {
+            this.createTitleNode();
         }
+
+        this.createContentWrapperNode();
 
         if (this.parameters.displayCloseButton) {
             this.createCloseButton();
@@ -135,23 +167,15 @@ export class Popup extends HTMLRenderer {
             this.rootNode.addClass("no_background");
         }
 
-        if (this.contentNode) {
-            this.containerNode.append(this.contentNode);
-        }
-
-        if (this.parameters.showAfterCreation) {
-            this.show();
-        }
+        // if (this.parameters.showAfterCreation) {
+        //     this.show();
+        // }
     }
 
 
     /**
      * Create and initialize the container node.
-     * The root node mainly exist as a global container and logical popup node,
-     * whereas the latter actually contain and display controls and data.
-     *
-     * Note, however, than the popup content should **not** be set this way;
-     * instead, it must be placed into the dedicated `contentNode`.
+     * It contains all the actual data and controls of the popup.
      *
      * @author Camille Gobert
      */
@@ -166,16 +190,28 @@ export class Popup extends HTMLRenderer {
 
 
     /**
-     * Create and initialize the close button node.
-     * It contains a control allowing the user to close the popup manually.
-     *
-     * This node does not have to be created if the popup has no close button
-     * @param {boolean} attachToContainer If `true`, the close button is appended to the container node once created (default).
-     *                                    Otherwise, the node is just created and initialized.
+     * Create and initialize the content wrapper node.
+     * It contains the given `content` data.
      *
      * @author Camille Gobert
      */
-    protected createCloseButton (attachToContainer: boolean = true) {
+    protected createContentWrapperNode () {
+        let contentWrapperNode = $("<div>");
+        contentWrapperNode.addClass("popup_content_wrapper");
+
+        this.contentWrapperNode = contentWrapperNode;
+
+        this.containerNode.append(contentWrapperNode);
+    }
+
+
+    /**
+     * Create and initialize the close button node.
+     * It contains a control allowing the user to close the popup manually.
+     *
+     * @author Camille Gobert
+     */
+    protected createCloseButton () {
         let closeButtonNode = $("<button>");
         closeButtonNode.attr("type", "button");
         closeButtonNode.addClass("popup_close_button");
@@ -183,9 +219,7 @@ export class Popup extends HTMLRenderer {
 
         this.closeButtonNode = closeButtonNode;
 
-        if (attachToContainer) {
-            this.containerNode.append(closeButtonNode);
-        }
+        this.containerNode.append(closeButtonNode);
     }
 
 
@@ -193,91 +227,103 @@ export class Popup extends HTMLRenderer {
      * Create and initialize the title node.
      * It contains the title of the popup, if any.
      *
-     * This node does not have to be created if the popup has no title.
-     * @param {string}  title             The title to display.
-     * @param {boolean} attachToContainer If `true`, the title is appended to the container node once created (default).
-     *                                    Otherwise, the node is just created and initialized.
-     *
      * @author Camille Gobert
      */
-    protected createTitleNode (title: string, attachToContainer: boolean = true) {
+    protected createTitleNode () {
         let titleNode = $("<h2>");
         titleNode.addClass("popup_title");
-        titleNode.html(title);
+        titleNode.html(this.title);
 
         this.titleNode = titleNode;
 
-        if (attachToContainer) {
-            this.containerNode.append(titleNode);
-        }
-    }
-
-
-    /**
-     * Show the popup by adding it to the DOM, and start handling clicks on the close button.
-     *
-     * @author Camille Gobert
-     */
-    show () {
-        this.startHandlingCloseButtonClick();
-        $("body").prepend(this.rootNode);
-    }
-
-
-    /**
-     * Close the popup by removing it from the DOM, and stop handling clicks on the close button.
-     *
-     * Note that no internal element is destroyed by this method: it simply *hide* the popup node.
-     * Therefore, it is totally possible to show an already closed popup again.
-     *
-     * @author Camille Gobert
-     */
-    close () {
-        this.rootNode.remove();
-        this.stopHandlingCloseButtonClick();
+        this.containerNode.append(titleNode);
     }
 
 
     /**
      * Set a new content node, and update the popup accordingly.
-     * @param  {JQuery} newContent The new content.
+     * @param  {JQuery} newContent The new content root node.
      *
      * @author Camille Gobert
      */
-    setContentNode (newContent: JQuery) {
-        // Remove previous content from the container if required
-        if (this.contentNode) {
-            this.containerNode.remove();
-        }
+    setContentNode (newContentNode: JQuery) {
+        this.contentNode = newContentNode;
 
-        this.contentNode = newContent;
-
-        // Append new content to the container
-        this.containerNode.append(newContent);
+        this.contentWrapperNode.empty();
+        this.contentWrapperNode.append(newContentNode);
     }
 
 
     /**
-     * Start handling popup closing by clicking on the close button.
-     * This method has no effect if there is no close button.
+     * Show the popup by adding it to the DOM, and start handling events.
+     * If defined, the `onShow` callback is also called.
+     *
+     * This method has no effect if the display state is already equal to `DISPLAYED`.
      *
      * @author Camille Gobert
      */
-    startHandlingCloseButtonClick () {
-        if (! this.closeButtonNode) {
+    show () {
+        if (this.displayState == PopupState.DISPLAYED) {
             return;
         }
 
-        this.document.eventManager.registerEventHandler(this.closeButtonClickHandler);
+        if (this.onShow) {
+            this.onShow(this);
+        }
+
+        this.startHandlingEvents();
+        $("body").prepend(this.rootNode);
+
+        this.displayState = PopupState.DISPLAYED;
     }
 
 
     /**
-     * Stop handling popup closing by clicking on the close button.
+     * Close the popup by removing it from the DOM, and stop handling events.
+     * If defined, the `onClose` callback is also called.
+     *
+     * This method has no effect if the display state is already equal to `CLOSED`.
      *
      * @author Camille Gobert
      */
-    stopHandlingCloseButtonClick () {
-        this.document.eventManager.unregisterEventHandler(this.closeButtonClickHandler);
+    close () {
+        if (this.displayState == PopupState.CLOSED) {
+            return;
+        }
+
+        if (this.onClose) {
+            this.onClose(this);
+        }
+
+        this.rootNode.remove();
+        this.stopHandlingEvents();
+
+        this.displayState = PopupState.CLOSED;
+    }
+
+
+    /**
+     * Start handling popup events (e.g. clicks on the close button).
+     * This method should be overriden to handle events required by more specific kinds of popups.
+     *
+     * @author Camille Gobert
+     */
+    protected startHandlingEvents () {
+        if (this.parameters.displayCloseButton) {
+            this.document.eventManager.registerEventHandler(this.closeButtonClickHandler);
+        }
+    }
+
+
+    /**
+     * Stop handling popup events (e.g. clicks on the close button).
+     * This method should be overriden to handle events required by more specific kinds of popups.
+     *
+     * @author Camille Gobert
+     */
+    protected stopHandlingEvents () {
+        if (this.parameters.displayCloseButton) {
+            this.document.eventManager.unregisterEventHandler(this.closeButtonClickHandler);
+        }
     }
 }

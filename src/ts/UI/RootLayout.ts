@@ -6,6 +6,7 @@ import { HTMLRenderer } from "./HTMLRenderer";
 import { Document } from "../Document";
 
 import { Popup, PopupParameters } from "./Popup";
+import { ParametersFieldPopupParameters, ParametersFieldPopup } from "./ParametersFieldPopup";
 
 /**
  * This class represents the root of the UI, which instanciates and communicate
@@ -38,9 +39,22 @@ export class RootLayout extends HTMLRenderer {
 
         // TODO: debug code, to be removed!
         /*
-        let popupParams = new PopupParameters();
-        popupParams.title = "My awesome test popup!";
-        let popup = new Popup(this.rootNode, document, popupParams, $("<p>Test paragraph!</p>"));
+        let popupParams = new ParametersFieldPopupParameters();
+        let paramsToDisplay = Object.keys(document.parameters.sharedToolParameters)
+                                    .map((key) => document.parameters.sharedToolParameters[key])
+        let popup = new ParametersFieldPopup(this.rootNode, document, popupParams,
+                                             paramsToDisplay,
+                                             "Look at this parameter popup!",
+                                             "Try to edit those parameters...");
+        popup.onParameterChangesApplied = () => {
+            console.log("parameter changes applied");
+
+            // Notify the UI global parameters have been updated
+            let evt = new CustomEvent("rubens_globalparameterschanged", {bubbles: true});
+            this.rootNode[0].dispatchEvent(evt);
+        }
+
+        popup.show();
         */
     }
 }

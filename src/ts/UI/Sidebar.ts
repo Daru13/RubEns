@@ -52,6 +52,15 @@ export class Sidebar extends HTMLRenderer {
                 this.updateCurrentToolParametersField();
         }});
 
+        // TODO: remove debug handler
+        this.document.eventManager.registerEventHandler({
+            eventTypes: ["rubens_globalparameterschanged"],
+            selector: "*",
+            callback: (event) => {
+                console.log("pouet");
+                this.updateGlobalParametersField();
+        }});
+
         this.updateRootNode();
     }
 
