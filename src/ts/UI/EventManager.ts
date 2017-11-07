@@ -6,84 +6,101 @@ import * as $ from "jquery";
  *
  * It is meant to be a central part of the Controller part of the MVC model,
  * allowing in particular the View and the Model to communicate over events.
+ *
+ * Each event type with at least one handler is mapped to its set of handlers.
+ * Rgistrered event handlers thus cannot be duplicated.
  */
 export class EventManager {
     /**
-     * Static list of handled events
-     * All events which should be handled by this manager must be listed here!
+     * Map from known and used event types to sets of registrered handlers.
      */
-    static handledEvents: Array<string> = [
-        "click",
-        "mousemove",
-        "mousedown",
-        "mouseup",
-        "mouseout",
-        "mousein",
-        "keypress",
-        "change",
-        "rubens_toolchanged",
-        "rubens_globalparameterschanged"
-    ];
+    private registeredHandlers: Map<string, Set<EventHandler>>;
 
-    private registeredHandlers: Array<EventHandler>;
+    /**
+     * Listening state of the event manager.
+     */
     private isListening: boolean;
 
     /**
      * Instanciates and initializes a new EventManager object.
-     * Note that it does not start listening for events until the [[startListening]] method is called.
+     *
+     * Note: it does not start listening for events until the [[startListening]] method is called.
      * @return {EventManager} Fresh instance of EventManager.
      *
      * @author Camille Gobert
      */
     constructor () {
-        this.registeredHandlers = [];
-        // console.log("Registered handlers list created:", this.registeredHandlers);
-
+        this.registeredHandlers = new Map();
         this.isListening = false;
     }
 
     /**
      * Add an event handler to the manager.
+     * This method has no effect if the exact same handler has already been registered.
+     *
+     * The handler is added for every specified event type.
      * @param {EventHandler} handler Event handler to register.
      *
      * @author Camille Gobert
      */
     registerEventHandler (handler: EventHandler) {
-        this.registeredHandlers.push(handler);
+        for (let eventType of handler.eventTypes) {
+            // If an event type is encountered for the first time by the manager,
+            // it must create a fresh set for this type
+            if (! this.registeredHandlers.has(eventType)) {
+                this.registeredHandlers.set(eventType, new Set());
+
+                // Also add the appropriate event handler
+                this.startListeningFor(eventType);
+            }
+
+            this.registeredHandlers.get(eventType).add(handler);
+        }
     }
 
     /**
      * Remove an event handler from the event manager.
-     * @param {EventHandler} handler  Event handler to unregister.
-     * @return                        The event handler which has been removed,
-     *                                or undefined if it could not be found.
+     *
+     * The handler is removed for every specified event type.
+     * @param  {EventHandler} handler  Event handler to unregister.
      *
      * @author Camille Gobert
      */
     unregisterEventHandler (handler: EventHandler) {
-        let handlerIndex = this.registeredHandlers.indexOf(handler);
-        if (handlerIndex === -1) {
-            return undefined;
-        }
+        for (let eventType of handler.eventTypes) {
+            let eventTypeSet = this.registeredHandlers.get(eventType);
+            if (! eventTypeSet) {
+                continue;
+            }
 
-        return this.registeredHandlers.splice(handlerIndex, 1);
+            eventTypeSet.delete(handler);
+
+            // Possibly remove the set if it becomes empty
+            if (eventTypeSet.size === 0) {
+                this.registeredHandlers.delete(eventType);
+
+                // Also remove the appropriate event handler
+                this.stopListeningFor(eventType);
+            }
+        }
     }
 
     /**
      * Internally dispatch an event to matching, registered event handlers.
-     * @param {Event} event Event to dispatch.
+     * @param {Event}  event     Event to dispatch.
      *
      * @author Camille Gobert
      */
     private dispatchEvent (event: Event) {
-        // Browse all registered event handlers and check their selectors
-        for (let handler of this.registeredHandlers) {
-            if (handler.disabled) {
-                continue;
-            }
+        if (! this.isListening) {
+            return;
+        }
 
-            // Check if the event type matches one of the handled types
-            if (! handler.eventTypes.find((type) => type === event.type)) {
+        // Browse all registered event handlers for the event type
+        let handlers = this.registeredHandlers.get(event.type);
+
+        for (let handler of handlers.values()) {
+            if (handler.disabled) {
                 continue;
             }
 
@@ -93,13 +110,36 @@ export class EventManager {
                 continue;
             }
 
-            // Otherwise, notify the handler it has received an event
+            // Notify the handler
             handler.callback(event);
         }
     }
 
+
     /**
-     * Start listening to events of the types listed in the related static array.
+     * Start listening for a particular type of event.
+     * @param  {string} eventType The event type to start listenning for.
+     *
+     * @author Camille Gobert
+     */
+    private startListeningFor (eventType: string) {
+        $(document)[0].addEventListener(eventType, (event) => this.dispatchEvent(event));
+    }
+
+
+    /**
+     * Stop listening for a particular type of event.
+     * @param  {string} eventType The event type to stop listenning for.
+     *
+     * @author Camille Gobert
+     */
+    private stopListeningFor (eventType: string) {
+        $(document)[0].removeEventListener(eventType, (event) => this.dispatchEvent(event));
+    }
+
+
+    /**
+     * Start listening for events.
      * Nothing happens if the manager was already listening.
      *
      * @author Camille Gobert
@@ -109,16 +149,12 @@ export class EventManager {
             return;
         }
 
-        let self = this;
-        for (let eventType of EventManager.handledEvents) {
-            document.addEventListener(eventType, (event) => self.dispatchEvent(event));
-        }
-
         this.isListening = true;
     }
 
+
     /**
-     * Stop listening to events of the types listed in the related static array.
+     * Stop listening for events.
      * Nothing happens if the manager was not listening.
      *
      * @author Camille Gobert
@@ -128,11 +164,6 @@ export class EventManager {
             return;
         }
 
-        for (let eventType of EventManager.handledEvents) {
-            document.removeEventListener(eventType, (event) => self.dispatchEvent(event));
-        }
-
         this.isListening = false;
     }
-
 }

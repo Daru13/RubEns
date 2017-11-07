@@ -150,29 +150,35 @@ describe("Test of the user interface:", function () {
     describe("Event manager:", function () {
         let dummyCounter = 0;
         let dummyEventHandler: EventHandler = {
-            eventTypes: ["click"],
+            eventTypes: ["rubens_test"],
             selector: $(document),
             callback: (_) => { dummyCounter++; },
             disabled: false
         };
 
-        it("Should listen for at least one type of event", function () {
-            assert(EventManager.handledEvents.length > 0);
+        it("Should be listening for events", function () {
+            JSDOMPromise.then(_ => {
+                assert(rubEns.eventManager.isListening);
+            });
         });
 
         it("Should allow to register an event handler", function () {
             JSDOMPromise.then(_ => {
                 rubEns.eventManager.registerEventHandler(dummyEventHandler);
-                assert(rubEns.eventManager.registeredHandlers.indexOf(dummyEventHandler) >= 0);
+                assert(rubEns.eventManager.registeredHandlers.has("rubens_test"));
+                assert(rubEns.eventManager.registeredHandlers.get("rubens_test").size === 1);
             });
         });
 
         it("Should trigger an event handler when conditions are fulfilled", function () {
             JSDOMPromise.then(_ => {
-                let clickEvent = new Event("click");
-                document.dispatchEvent(clickEvent);
+                let event = new Event("rubens_test");
+                document.dispatchEvent(event);
 
-                assert(dummyCounter === 1);
+                // Attempt to simulate event bubbling delday...
+                setTimeout(function() {
+                    assert(dummyCounter === 1);
+                }, 2);
             });
         });
 
@@ -180,17 +186,21 @@ describe("Test of the user interface:", function () {
             JSDOMPromise.then(_ => {
                 dummyEventHandler.disabled = true;
 
-                let clickEvent = new Event("click");
-                document.dispatchEvent(clickEvent);
+                let event = new Event("rubens_test");
+                document.dispatchEvent(event);
 
-                assert(dummyCounter === 1 /* not 2 */);
+                // Attempt to simulate event bubbling delday...
+                setTimeout(function() {
+                    assert(dummyCounter === 1 /* not 2 */);
+                }, 2);
             });
         });
 
-        it("Should allow to register an event handler", function () {
+        it("Should allow to unregister an event handler", function () {
             JSDOMPromise.then(_ => {
+                assert(rubEns.eventManager.registeredHandlers.get("rubens_test").size === 1);
                 rubEns.eventManager.unregisterEventHandler(dummyEventHandler);
-                assert(! rubEns.eventManager.registeredHandlers.indexOf(dummyEventHandler) >= 0);
+                assert(! rubEns.eventManager.registeredHandlers.has("rubens_test"));
             });
         });
     });
