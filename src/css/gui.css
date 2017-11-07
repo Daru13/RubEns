@@ -22,7 +22,7 @@
     min-height: 600px;
     margin: 0;
     padding: 0;
-    overflow: hidden; /* Fix 1-2 pixel UI overflow in some browsers */
+    overflow: auto; /* Fix 1-2 pixel UI overflow in some browsers */
 }
 
 
@@ -84,7 +84,7 @@
     height: 30px;
     background-color: #4C555C;
     border-top: 2px solid #2A2E33;
-    line-height: 30px;
+    line-height: 28px;
     vertical-align: middle;
     /*box-shadow: 0 0 10px #2A2A2A;*/
     z-index: 100;
