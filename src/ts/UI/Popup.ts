@@ -1,6 +1,6 @@
 import * as $ from "jquery";
 import { HTMLRenderer } from "./HTMLRenderer";
-import { Document } from "../Document";
+import { RubEns } from "../RubEns";
 
 
 /**
@@ -47,9 +47,9 @@ export class Popup extends HTMLRenderer {
     protected rootNodeClasses = "popup";
 
     /**
-     * Related document instance.
+     * Related instance of RubEns app.
      */
-    document: Document;
+    protected app: RubEns;
 
     /**
      * Root node of the actual content of the popup.
@@ -119,7 +119,7 @@ export class Popup extends HTMLRenderer {
     /**
      * Instanciates and initializes an empty, new Popup object.
      * @param  {JQuery}          parentNode  Parent node owning current instance.
-     * @param  {Document}        document    Related document instance.
+     * @param  {RubEns}          app         Related app instance.
      * @param  {PopupParameters} parameters  Set of parameters of the popup.
      * @param  {string}          title       Optionnal title of the popup.
      * @param  {JQuery}          contentNode Optionnal content of the popup.
@@ -128,14 +128,14 @@ export class Popup extends HTMLRenderer {
      * @author Camille Gobert
      */
     constructor (parentNode: JQuery,
-                 document: Document,
+                 app: RubEns,
                  parameters: PopupParameters,
                  title?: string,
                  contentNode?: JQuery) {
         super(parentNode);
         this.createRootNode(false);
 
-        this.document    = document;
+        this.app         = app;
         this.parameters  = parameters;
         this.title       = title;
         this.contentNode = contentNode;
@@ -310,7 +310,7 @@ export class Popup extends HTMLRenderer {
      */
     protected startHandlingEvents () {
         if (this.parameters.displayCloseButton) {
-            this.document.eventManager.registerEventHandler(this.closeButtonClickHandler);
+            this.app.document.eventManager.registerEventHandler(this.closeButtonClickHandler);
         }
     }
 
@@ -323,7 +323,7 @@ export class Popup extends HTMLRenderer {
      */
     protected stopHandlingEvents () {
         if (this.parameters.displayCloseButton) {
-            this.document.eventManager.unregisterEventHandler(this.closeButtonClickHandler);
+            this.app.document.eventManager.unregisterEventHandler(this.closeButtonClickHandler);
         }
     }
 }

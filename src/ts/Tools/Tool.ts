@@ -27,7 +27,7 @@ export abstract class Tool {
     protected eventHandlers: EventHandler[];
 
     /**
-     * The image workspac where to apply the tool operations.
+     * The image workspace where to apply the tool operations.
      */
     workspace: ImageWorkspace;
 
@@ -35,7 +35,7 @@ export abstract class Tool {
      * The set of parameters local to the tool.
      * It may be empty.
      */
-    parameters: ToolParameters;
+    parameters: ToolParameters = {};
 
     /**
      * Reference to the parameters of the current document.
@@ -45,6 +45,7 @@ export abstract class Tool {
      */
     documentParameters: DocumentParameters;
 
+
     /**
      * Basic constructor.
      *
@@ -52,9 +53,6 @@ export abstract class Tool {
      */
     constructor () {
         this.eventHandlers = [];
-
-        // Starts with a null value, defined later in time (before any use)
-        this.workspace = null;
     }
 
 

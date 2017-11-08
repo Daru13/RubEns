@@ -166,4 +166,13 @@ export class EventManager {
 
         this.isListening = false;
     }
+
+    static spawnEvent (type: string, data: object = {}, source: JQuery = $(document)) {
+        let event = new CustomEvent(type, {
+            bubbles: true,
+            detail : data
+        });
+
+        source[0].dispatchEvent(event);
+    }
 }

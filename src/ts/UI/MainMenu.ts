@@ -1,7 +1,7 @@
 import { HTMLRenderer } from "./HTMLRenderer";
 import { ToolSelectionMenu } from "./ToolSelectionMenu";
 import { DocumentActionsMenu } from "./DocumentActionsMenu";
-import { Document } from "../Document";
+import { RubEns } from "../RubEns";
 
 /**
 * Main UI element representing the top main menu of the UI.
@@ -12,6 +12,11 @@ import { Document } from "../Document";
 * */
 export class MainMenu extends HTMLRenderer {
     protected rootNodeId = "main_menu";
+
+    /**
+     * Related app intance.
+     */
+    private app: RubEns;
 
     /**
      * Instance of the child tool document actions menu.
@@ -31,17 +36,19 @@ export class MainMenu extends HTMLRenderer {
     /**
      * Instanciates and initializes a new MainMenu object and its sub-modules.
      * @param  {JQuery}   parentNode Parent node owning current instance.
-     * @param  {Document} document   Related document instance.
+     * @param  {RubEns}   app        Related app instance.
      * @return {MainMenu}            Fresh instance of MainMenu.
      *
      * @author Camille Gobert
      */
-    constructor (parentNode: JQuery, document: Document) {
+    constructor (parentNode: JQuery, app: RubEns) {
         super(parentNode);
         this.createRootNode();
 
-        this.documentActionsMenu = new DocumentActionsMenu(this.rootNode, document);
-        this.toolSelectionMenu   = new ToolSelectionMenu(this.rootNode, document);
+        this.app = app;
+
+        this.documentActionsMenu = new DocumentActionsMenu(this.rootNode, app);
+        this.toolSelectionMenu   = new ToolSelectionMenu(this.rootNode, app);
         this.createTitleNode();
 
         this.setDefaultDocumentActions();
@@ -61,10 +68,17 @@ export class MainMenu extends HTMLRenderer {
         // TODO: implement new document, saving and loading actions!
         defaultActions.push({
             name: "New",
-            apply: (document) => {  },
-            disabled: true
+            apply: (document) => { this.app.createDocument(); },
+            disabled: false
         });
 
+        defaultActions.push({
+            name: "Close",
+            apply: (document) => { this.app.closeDocument(); },
+            disabled: false
+        });
+
+        /*
         defaultActions.push({
             name: "Save",
             apply: (document) => {  },
@@ -76,7 +90,7 @@ export class MainMenu extends HTMLRenderer {
             apply: (document) => {  },
             disabled: true
         });
-
+        */
 
         // Importing an image in the current document
         defaultActions.push({

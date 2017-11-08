@@ -1,7 +1,7 @@
 import * as $ from "jquery";
 import { HTMLRenderer } from "./HTMLRenderer";
 import { ParametersField } from "./ParametersField";
-import { Document } from "../Document";
+import { RubEns } from "../RubEns";
 
 /**
  * Main UI element representing the sidebar of the GUI.
@@ -13,9 +13,9 @@ export class Sidebar extends HTMLRenderer {
     protected rootNodeId = "sidebar";
 
     /**
-     * Related document instance.
+     * Related app instance.
      */
-    document: Document;
+    app: RubEns;
 
     /**
      * Instance of the global parameters field.
@@ -29,36 +29,34 @@ export class Sidebar extends HTMLRenderer {
 
     /**
      * Instanciates and initializes a new Sidebar object and its sub-modules.
-     * @param  {JQuery}   parentNode Parent node owning current instance.
-     * @param  {Document} document   Related document instance.
-     * @return {Sidebar}             Fresh instance of Sidebar.
+     * @param  {JQuery}  parentNode Parent node owning current instance.
+     * @param  {RubEns}  app        Related app instance.
+     * @return {Sidebar}            Fresh instance of Sidebar.
      *
      * @author Camille Gobert
      */
-    constructor (parentNode: JQuery, document: Document) {
+    constructor (parentNode: JQuery, app: RubEns) {
         super(parentNode);
         this.createRootNode();
 
-        this.document = document;
+        this.app = app;
 
-        this.globalParametersField      = new ParametersField(this.rootNode, document);
-        this.currentToolParametersField = new ParametersField(this.rootNode, document);
+        this.globalParametersField      = new ParametersField(this.rootNode, app);
+        this.currentToolParametersField = new ParametersField(this.rootNode, app);
 
-        // TODO: move this elsewhere?
-        this.document.eventManager.registerEventHandler({
-            eventTypes: ["rubens_toolchanged"],
-            selector: $("body"),
+        // TODO: move the handlers elsewhere!
+        this.app.eventManager.registerEventHandler({
+            eventTypes: ["rubens_toolChanged"],
+            selector: $(document),
             callback: (event) => {
                 this.updateCurrentToolParametersField();
         }});
 
-        // TODO: remove debug handler
-        this.document.eventManager.registerEventHandler({
-            eventTypes: ["rubens_globalparameterschanged"],
-            selector: "*",
+        this.app.eventManager.registerEventHandler({
+            eventTypes: ["rubens_documentCreated", "rubens_documentClosed"],
+            selector: $(document),
             callback: (event) => {
-                console.log("pouet");
-                this.updateGlobalParametersField();
+                this.updateRootNode();
         }});
 
         this.updateRootNode();
@@ -76,13 +74,18 @@ export class Sidebar extends HTMLRenderer {
 
     /**
      * Update the global parameters field.
+     * If the
      *
      * @author Camille Gobert
      */
     updateGlobalParametersField () {
         this.globalParametersField.clearParameters();
 
-        let sharedToolParameters = this.document.parameters.sharedToolParameters;
+        if (! this.app.document) {
+            return;
+        }
+
+        let sharedToolParameters = this.app.document.parameters.sharedToolParameters;
         this.globalParametersField.addAllParameters(Object.keys(sharedToolParameters)
                                                           .map((key) => sharedToolParameters[key]));
     }
@@ -97,7 +100,11 @@ export class Sidebar extends HTMLRenderer {
     updateCurrentToolParametersField () {
         this.currentToolParametersField.clearParameters();
 
-        let currentTool = this.document.getCurrentTool();
+        if (! this.app.document) {
+            return;
+        }
+
+        let currentTool = this.app.document.getCurrentTool();
         if (! currentTool) {
             return;
         }

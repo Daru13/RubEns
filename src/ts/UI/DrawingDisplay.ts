@@ -1,54 +1,87 @@
 import * as $ from "jquery";
 import { HTMLRenderer } from "./HTMLRenderer";
+import { RubEns } from "../RubEns";
 
 export class DrawingDisplay extends HTMLRenderer {
     protected rootNodeId = "drawing_display";
 
-    constructor (parentNode: JQuery) {
-        super(parentNode);
-        this.createRootNode();
-        this.updateRootNode();
-    }
+    /**
+     * Related app instance.
+     */
+    app: RubEns;
 
     /**
-     * Create all canvases in a common block element, itself appended to the root node.
+     * Reference to the canvas container.
+     */
+    protected canvasContainer: JQuery;
+
+    /**
+     * Event handler for document changes.
+     */
+    protected documentChangedHandler = {
+        eventTypes: ["rubens_documentCreated", "rubens_documentClosed"],
+        selector  : $(document),
+        callback  : (_) => { this.updateCanvasContainerNode(); }
+    };
+
+
+    /**
+     * Instanciates and initializes a new DrawingDisplay object and its sub-modules.
+     * @param  {JQuery}         parentNode Parent node owning current instance.
+     * @param  {RubEns}         app        Related app instance.
+     * @return {DrawingDisplay}            Fresh instance of DrawingDisplay.
      *
      * @author Camille Gobert
      */
-    createRootNode () {
-        // Canvas container
-        this.rootNode = $("<div>");
-        this.rootNode.attr("id", this.rootNodeId);
+    constructor (parentNode: JQuery, app: RubEns) {
+        super(parentNode);
+        this.createRootNode();
 
-        this.parentNode.append(this.rootNode);
+        this.app = app;
 
-        // Drawing canvas
-        let drawingCanvas = $("<canvas>");
-        drawingCanvas.attr("id", "drawing_canvas");
+        app.eventManager.registerEventHandler(this.documentChangedHandler);
 
-        drawingCanvas.attr("width", "800px");
-        drawingCanvas.attr("height", "600px");
-
-        this.rootNode.append(drawingCanvas);
-
-        // Working canvas
-        let workingCanvas = $("<canvas>");
-        workingCanvas.attr("id", "working_canvas");
-
-        workingCanvas.attr("width", "800px");
-        workingCanvas.attr("height", "600px");
-        this.rootNode.append(workingCanvas);
-
-        // Selection canvas
-        let selectionCanvas = $("<canvas>");
-        selectionCanvas.attr("id", "selection_canvas");
-
-        selectionCanvas.attr("width", "800px");
-        selectionCanvas.attr("height", "600px");
-        this.rootNode.append(selectionCanvas);
+        this.createCanvasContainerNode();
+        this.updateCanvasContainerNode();
     }
 
-    updateRootNode () {
 
+    /**
+     * Create and initialize the canvas container node.
+     *
+     * @author Camille Gobert
+     */
+    createCanvasContainerNode () {
+        let canvasContainer = $("<div>");
+        canvasContainer.attr("id", "canvas_container");
+
+        this.canvasContainer = canvasContainer;
+
+        this.rootNode.append(canvasContainer);
+    }
+
+
+    /**
+     * Create and initialize all required canvases, and append them to the canvas container.
+     * If there is no current document, this method only empties the canvas container.
+     *
+     * @author Camille Gobert
+     */
+    updateCanvasContainerNode () {
+        this.canvasContainer.empty();
+
+        let document = this.app.document;
+        if (! document) {
+            return;
+        }
+
+        this.canvasContainer.append(document.imageWorkspace.drawingCanvas.canvas);
+        document.imageWorkspace.drawingCanvas.updateBoundingRect();
+
+        this.canvasContainer.append(document.imageWorkspace.workingCanvas.canvas);
+        document.imageWorkspace.workingCanvas.updateBoundingRect();
+
+        this.canvasContainer.append(document.imageWorkspace.selectionCanvas.canvas);
+        document.imageWorkspace.selectionCanvas.updateBoundingRect();
     }
 }

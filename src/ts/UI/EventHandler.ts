@@ -22,7 +22,7 @@ export interface EventHandler {
     /**
      * Array of types of events to handle.
      */
-    eventTypes: Array<string>;
+    eventTypes: string[];
 
     /**
      * Selector in the jQuery format, to filter which events should be handled.
@@ -39,4 +39,10 @@ export interface EventHandler {
      * Optionnal flag; if defined and set to true, ignore this handler.
      */
     disabled?: boolean;
+
+    /**
+     * Optionnal list of events; if defined, automatically unregister this handler
+     * when one of the listed event is received.
+     */
+    unregisterOnEventTypes?: string[];
 }

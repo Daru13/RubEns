@@ -1,6 +1,6 @@
 import * as Params from "../Parameter";
 import { Parameter } from "./Parameter";
-import { Document } from "../Document";
+import { RubEns } from "../RubEns";
 
 /**
  * UI element representing a single string parameter.
@@ -14,13 +14,13 @@ export class ColorParameter extends Parameter {
      * Instanciates and initialize a new, empty ColorParameter object.
      * @param  {JQuery}         parentNode Parent node owning current instance.
      * @param  {ColorParameter} parameter  Parameter to display.
-     * @param  {Document}       document   Related document instance.
+     * @param  {RubEns}         app        Related app instance.
      * @return {ColorParameter}            Fresh instance of ColorParameter.
      *
      * @author Camille Gobert
      */
-    constructor (parentNode: JQuery, document: Document, parameter: Params.ColorParameter) {
-        super(parentNode, document, parameter);
+    constructor (parentNode: JQuery, app: RubEns, parameter: Params.ColorParameter) {
+        super(parentNode, app, parameter);
 
         this.controlNodeValue = parameter.value;
 

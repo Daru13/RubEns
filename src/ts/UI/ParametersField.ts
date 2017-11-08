@@ -4,7 +4,7 @@ import { Parameter } from "./Parameter";
 import { NumberParameter } from "./NumberParameter";
 import { StringParameter } from "./StringParameter";
 import { ColorParameter } from "./ColorParameter";
-import { Document } from "../Document";
+import { RubEns } from "../RubEns";
 
 /**
  * UI element representing a set of related parameters.
@@ -17,9 +17,9 @@ export class ParametersField extends HTMLRenderer {
     protected rootNodeClasses = "parameters_field";
 
     /**
-     * Related document instance.
+     * Related instance of RubEns app.
      */
-    private document: Document;
+    private app: RubEns;
 
     /**
      * List of parameters (of any type) which should be displayed by the UI.
@@ -34,16 +34,16 @@ export class ParametersField extends HTMLRenderer {
     /**
      * Instanciates and initializes a new, empty ParametersField object.
      * @param  {JQuery}   parentNode Parent node owning current instance.
-     * @param  {Document} document   Related document instance.
+     * @param  {RubEns}   app        Related app instance.
      * @return {ParametersField}     Fresh instance of Parameter.
      *
      * @author Camille Gobert
      */
-    constructor (parentNode: JQuery, document: Document) {
+    constructor (parentNode: JQuery, app: RubEns) {
         super(parentNode);
         this.createRootNode();
 
-        this.document = document;
+        this.app = app;
 
         this.parameters        = [];
         this.wrappedParameters = [];
@@ -79,13 +79,13 @@ export class ParametersField extends HTMLRenderer {
 
         switch (parameterKind) {
             case "number":
-                wrappedParameter = new NumberParameter(this.rootNode, this.document, <Params.NumberParameter> parameter);
+                wrappedParameter = new NumberParameter(this.rootNode, this.app, <Params.NumberParameter> parameter);
                 break;
             case "string":
-                wrappedParameter = new StringParameter(this.rootNode, this.document, <Params.StringParameter> parameter);
+                wrappedParameter = new StringParameter(this.rootNode, this.app, <Params.StringParameter> parameter);
                 break;
             case "color":
-                wrappedParameter = new ColorParameter(this.rootNode, this.document, <Params.ColorParameter> parameter);
+                wrappedParameter = new ColorParameter(this.rootNode, this.app, <Params.ColorParameter> parameter);
                 break;
         }
 

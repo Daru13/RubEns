@@ -1,6 +1,7 @@
 import * as $ from "jquery";
 import { HTMLRenderer } from "./HTMLRenderer";
 import { Document } from "../Document";
+import { RubEns } from "../RubEns";
 
 
 /**
@@ -44,9 +45,9 @@ export class DocumentActionsMenu extends HTMLRenderer {
     private actions: DocumentAction[];
 
     /**
-     * Related document intance.
+     * Related app intance.
      */
-    private document: Document;
+    private app: RubEns;
 
     /**
      * Event handler callback meant to be called when a click occurs on a tool.
@@ -61,21 +62,21 @@ export class DocumentActionsMenu extends HTMLRenderer {
      * Instanciates and initializes a new DocumentActionsMenu object,
      * and set up the related click event handler.
      * @param  {JQuery}              parentNode Parent node owning current instance.
-     * @param  {Document}            document   Related document intance.
+     * @param  {RubEns}              app        Related app intance.
      * @return {DocumentActionsMenu}            Fresh instance of DocumentActionsMenu.
      *
      * @author Camille Gobert
      */
-    constructor (parentNode: JQuery, document: Document) {
+    constructor (parentNode: JQuery, app: RubEns) {
         super(parentNode);
 
-        this.actions  = [];
-        this.document = document;
+        this.actions = [];
+        this.app     = app;
 
         this.createRootNode();
         this.updateRootNode();
 
-        this.document.eventManager.registerEventHandler(this.actionClickEventHandler);
+        this.app.eventManager.registerEventHandler(this.actionClickEventHandler);
     }
 
     /**
@@ -143,13 +144,13 @@ export class DocumentActionsMenu extends HTMLRenderer {
         // Get the clicked document action instance
         let documentActionName = $(event.target).attr("data-doc-action-name");
 
-        let action = this.actions.find((da) => da.name === documentActionName);
+        let action = this.actions.find((dA) => dA.name === documentActionName);
         if (! action) {
             console.log("Error: action " + documentActionName + " could not be found.");
             return;
         }
 
         // Apply the right action
-        action.apply(this.document);
+        action.apply(this.app.document);
     }
 }

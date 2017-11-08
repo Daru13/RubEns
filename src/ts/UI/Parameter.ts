@@ -1,7 +1,7 @@
 import * as $ from "jquery";
 import { HTMLRenderer } from "./HTMLRenderer";
 import * as Params from "../Parameter";
-import { Document } from "../Document";
+import { RubEns } from "../RubEns";
 
 /**
  * Abstract UI element representing a single parameter.
@@ -16,9 +16,9 @@ export abstract class Parameter extends HTMLRenderer {
     protected rootNodeClasses = "parameter";
 
     /**
-     * Related document instance.
+     * Related instance of RubEns app.
      */
-    protected document: Document;
+    private app: RubEns;
 
     /**
      * Related parameter, to display and bind to the control element.
@@ -60,16 +60,16 @@ export abstract class Parameter extends HTMLRenderer {
      * Instanciates and initialize a new Parameter object.
      * This method is only meant to be called from classes extending this one.
      * @param  {JQuery}                parentNode Parent node owning current instance.
-     * @param  {Document}              document   Related document instance.
+     * @param  {RubEns}                app        Related app instance.
      * @param  {Params.Parameter<any>} parameter  Parameter to display.
      * @return {Parameter}                        Fresh instance of Parameter.
      *
      * @author Camille Gobert
      */
-    constructor (parentNode: JQuery, document: Document, parameter: Params.Parameter<any>) {
+    constructor (parentNode: JQuery, app: RubEns, parameter: Params.Parameter<any>) {
         super(parentNode);
 
-        this.document  = document;
+        this.app       = app;
         this.parameter = parameter;
     }
 
@@ -146,7 +146,7 @@ export abstract class Parameter extends HTMLRenderer {
      * @author Camille Gobert
      */
     startHandlingChanges () {
-        this.document.eventManager.registerEventHandler(this.parameterChangeHandler);
+        this.app.eventManager.registerEventHandler(this.parameterChangeHandler);
     }
 
     /**
@@ -155,6 +155,6 @@ export abstract class Parameter extends HTMLRenderer {
      * @author Camille Gobert
      */
     stopHandlingChanges () {
-        this.document.eventManager.unregisterEventHandler(this.parameterChangeHandler);
+        this.app.eventManager.unregisterEventHandler(this.parameterChangeHandler);
     }
 }

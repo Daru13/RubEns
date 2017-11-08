@@ -41,7 +41,7 @@ export class RubEns {
     /**
      * Event manager of the application.
      */
-    private eventManager: EventManager;
+    eventManager: EventManager;
 
     /**
      * Top-level UI element.
@@ -69,12 +69,9 @@ export class RubEns {
         this.parameters = parameters;
 
         this.initEventManager();
-        this.initDocument();
         this.initTools();
         this.initUserInterface();
-
-        // TODO: move this elsewhere!
-        this.document.createCanvases();
+        this.initDocument();
     }
 
 
@@ -140,7 +137,28 @@ export class RubEns {
             new BucketTool()
         ];
 
-        this.updateTools();
+        this.eventManager.registerEventHandler({
+            eventTypes: ["rubens_documentCreated"],
+            selector  : $(document),
+            callback  : (event: CustomEvent) => {
+                let newDocument = event.detail.document;
+                for (let tool of this.tools) {
+                    tool.documentParameters = newDocument.parameters;
+                    tool.workspace          = newDocument.imageWorkspace;
+                }
+            }
+        });
+
+        this.eventManager.registerEventHandler({
+            eventTypes: ["rubens_documentClosed"],
+            selector  : $(document),
+            callback  : (_) => {
+                for (let tool of this.tools) {
+                    tool.documentParameters = undefined;
+                    tool.workspace          = undefined;
+                }
+            }
+        });
     }
 
 
@@ -167,21 +185,53 @@ export class RubEns {
      * @author Camille Gobert
      */
     initUserInterface () {
-        this.rootLayout = new RootLayout($("body"), this.document);
-
+        this.rootLayout = new RootLayout($("body"), this);
         this.rootLayout.mainMenu.toolSelectionMenu.setTools(this.tools);
     }
 
 
     /**
-     * Create a new document, set as the current one.
+     * Create a new document, and set it as the current one.
+     * If a document is already open, call the [[closeDocument]] method first.
      * @param  {DocumentParameters} parameters Set of document parameters.
      *
      * @author Camille Gobert
      */
-    createDocument (parameters: DocumentParameters) {
-        this.document = new Document(parameters, this.eventManager);
+    createDocument (parameters?: DocumentParameters) {
+        if (this.document) {
+            this.closeDocument();
+        }
+
+        this.document = new Document(parameters || new DocumentParameters(),
+                                     this.eventManager);
+
+        // Notify that the document has changed
+        EventManager.spawnEvent("rubens_documentCreated", {document: this.document});
     }
+
+    /**
+     * Close the current document.
+     * This method has no effect if there is no document currently opened.
+     *
+     * @author Camille Gobert
+     */
+    closeDocument () {
+        if (! this.document) {
+            return;
+        }
+
+        let currentTool = this.document.getCurrentTool();
+        if (currentTool) {
+            currentTool.unregisterEvents(this.eventManager);
+        }
+
+        this.document = undefined;
+
+        // Notify that the document has changed
+        EventManager.spawnEvent("rubens_documentClosed", {document: this.document});
+
+    }
+
 
     /**
      *

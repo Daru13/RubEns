@@ -11,12 +11,12 @@ import {Color} from "./utils/Color";
 export class ImageWorkspace {
 
     /**
-     * The height of the canvases and the selection area
+     * The height of the canvases and the selection area.
      */
     height: number;
 
     /**
-     * the width of the canvases and the selection area
+     * the width of the canvases and the selection area.
      */
     width: number;
 
@@ -174,14 +174,25 @@ export class ImageWorkspace {
      *
      * @author Mathieu Fehr
      */
-    constructor() {
-        this.height = null;
-        this.width = null;
-        this.drawingCanvas = null;
-        this.workingCanvas = null;
-        this.selectionCanvas = null;
-        this.selectedArea = null;
+    constructor (width: number, height: number) {
+        this.width  = width;
+        this.height = height;
+
         this.selectionBorderColorShift = 0;
         this.selectionDrawingIntervalID = null;
+
+        this.selectedArea = new SelectedArea(this.width, this.height);
+        this.selectedArea.selectEverything();
+
+        this.createCanvases();
+    }
+
+    createCanvases () {
+        let width  = this.width;
+        let height = this.height;
+
+        this.drawingCanvas   = new Canvas(width, height, "drawing_canvas");
+        this.workingCanvas   = new Canvas(width, height, "working_canvas");
+        this.selectionCanvas = new Canvas(width, height, "selection_canvas");
     }
 }

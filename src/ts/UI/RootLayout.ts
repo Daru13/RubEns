@@ -3,7 +3,7 @@ import { DrawingDisplay } from "./DrawingDisplay";
 import { Sidebar } from "./Sidebar";
 import { StatusBar } from "./StatusBar";
 import { HTMLRenderer } from "./HTMLRenderer";
-import { Document } from "../Document";
+import { RubEns } from "../RubEns";
 
 import { Popup, PopupParameters } from "./Popup";
 import { ParametersFieldPopupParameters, ParametersFieldPopup } from "./ParametersFieldPopup";
@@ -24,17 +24,17 @@ export class RootLayout extends HTMLRenderer {
     /**
      * Instanciates a new RootLayout, and initializes its sub-modules
      * @param parentNode  Parent HTML node where to set up the UI.
-     * @param document    Rleated document instance.
+     * @param app         Related app instance.
      *
      * @author Camille Gobert
      */
-    constructor (parentNode: JQuery, document: Document) {
+    constructor (parentNode: JQuery, app: RubEns) {
         super(parentNode);
         this.createRootNode();
 
-        this.mainMenu       = new MainMenu(this.rootNode, document);
-        this.drawingDisplay = new DrawingDisplay(this.rootNode);
-        this.sidebar        = new Sidebar(this.rootNode, document);
+        this.mainMenu       = new MainMenu(this.rootNode, app);
+        this.drawingDisplay = new DrawingDisplay(this.rootNode, app);
+        this.sidebar        = new Sidebar(this.rootNode, app);
         this.statusBar      = new StatusBar(this.rootNode);
 
         // TODO: debug code, to be removed!

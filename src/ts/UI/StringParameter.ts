@@ -1,6 +1,6 @@
 import * as Params from "../Parameter";
 import { Parameter } from "./Parameter";
-import { Document } from "../Document";
+import { RubEns } from "../RubEns";
 
 /**
  * UI element representing a single string parameter.
@@ -14,13 +14,13 @@ export class StringParameter extends Parameter {
      * Instanciates and initialize a new, empty StringParameter object.
      * @param  {JQuery}          parentNode Parent node owning current instance.
      * @param  {StringParameter} parameter  Parameter to display.
-     * @param  {Document}        document   Related document instance.
+     * @param  {RubEns}          app        Related app instance.
      * @return {StringParameter}            Fresh instance of StringParameter.
      *
      * @author Camille Gobert
      */
-    constructor (parentNode: JQuery, document: Document, parameter: Params.StringParameter) {
-        super(parentNode, document, parameter);
+    constructor (parentNode: JQuery, app: RubEns, parameter: Params.StringParameter) {
+        super(parentNode, app, parameter);
 
         this.controlNodeValue = parameter.value;
 

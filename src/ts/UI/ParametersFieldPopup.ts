@@ -1,5 +1,5 @@
 import * as $ from "jquery";
-import { Document } from "../Document";
+import { RubEns } from "../RubEns";
 import * as Params from "../Parameter";
 import { Popup, PopupParameters } from "./Popup";
 import { ParametersField } from "./ParametersField";
@@ -119,7 +119,7 @@ export class ParametersFieldPopup extends Popup {
     /**
      * Instanciates and initializes an empty, new ParametersFieldPopup object.
      * @param  {JQuery}                          parentNode          Parent node owning current instance.
-     * @param  {Document}                        document            Related document instance.
+     * @param  {RubEns}                          app                 Related app instance.
      * @param  {ParametersFieldPopupParameters}  parameters          Set of parameters of the popup.
      * @param  {Iterable<Params.Parameter<any>>} parametersToDisplay Set of parameters to display.
      * @param  {string}                          title               Optionnal title of the popup.
@@ -129,12 +129,12 @@ export class ParametersFieldPopup extends Popup {
      * @author Camille Gobert
      */
     constructor (parentNode: JQuery,
-                document: Document,
+                app: RubEns,
                 parameters: ParametersFieldPopupParameters,
                 parametersToDisplay: Iterable<Params.Parameter<any>>,
                 title?: string,
                 message?: string) {
-        super(parentNode, document, parameters, title);
+        super(parentNode, app, parameters, title);
 
         this.parametersToDisplay = parametersToDisplay;
         this.message             = message;
@@ -190,7 +190,7 @@ export class ParametersFieldPopup extends Popup {
         let parametersToDisplayCopy  = JSON.parse(JSON.stringify(this.parametersToDisplay));
         this.parametersToDisplayCopy = parametersToDisplayCopy;
 
-        this.parametersField = new ParametersField(this.contentNode, this.document);
+        this.parametersField = new ParametersField(this.contentNode, this.app);
         this.parametersField.addAllParameters(parametersToDisplayCopy);
     }
 
@@ -316,11 +316,11 @@ export class ParametersFieldPopup extends Popup {
         super.startHandlingEvents();
 
         if (this.parameters.displayCancelButton) {
-            this.document.eventManager.registerEventHandler(this.cancelButtonClickHandler);
+            this.app.eventManager.registerEventHandler(this.cancelButtonClickHandler);
         }
 
         if (this.parameters.displayOkButton) {
-            this.document.eventManager.registerEventHandler(this.okButtonClickHandler);
+            this.app.eventManager.registerEventHandler(this.okButtonClickHandler);
         }
     }
 
@@ -334,11 +334,11 @@ export class ParametersFieldPopup extends Popup {
         super.stopHandlingEvents();
 
         if (this.parameters.displayCancelButton) {
-            this.document.eventManager.unregisterEventHandler(this.cancelButtonClickHandler);
+            this.app.eventManager.unregisterEventHandler(this.cancelButtonClickHandler);
         }
 
         if (this.parameters.displayOkButton) {
-            this.document.eventManager.unregisterEventHandler(this.okButtonClickHandler);
+            this.app.eventManager.unregisterEventHandler(this.okButtonClickHandler);
         }
     }
 }

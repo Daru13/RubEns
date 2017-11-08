@@ -1,3 +1,4 @@
+import * as $ from "jquery";
 import { ImageFormat } from "./ImageFormat"
 import { Point } from "../utils/Point";
 
@@ -8,14 +9,20 @@ import { Point } from "../utils/Point";
 export class Canvas {
 
     /**
-     * The HTML canvas node.
+     * The canvas node.
      */
-    private canvas: HTMLCanvasElement  = null;
+    canvas: HTMLCanvasElement;
+
+    width: number;
+
+    height: number;
+
+    id: string;
 
     /**
      * The 2D context of the canvas.
      */
-    private canvas2DContext: CanvasRenderingContext2D = null;
+    private canvas2DContext: CanvasRenderingContext2D;
 
     /**
      * The bounding rectangle of the canvas.
@@ -26,9 +33,21 @@ export class Canvas {
     /**
      * Basic constructor
      */
-    constructor (canvas: HTMLCanvasElement) {
-        this.canvas          = canvas;
-        this.canvas2DContext = canvas.getContext("2d");
+    constructor (width: number, height: number, id: string) {
+        this.width  = width;
+        this.height = height;
+        this.id     = id;
+
+        let canvas = $("<canvas>");
+        canvas.attr("id", id);
+
+        canvas.attr("width", width + "px");
+        canvas.css("width", width + "px");
+        canvas.attr("height", height + "px");
+        canvas.css("height", height + "px");
+
+        this.canvas             = <HTMLCanvasElement> canvas[0];
+        this.canvas2DContext    = this.canvas.getContext("2d");
         this.canvasBoundingRect = this.canvas.getBoundingClientRect();
     }
 
@@ -40,7 +59,7 @@ export class Canvas {
      * @author Camille Gobert
      */
     getImageData () {
-        return this.canvas2DContext.getImageData(0, 0, this.canvas.width, this.canvas.height);
+        return this.canvas2DContext.getImageData(0, 0, this.width, this.height);
     }
 
 
@@ -61,7 +80,7 @@ export class Canvas {
      * @author Camille Gobert
      */
     clear () {
-        this.canvas2DContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.canvas2DContext.clearRect(0, 0, this.width, this.height);
     }
 
 
@@ -99,6 +118,16 @@ export class Canvas {
         this.canvas2DContext.drawImage(image,0,0);
     }
 
+
+    /**
+     * Compute and save the bounding rectangle of the HTML canvas.
+     * This method should be called whenever the canvas changes in the DOM.
+     *
+     * @author Camille Gobert
+     */
+    updateBoundingRect () {
+        this.canvasBoundingRect = this.canvas.getBoundingClientRect();
+    }
 
     /**
      * Get the position of a mouse event relative to the canvas,

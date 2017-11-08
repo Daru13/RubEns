@@ -45,18 +45,9 @@ export class Document {
         this.parameters   = parameters;
         this.eventManager = eventManager;
 
-        this.imageWorkspace = new ImageWorkspace();
-    }
+        this.imageWorkspace = new ImageWorkspace(this.parameters.width, this.parameters.height);
 
-    // TODO: move this to the ImageWorkspace instance!
-    createCanvases () {
-        this.imageWorkspace.width = this.parameters.width;
-        this.imageWorkspace.height = this.parameters.height;
-        this.imageWorkspace.drawingCanvas = new Canvas(<HTMLCanvasElement> document.getElementById("drawing_canvas"));
-        this.imageWorkspace.workingCanvas = new Canvas(<HTMLCanvasElement> document.getElementById("working_canvas"));
-        this.imageWorkspace.selectionCanvas = new Canvas(<HTMLCanvasElement> document.getElementById("selection_canvas"));
-        this.imageWorkspace.selectedArea = new SelectedArea(this.parameters.width, this.parameters.height);
-        this.imageWorkspace.selectedArea.selectEverything();
+        console.log("Document created", this);
     }
 
     /**
@@ -122,8 +113,8 @@ export class Document {
             let img = new Image();
             img.addEventListener("load", function() {
                 // TODO change interface when image size is not the same
-                self.parameters.height = img.height;
-                self.parameters.width = img.width;
+                // self.parameters.height = img.height;
+                // self.parameters.width = img.width;
                 self.imageWorkspace.drawingCanvas.importImage(img);
                 onCopyEnd();
             });

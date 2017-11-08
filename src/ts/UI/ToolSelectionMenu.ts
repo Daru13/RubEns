@@ -1,7 +1,8 @@
 import * as $ from "jquery";
 import { HTMLRenderer } from "./HTMLRenderer";
 import { Tool } from "../Tools/Tool";
-import { Document } from "../Document";
+import { RubEns } from "../RubEns";
+import { EventManager } from "./EventManager";
 
 
 /**
@@ -15,14 +16,14 @@ export class ToolSelectionMenu extends HTMLRenderer {
     protected rootNodeType = "ul";
 
     /**
+     * Related app intance.
+     */
+    private app: RubEns;
+
+    /**
      * Set of tools, to display in the UI.
      */
     private tools: Tool[];
-
-    /**
-     * Related document intance.
-     */
-    private document: Document;
 
     /**
      * Event handler callback meant to be called when a click occurs on a tool.
@@ -37,21 +38,37 @@ export class ToolSelectionMenu extends HTMLRenderer {
      * Instanciates and initializes a new ToolSelectionMenu object,
      * and set up the related click event handler.
      * @param  {JQuery}            parentNode Parent node owning current instance.
-     * @param  {Document}          document   Related document intance.
+     * @param  {RubEns}            app        Related app intance.
      * @return {ToolSelectionMenu}            Fresh instance of ToolSelectionMenu.
      *
      * @author Camille Gobert
      */
-    constructor (parentNode: JQuery, document: Document) {
+    constructor (parentNode: JQuery, app: RubEns) {
         super(parentNode);
 
-        this.tools    = [];
-        this.document = document;
+        this.tools = [];
+        this.app   = app;
 
         this.createRootNode();
         this.updateRootNode();
 
-        this.document.eventManager.registerEventHandler(this.toolClickEventHandler);
+        this.app.eventManager.registerEventHandler(this.toolClickEventHandler);
+
+        this.app.eventManager.registerEventHandler({
+            eventTypes: ["rubens_documentCreated"],
+            selector  : $(document),
+            callback  : (event: CustomEvent) => {
+                $(".tool_button").prop("disabled", false);
+            }
+        });
+        this.app.eventManager.registerEventHandler({
+            eventTypes: ["rubens_documentClosed"],
+            selector  : $(document),
+            callback  : (event: CustomEvent) => {
+                $(".tool_button").prop("disabled", true);
+                $(".tool_button.selected").removeClass("selected");
+            }
+        });
     }
 
     /**
@@ -100,6 +117,9 @@ export class ToolSelectionMenu extends HTMLRenderer {
         toolButton.attr("data-tool-classname", toolClassName);
         toolButton.addClass("tool_button");
 
+        // A tool is initially disabled
+        toolButton.prop("disabled", true);
+
         let toolNode = $("<li>");
         toolNode.append(toolButton);
 
@@ -108,11 +128,16 @@ export class ToolSelectionMenu extends HTMLRenderer {
 
     /**
      * Method which must be called when a click occurs on a tool node.
+     * If there is no current document, only updates the selected state of the tools.
      * @param  {Event}  event Related click event.
      *
      * @author Camille Gobert
      */
     onToolClick (event: Event) {
+        if (! this.app.document) {
+            return;
+        }
+
         // Get the clicked tool instance
         let toolClassName = $(event.target).attr("data-tool-classname");
 
@@ -122,18 +147,14 @@ export class ToolSelectionMenu extends HTMLRenderer {
             return;
         }
 
-        // Update the current tool of the document
-        this.document.setCurrentTool(tool);
-
-        console.log("New selected tool:");
-        console.log(tool);
-
         // Update the class of the previously/currently selected tools
         $(".tool_button.selected").removeClass("selected");
         $(event.target).addClass("selected");
 
+        // Update the current tool of the document
+        this.app.document.setCurrentTool(tool);
+
         // Notify the UI the tool has changed with an event
-        let evt = new CustomEvent("rubens_toolchanged", {bubbles: true});
-        this.rootNode[0].dispatchEvent(evt);
+        EventManager.spawnEvent("rubens_toolChanged", {tool: tool});
     }
 }
