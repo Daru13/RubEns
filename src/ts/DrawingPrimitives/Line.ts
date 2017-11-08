@@ -208,16 +208,13 @@ export class Line {
                     let nbPointsInEllipse = 0;
                     for(let dx = -4; dx<=4; dx++) {
                         for(let dy = -4; dy<=4; dy++) {
-                            let distanceToLineSquared = Line.distanceToLineSquared(from, to, new Point(x + dx/4, y + dy/4));
+                            let distanceToLineSquared = Line.distanceToLineSquared(from, to, new Point(x + dx/8, y + dy/8));
                             if(distanceToLineSquared < thickness**2) {
                                 nbPointsInEllipse += 1;
                             }
                         }
                     }
                     let newAlpha = (nbPointsInEllipse / 81) * color.alpha;
-                    if(thickness <= 1) {
-                        newAlpha = Math.min(255,2*newAlpha);
-                    }
                     let red = image.data[offset];
                     let blue = image.data[offset + 1];
                     let green = image.data[offset + 2];
