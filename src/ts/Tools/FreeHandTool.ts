@@ -141,20 +141,6 @@ export class FreeHandTool extends Tool {
         });
     }
 
-    /**
-     * Returns a function to apply on canvas
-     * @param {FreeHandParameters} parameters         thickness and color
-     * @param {DocumentParameters} documentParameters Parameters of current document.
-     * @author Josselin GIET
-     */
-    static getLambda (parameters: FreeHandParameters, documentParameters: DocumentParameters) {
-        return function(center: Point, image: ImageData) {
-            let color = Color.buildFromHex(documentParameters.sharedToolParameters.mainColor.value);
-            let thickness = parameters.thickness.value;
-            Ellipse.drawFromCenter(image, center, thickness, thickness, color, 0, 0, color);
-        };
-    }
-
 
     /**
      * Draw a line from this.lastPosition to currentPosition on the given canvas.

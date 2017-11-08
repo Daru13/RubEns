@@ -3,6 +3,8 @@
 *RubEns* is a simple painting app, built in Javascript/Typescript.
 It is our course project for ENS Paris-Saclay's software dev. course.
 
+You can find the latest build [online](https://daru13.github.io/RubEns/).
+
 ## To compile: 
 
 - `make` compiles the project
