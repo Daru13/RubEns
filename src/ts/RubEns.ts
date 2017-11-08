@@ -132,7 +132,6 @@ export class RubEns {
             new RectangleTool(),
             new FreeHandTool(),
             new RectangleSelectionTool(),
-            new SelectEverythingTool(),
             new MagicWandTool(),
             new BucketTool()
         ];
