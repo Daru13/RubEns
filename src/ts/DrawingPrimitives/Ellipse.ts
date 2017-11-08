@@ -161,7 +161,7 @@ export class Ellipse {
 
             // We check either we should blend with border color if it exist.
             if(Ellipse.isPointInEllipse(x, y, aBorder, bBorder)) {
-                let colorTemp = new Color(fillColor.red, fillColor.blue, fillColor.green, fillColor.alpha * alphaFactor);
+                let colorTemp = new Color(fillColor.red, fillColor.green, fillColor.blue, fillColor.alpha * alphaFactor);
                 return Color.blend(colorTemp, borderColor);
             } else {
                 return new Color(fillColor.red, fillColor.green, fillColor.blue, Math.round(fillColor.alpha * alphaFactor));
