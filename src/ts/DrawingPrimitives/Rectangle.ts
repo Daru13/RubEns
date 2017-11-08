@@ -47,6 +47,8 @@ export class Rectangle {
      * @param {number} thickness    The thickness of the border.
      * @param {Color} color         The color of the border.
      * @param {ImageData} image     The image where the border will be drawn.
+     *
+     * @author Mathieu Fehr
      */
     private static drawVerticalBorder(centerX: number, minY: number, maxY: number,
                                       thickness: number, color: Color, image: ImageData) {
@@ -72,6 +74,8 @@ export class Rectangle {
      * @param {number} thickness    The thickness of the border.
      * @param {Color} color         The color of the border.
      * @param {ImageData} image     The image where the border will be drawn.
+     *
+     * @author Mathieu Fehr
      */
     private static drawHorizontalBorder(minX: number, maxX: number, centerY: number,
                                         thickness: number, color: Color, image: ImageData) {
@@ -98,6 +102,8 @@ export class Rectangle {
      * @param thickness         The thickness of the borders.
      * @param {Color} color     The color of the inner rectangle.
      * @param {ImageData} image The image where the border will be drawn.
+     *
+     * @author Mathieu Fehr
      */
     private static drawInnerRectangle(minX: number, maxX: number, minY: number, maxY: number,
                                       thickness, color: Color, image: ImageData) {
@@ -123,6 +129,8 @@ export class Rectangle {
      * @param {number} maxY     The maximal y coordinate of the rectangle.
      * @param {Color} color     The color of the rectangle.
      * @param {ImageData} image The image where the rectangle will be drawn.
+     *
+     * @author Mathieu Fehr
      */
     private static drawRectangle(minX: number, maxX: number, minY: number, maxY: number, color: Color, image: ImageData) {
         for(let i = minY; i <= maxY; i++) {
