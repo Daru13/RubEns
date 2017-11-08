@@ -1,10 +1,8 @@
-import { Canvas } from "./Image/Canvas";
 import { DocumentParameters } from "./DocumentParameters";
 import { ImageFormat } from "./Image/ImageFormat";
 import { Tool } from "./Tools/Tool";
 import { EventManager } from "./UI/EventManager";
 import { ImageWorkspace } from "./ImageWorkspace";
-import { SelectedArea } from "./Image/SelectedArea";
 
 /**
  * Document representing an open image and all its metadata.

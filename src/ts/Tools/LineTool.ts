@@ -1,6 +1,5 @@
 import { Point } from "../utils/Point";
 import { Line } from "../DrawingPrimitives/Line";
-import { Ellipse } from "../DrawingPrimitives/Ellipse"
 import { SimpleShapeTool } from "./SimpleShapeTool";
 import * as Params from "../Parameter";
 import { ToolParameters } from "./Tool";

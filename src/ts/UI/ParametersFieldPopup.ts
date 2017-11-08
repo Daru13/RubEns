@@ -104,7 +104,7 @@ export class ParametersFieldPopup extends Popup {
         eventTypes: ["click"],
         selector  : ".popup_cancel_button",
         callback  : (_) => { this.onCancelButtonClick(); }
-    }
+    };
 
     /**
      * Event handler for a click on the OK button.
@@ -113,7 +113,7 @@ export class ParametersFieldPopup extends Popup {
         eventTypes: ["click"],
         selector  : ".popup_ok_button",
         callback  : (_) => { this.onOkButtonClick(); }
-    }
+    };
 
 
     /**

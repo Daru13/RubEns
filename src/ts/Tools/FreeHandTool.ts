@@ -4,9 +4,7 @@ import { Canvas } from "../Image/Canvas";
 import { Line } from "../DrawingPrimitives/Line";
 import * as Params from "../Parameter";
 import { ToolParameters } from "./Tool";
-import { Ellipse } from "../DrawingPrimitives/Ellipse";
 import { Color } from "../utils/Color";
-import { DocumentParameters } from "../DocumentParameters";
 
 /**
  * Set of parameters used by [[FreeHandTool]].

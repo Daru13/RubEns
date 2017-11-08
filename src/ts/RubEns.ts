@@ -13,7 +13,6 @@ import { FreeHandTool } from "./Tools/FreeHandTool";
 import { RectangleSelectionTool } from "./Tools/RectangleSelectionTool";
 import { MagicWandTool } from "./Tools/MagicWandTool";
 import { BucketTool } from "./Tools/BucketTool";
-import { SelectEverythingTool } from "./Tools/SelectEverythingTool";
 
 
 /**

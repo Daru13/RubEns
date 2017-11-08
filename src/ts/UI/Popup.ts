@@ -34,7 +34,7 @@ import { RubEns } from "../RubEns";
  enum PopupState {
      DISPLAYED = "displayed",
      CLOSED    = "closed"
- };
+ }
 
 
 /**
@@ -113,7 +113,7 @@ export class Popup extends HTMLRenderer {
         eventTypes: ["click"],
         selector  : ".popup_close_button",
         callback  : (_) => { this.close(); }
-    }
+    };
 
 
     /**
@@ -242,7 +242,7 @@ export class Popup extends HTMLRenderer {
 
     /**
      * Set a new content node, and update the popup accordingly.
-     * @param  {JQuery} newContent The new content root node.
+     * @param  {JQuery} newContentNode The new content root node.
      *
      * @author Camille Gobert
      */

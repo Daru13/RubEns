@@ -4,7 +4,6 @@ import { Ellipse } from "../DrawingPrimitives/Ellipse";
 import * as Params from "../Parameter";
 import { ToolParameters } from "./Tool";
 import { Color } from "../utils/Color";
-import {RectangleTool} from "./RectangleTool";
 
 
 /**
