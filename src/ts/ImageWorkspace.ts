@@ -70,7 +70,6 @@ export class ImageWorkspace {
 
         // We select only the pixels that are in the selection
         this.selectedArea.data.forEach((value, index) => {
-            //TODO add support for selection different than 0 or 255
             if(value !== 0 && workingImageData.data[4 * index + 3] !== 0) {
                 let dest = new Color(drawingImageData.data[4 * index],
                                      drawingImageData.data[4 * index + 1],
