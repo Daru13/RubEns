@@ -95,13 +95,15 @@ export class MainMenu extends HTMLRenderer {
         // Importing an image in the current document
         defaultActions.push({
             name: "Import image",
-            apply: (document) => { document.importImage(); }
+            apply: (document) => { document.importImage(); },
+            disabled: true
         });
 
         // Exporting current document as an image
         defaultActions.push({
             name: "Export image",
-            apply: (document) => { document.exportImage(); }
+            apply: (document) => { document.exportImage(); },
+            disabled: true
         });
 
         this.documentActionsMenu.setActions(defaultActions);
