@@ -17,6 +17,8 @@ export class Line {
      * @param {Point} to            The other point defining the segment.
      * @param {number} thickness    The segment thickness.
      * @param {Color} color         The color of the segment.
+     *
+     * @author Mathieu Fehr
      */
     static draw(image: ImageData, from: Point, to: Point, thickness: number, color: Color) {
 
@@ -75,6 +77,8 @@ export class Line {
         let distanceToLine = Math.sqrt(Line.distanceToSegmentSquared(from, to, new Point(x,y)));
 
         // Get the color of the current pixel in the image
+        // We need to get that, because there might be another color already there in the image
+        // For instance, this is useful in the freehand drawing tool.
         let offset = (y * image.width + x) * 4;
         let destRed = image.data[offset];
         let destGreen = image.data[offset + 1];
