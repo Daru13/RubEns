@@ -269,17 +269,17 @@ export class ParametersFieldPopup extends Popup {
      * Note: this method assumes the original and the copied sets contain parameters **in the same order**.
      * TODO: ensure this and avoid this trick!
      *
-     * If defined, the `onParameterChangesApplied` callback is also called (before applying changes).
+     * If defined, the `onParameterChangesApplied` callback is also called (after applying changes).
      *
      * @author Camille Gobert
      */
     protected applyParameterChanges () {
-        if (this.onParameterChangesApplied) {
-            this.onParameterChangesApplied(this, this.parametersToDisplay, this.parametersToDisplayCopy);
-        }
-
         for (let key in this.parametersToDisplay) {
             this.parametersToDisplay[key].value = this.parametersToDisplayCopy[key].value;
+        }
+
+        if (this.onParameterChangesApplied) {
+            this.onParameterChangesApplied(this, this.parametersToDisplay, this.parametersToDisplayCopy);
         }
     }
 

@@ -2,6 +2,9 @@ import { HTMLRenderer } from "./HTMLRenderer";
 import { ToolSelectionMenu } from "./ToolSelectionMenu";
 import { DocumentActionsMenu } from "./DocumentActionsMenu";
 import { RubEns } from "../RubEns";
+import { DocumentParameters } from "../DocumentParameters";
+import { ParametersFieldPopup, ParametersFieldPopupParameters } from "./ParametersFieldPopup";
+
 
 /**
 * Main UI element representing the top main menu of the UI.
@@ -62,13 +65,26 @@ export class MainMenu extends HTMLRenderer {
      *
      * @author Camille Gobert
      */
-    setDefaultDocumentActions () {
+    setDefaultDocumentActions () { // TODO: move this elsewhere, e.g. in the action menu
         let defaultActions = [];
 
-        // TODO: implement new document, saving and loading actions!
         defaultActions.push({
             name: "New",
-            apply: (document) => { this.app.createDocument(); },
+            apply: (document) => {
+                let newDocumentParameters = new DocumentParameters();
+                let parametersToDisplay = [
+                    newDocumentParameters.title,
+                    newDocumentParameters.width,
+                    newDocumentParameters.height
+                ];
+
+                let popupParameters = new ParametersFieldPopupParameters();
+                let popup = new ParametersFieldPopup(this.rootNode, this.app, popupParameters,
+                                                     parametersToDisplay, "New document");
+                popup.onParameterChangesApplied = (_) => { this.app.createDocument(newDocumentParameters); };
+
+                popup.show();
+            },
             disabled: false
         });
 
