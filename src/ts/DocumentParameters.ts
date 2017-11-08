@@ -4,13 +4,31 @@ export class DocumentParameters {
     /**
      * Title of the document.
      */
-    title: string = "New document";
+    title = {
+        value: "New document",
+        kind: Params.ParameterKind.String,
+        name: "Title",
+        pattern: /pint/i
+    };
 
     /**
      * Dimensions of the document.
      */
-    width: number  = 800;
-    height: number = 600;
+    width = {
+        value: 800,
+        kind: Params.ParameterKind.Number,
+        name: "Width",
+        min: 1,
+        max: 2048
+    };
+
+    height = {
+        value: 600,
+        kind: Params.ParameterKind.Number,
+        name: "Height",
+        min: 1,
+        max: 2048
+    };
 
     /**
      * Global parameters, shared by all tools (but still local to the document).

@@ -45,9 +45,8 @@ export class Document {
         this.parameters   = parameters;
         this.eventManager = eventManager;
 
-        this.imageWorkspace = new ImageWorkspace(this.parameters.width, this.parameters.height);
-
-        console.log("Document created", this);
+        this.imageWorkspace = new ImageWorkspace(this.parameters.width.value,
+                                                 this.parameters.height.value);
     }
 
     /**
@@ -56,7 +55,7 @@ export class Document {
      * @author Mathieu Fehr
      */
     exportImage () {
-        this.imageWorkspace.drawingCanvas.exportImage(ImageFormat.png,this.parameters.title);
+        this.imageWorkspace.drawingCanvas.exportImage(ImageFormat.png, this.parameters.title.value);
     }
 
 
