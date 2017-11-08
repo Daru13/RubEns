@@ -53,13 +53,13 @@ export class LineTool extends SimpleShapeTool {
      *
      * @author Josselin GIET
      */
-     static getLambda (parameters: LineParameters, documentParameters: DocumentParameters) {
+     /*static getLambda (parameters: LineParameters, documentParameters: DocumentParameters) {
          return function(center: Point, image: ImageData) {
             let color     = Color.buildFromHex(documentParameters.sharedToolParameters.mainColor.value);
             let thickness = parameters.thickness.value;
             Ellipse.drawFromCenter(image, center, thickness, thickness, color, 0, 0, color);
         };
-    }
+    }*/
 
     /**
      * Draw a line in the given canvas.

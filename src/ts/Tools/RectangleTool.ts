@@ -17,12 +17,6 @@ export class RectangleParameters implements ToolParameters {
         min: 0,
         step: 1
     };
-
-    borderColor: Params.ColorParameter = {
-        kind: Params.ParameterKind.Color,
-        value: "#000000",
-        name: "Border color",
-    };
 }
 
 
@@ -63,7 +57,7 @@ export class RectangleTool extends SimpleShapeTool {
         let imageData = new ImageData(this.workspace.width, this.workspace.height);
 
         let fillColor = Color.buildFromHex(this.documentParameters.sharedToolParameters.mainColor.value);
-        let borderColor = Color.buildFromHex(this.parameters.borderColor.value);
+        let borderColor = Color.buildFromHex(this.documentParameters.sharedToolParameters.secondaryColor.value);
         let thickness = this.parameters.borderThickness.value;
 
         Rectangle.draw(firstPoint, secondPoint, imageData, fillColor, borderColor, thickness);

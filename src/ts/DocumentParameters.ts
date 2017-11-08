@@ -23,8 +23,13 @@ export class DocumentParameters {
             value: "#000000",
             kind: Params.ParameterKind.Color,
             name: "Main color"
+        },
+
+        secondaryColor: {
+            value: "#FFFFFF",
+            kind: Params.ParameterKind.Color,
+            name: "Secondary color"
         }
 
-        // TODO: share more parameters?
     };
 }
