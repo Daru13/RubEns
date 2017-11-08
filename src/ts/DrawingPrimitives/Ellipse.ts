@@ -1,5 +1,4 @@
 import { Point } from "../utils/Point";
-import { Canvas } from "../Image/Canvas";
 import { Color } from "../utils/Color";
 
 
@@ -15,17 +14,18 @@ export class Ellipse {
     /**
      * Draw an ellipse given two points defining the bounding rectangle.
      *
-     * @param {ImageData} image         The image where the ellipse will be drawn.
      * @param {Point} firstPoint        The first point defining the bounding rectangle.
      * @param {Point} secondPoint       The second point defining the bounding rectangle.
      * @param {Color} color             The inner color of the ellipse.
      * @param {number} borderThickness  The thickness of the border.
      * @param {Color} borderColor       The color of the border.
+     * @param {ImageData} image         The image where the ellipse will be drawn.
      *
      * @author Mathieu Fehr
      */
-    static drawFromBoundingRect(image: ImageData, firstPoint: Point, secondPoint: Point, color: Color,
-                                                  borderThickness: number, borderColor: Color) {
+    static drawFromBoundingRect(firstPoint: Point, secondPoint: Point, color: Color,
+                                borderThickness: number, borderColor: Color,
+                                image: ImageData) {
 
         // Get the circumscribed rectangle upper-left and bottom-right corners
         let minX = Math.min(firstPoint.x, secondPoint.x);
@@ -41,7 +41,7 @@ export class Ellipse {
         let borderHeight = maxY - minY + borderThickness;
 
         // Draw the ellipse using these parameters
-        Ellipse.drawFromCenter(image, center, width, height, color, borderWidth, borderHeight, borderColor);
+        Ellipse.drawFromCenter(center, width, height, color, borderWidth, borderHeight, borderColor, image);
     }
 
 
@@ -55,17 +55,17 @@ export class Ellipse {
      * @param {Point} center        The center of the bounding rectangle
      * @param {number} width        The width of the ellipse, with border excluded
      * @param {number} height       The height of the ellipse, with border excluded.
-     * @param {Canvas} image        The image where the ellipse will be drawn
      * @param {Color}  color        The inner color of the ellipse.
      * @param {number} borderWidth  The width of the ellipse, with border included
      * @param {number} borderHeight The height of the ellipse, with border included
      * @param {Color} borderColor   The color of the border
+     * @param {ImageData} image     The image where the ellipse will be drawn
      *
      * @author Mathieu Fehr
      */
-    static drawFromCenter(image: ImageData, center: Point,
-                          width: number, height: number, color: Color,
-                          borderWidth: number, borderHeight: number, borderColor: Color) {
+    static drawFromCenter(center: Point, width: number, height: number, color: Color,
+                          borderWidth: number, borderHeight: number, borderColor: Color,
+                          image: ImageData) {
 
         let aEllipse = width/2;
         let bEllipse = height/2;
@@ -73,7 +73,7 @@ export class Ellipse {
         let bBorder = (borderHeight + 1)/2;
 
         // And draw the ellipse with the equation
-        Ellipse.drawFromEquation(image, center, aEllipse, bEllipse, color, aBorder, bBorder, borderColor);
+        Ellipse.drawFromEquation(center, aEllipse, bEllipse, color, aBorder, bBorder, borderColor, image);
     }
 
     /**
@@ -83,17 +83,17 @@ export class Ellipse {
      * @param {Point} center        The center of the ellipse
      * @param {number} aEllipse     The a parameter, representing width/2
      * @param {number} bEllipse     The b parameter, representing height/2
-     * @param {Canvas} image        The image where the ellipse will be drawn
      * @param {Color}  color        The inner color of the ellipse.
      * @param {number} aBorder      The a parameter of the border ellipse.
      * @param {number} bBorder      The b parameter of the border ellipse.
      * @param {Color} borderColor   The color of the border.
+     * @param {Image} image        The image where the ellipse will be drawn
      *
      * @author Mathieu Fehr
      */
-    static drawFromEquation(image: ImageData, center: Point,
-                            aEllipse: number, bEllipse: number, color: Color,
-                            aBorder: number, bBorder: number, borderColor: Color) {
+    static drawFromEquation(center: Point, aEllipse: number, bEllipse: number, color: Color,
+                            aBorder: number, bBorder: number, borderColor: Color,
+                            image: ImageData) {
 
         // The current image
         let imageWidth = image.width;
