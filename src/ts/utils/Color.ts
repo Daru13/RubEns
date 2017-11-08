@@ -115,6 +115,6 @@ export class Color {
         let outBlue  = (src.blue  * src.alpha + dest.blue  * dest.alpha * (1 - (src.alpha / 255))) / outAlpha;
         let outGreen = (src.green * src.alpha + dest.green * dest.alpha * (1 - (src.alpha / 255))) / outAlpha;
 
-        return new Color(outRed, outBlue, outGreen, outAlpha);
+        return new Color(Math.round(outRed), Math.round(outBlue), Math.round(outGreen), Math.round(outAlpha));
     };
 }

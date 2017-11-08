@@ -4,6 +4,7 @@ import { Ellipse } from "../DrawingPrimitives/Ellipse";
 import * as Params from "../Parameter";
 import { ToolParameters } from "./Tool";
 import { Color } from "../utils/Color";
+import {RectangleTool} from "./RectangleTool";
 
 
 /**
@@ -17,12 +18,6 @@ export class EllipseParameters implements ToolParameters {
         name: "Border thickness",
         min: 0,
         step: 1
-    };
-
-    borderColor: Params.ColorParameter = {
-        kind: Params.ParameterKind.Color,
-        value: "#000000",
-        name: "Border color",
     };
 }
 
@@ -67,7 +62,7 @@ export class EllipseTool extends SimpleShapeTool {
 
         let color = Color.buildFromHex(this.documentParameters.sharedToolParameters.mainColor.value);
         let borderThickness = this.parameters.borderThickness.value;
-        let borderColor = Color.buildFromHex(this.parameters.borderColor.value);
+        let borderColor = Color.buildFromHex(this.documentParameters.sharedToolParameters.secondaryColor.value);
 
         Ellipse.drawFromBoundingRect(imageData, firstPoint, secondPoint, color, borderThickness, borderColor);
 
