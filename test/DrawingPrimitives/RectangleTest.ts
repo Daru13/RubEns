@@ -28,8 +28,8 @@ describe("Test of Rectangle drawing primitives:", function() {
         it("Draw from top left to bottom right", function() {
             Rectangle.drawWithBorders(new Point(10,10), new Point(20,20), black, black, 0, imageData);
 
-            for(let i = 10; i<20; i++) {
-                for(let j = 10; j<20; j++) {
+            for(let i = 10; i<=20; i++) {
+                for(let j = 10; j<=20; j++) {
                     assert.notEqual(imageData.data[(i + j * imageSize) * 4 + 3], 0);
                 }
             }
@@ -38,8 +38,8 @@ describe("Test of Rectangle drawing primitives:", function() {
         it("Draw from top right to bottom left", function() {
             Rectangle.drawWithBorders(new Point(20, 10), new Point(10, 20), black, black, 0, imageData);
 
-            for(let i = 10; i<20; i++) {
-                for(let j = 10; j<20; j++) {
+            for(let i = 10; i<=20; i++) {
+                for(let j = 10; j<=20; j++) {
                     assert.notEqual(imageData.data[(i + j * imageSize) * 4 + 3], 0);
                 }
             }
@@ -48,8 +48,8 @@ describe("Test of Rectangle drawing primitives:", function() {
         it("Draw from bottom left to top right", function() {
             Rectangle.drawWithBorders(new Point(10, 20), new Point(20, 10), black, black, 0, imageData);
 
-            for(let i = 10; i<20; i++) {
-                for(let j = 10; j<20; j++) {
+            for(let i = 10; i<=20; i++) {
+                for(let j = 10; j<=20; j++) {
                     assert.notEqual(imageData.data[(i + j * imageSize) * 4 + 3], 0);
                 }
             }
@@ -58,8 +58,8 @@ describe("Test of Rectangle drawing primitives:", function() {
         it("Draw from bottom right to top left", function() {
             Rectangle.drawWithBorders(new Point(20, 20), new Point(10, 10), black, black, 0, imageData);
 
-            for(let i = 10; i<20; i++) {
-                for(let j = 10; j<20; j++) {
+            for(let i = 10; i<=20; i++) {
+                for(let j = 10; j<=20; j++) {
                     assert.notEqual(imageData.data[(i + j * imageSize) * 4 + 3], 0);
                 }
             }
