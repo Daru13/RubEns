@@ -8,7 +8,8 @@ export class DocumentParameters {
         value: "New document",
         kind: Params.ParameterKind.String,
         name: "Title",
-        pattern: /pint/i
+        minLength: 1,
+        maxLength: 32
     };
 
     /**
