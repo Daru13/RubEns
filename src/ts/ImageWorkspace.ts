@@ -142,11 +142,19 @@ export class ImageWorkspace {
 
             // If the pixel is invisible in the image, we set the corresponding selection pixel
             // to the background value, so drawings will only be displayed in the selection.
-            if(imageData.data[4 * (y * this.width + x) + 3] === 0) {
-                imageData.data[4 * (y * this.width + x)    ] = this.drawingCanvasBgColor.red;
-                imageData.data[4 * (y * this.width + x) + 1] = this.drawingCanvasBgColor.green;
-                imageData.data[4 * (y * this.width + x) + 2] = this.drawingCanvasBgColor.blue;
-                imageData.data[4 * (y * this.width + x) + 3] = this.drawingCanvasBgColor.alpha;
+            if(imageData.data[4 * (y * this.width + x) + 3] !== 255) {
+                let red = imageData.data[4 * (y * this.width + x)];
+                let green = imageData.data[4 * (y * this.width + x) + 1];
+                let blue = imageData.data[4 * (y * this.width + x) + 2];
+                let alpha = imageData.data[4 * (y * this.width + x) + 3];
+                let color = new Color(red, green, blue, alpha);
+
+                let outColor = Color.blend(color, this.drawingCanvasBgColor);
+
+                imageData.data[4 * (y * this.width + x)    ] = outColor.red;
+                imageData.data[4 * (y * this.width + x) + 1] = outColor.green;
+                imageData.data[4 * (y * this.width + x) + 2] = outColor.blue;
+                imageData.data[4 * (y * this.width + x) + 3] = outColor.alpha;
             }
 
             if(x === 0 || y === 0 || x === this.width-1 || y === this.height-1) {
