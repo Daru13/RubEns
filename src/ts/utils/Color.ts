@@ -112,9 +112,9 @@ export class Color {
         }
         let outAlpha =  src.alpha + dest.alpha * (1 - (src.alpha / 255));
         let outRed   = (src.red   * src.alpha + dest.red   * dest.alpha * (1 - (src.alpha / 255))) / outAlpha;
-        let outBlue  = (src.blue  * src.alpha + dest.blue  * dest.alpha * (1 - (src.alpha / 255))) / outAlpha;
         let outGreen = (src.green * src.alpha + dest.green * dest.alpha * (1 - (src.alpha / 255))) / outAlpha;
+        let outBlue  = (src.blue  * src.alpha + dest.blue  * dest.alpha * (1 - (src.alpha / 255))) / outAlpha;
 
-        return new Color(Math.round(outRed), Math.round(outBlue), Math.round(outGreen), Math.round(outAlpha));
+        return new Color(Math.round(outRed), Math.round(outGreen), Math.round(outBlue), Math.round(outAlpha));
     };
 }

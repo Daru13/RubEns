@@ -80,10 +80,11 @@ export class Line {
         // We need to get that, because there might be another color already there in the image
         // For instance, this is useful in the freehand drawing tool.
         let offset = (y * image.width + x) * 4;
-        let destRed = image.data[offset];
-        let destGreen = image.data[offset + 1];
-        let destBlue = image.data[offset + 2];
-        let destAlpha = image.data[offset + 3];
+
+        let destRed =    image.data[offset];
+        let destGreen =  image.data[offset + 1];
+        let destBlue =   image.data[offset + 2];
+        let destAlpha =  image.data[offset + 3];
         let destColor = new Color(destRed, destGreen, destBlue, destAlpha);
 
         // If we are near enough of the segment, we can draw the color with full alpha
@@ -107,7 +108,7 @@ export class Line {
 
             // We compute the value of the new alpha we will apply on that pixel
             let newAlpha = (nbPointsInLine / 81) * color.alpha;
-            return Color.blend(new Color(color.red, color.blue, color.green, newAlpha), destColor);
+            return Color.blend(new Color(color.red, color.green, color.blue, newAlpha), destColor);
         }
 
         // If we are too far from the segment, we will not color it.

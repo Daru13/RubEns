@@ -12,14 +12,14 @@ export class Rectangle {
      *
      * @param {Point}     firstPoint        The first corner of the rectangle.
      * @param {Point}     secondPoint       The second corner of the rectangle.
-     * @param {ImageData} image             The image where the rectangle will be drawn.
      * @param {Color}     fillColor         The inner color of the rectangle.
      * @param {Color}     borderColor       The border color of the rectangle.
      * @param {number}    borderThickness   The thickness of the border.
+     * @param {ImageData} image             The image where the rectangle will be drawn.
      *
      * @author Mathieu Fehr
      */
-    static drawWithBorders(firstPoint: Point, secondPoint: Point, image: ImageData, fillColor: Color, borderColor: Color, borderThickness: number) {
+    static drawWithBorders(firstPoint: Point, secondPoint: Point, fillColor: Color, borderColor: Color, borderThickness: number, image: ImageData) {
         // The current image
         borderThickness = Math.round(borderThickness);
 
