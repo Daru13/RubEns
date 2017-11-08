@@ -84,8 +84,8 @@ export class ImageWorkspace {
                 let out = Color.blend(src, dest);
 
                 drawingImageData.data[4 * index] = Math.round(out.red);
-                drawingImageData.data[4 * index + 1] = Math.round(out.blue);
-                drawingImageData.data[4 * index + 2] = Math.round(out.green);
+                drawingImageData.data[4 * index + 1] = Math.round(out.green);
+                drawingImageData.data[4 * index + 2] = Math.round(out.blue);
                 drawingImageData.data[4 * index + 3] = Math.round(out.alpha);
             }
         });
