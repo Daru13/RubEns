@@ -51,6 +51,11 @@ export class ImageWorkspace {
      */
     selectionDrawingIntervalID: number;
 
+    /**
+     * The color of the drawingCanvas background
+     */
+    drawingCanvasBgColor: Color;
+
 
     /**
      * Apply the working canvas in the drawingCanvas.
@@ -138,12 +143,11 @@ export class ImageWorkspace {
 
             // If the pixel is invisible in the image, we set the corresponding selection pixel
             // to the background value, so drawings will only be displayed in the selection.
-            // TODO stop hardcoding the color of the background
             if(imageData.data[4 * (y * this.width + x) + 3] === 0) {
-                imageData.data[4 * (y * this.width + x)    ] = 211;
-                imageData.data[4 * (y * this.width + x) + 1] = 211;
-                imageData.data[4 * (y * this.width + x) + 2] = 211;
-                imageData.data[4 * (y * this.width + x) + 3] = 255;
+                imageData.data[4 * (y * this.width + x)    ] = this.drawingCanvasBgColor.red;
+                imageData.data[4 * (y * this.width + x) + 1] = this.drawingCanvasBgColor.green;
+                imageData.data[4 * (y * this.width + x) + 2] = this.drawingCanvasBgColor.blue;
+                imageData.data[4 * (y * this.width + x) + 3] = this.drawingCanvasBgColor.alpha;
             }
 
             if(x === 0 || y === 0 || x === this.width-1 || y === this.height-1) {
@@ -183,5 +187,7 @@ export class ImageWorkspace {
         this.selectedArea = null;
         this.selectionBorderColorShift = 0;
         this.selectionDrawingIntervalID = null;
+        //this.drawingCanvasBgColor = Color.buildFromHex($("#drawing_canvas").css("background-color"));
+        this.drawingCanvasBgColor = new Color(211,211,211,255);
     }
 }
