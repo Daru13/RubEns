@@ -65,8 +65,8 @@ export class Ellipse {
 
         let aEllipse = width/2;
         let bEllipse = height/2;
-        let aBorder = borderWidth/2;
-        let bBorder = borderHeight/2;
+        let aBorder = (borderWidth + 1)/2;
+        let bBorder = (borderHeight + 1)/2;
 
         // And draw the ellipse with the equation
         Ellipse.drawFromEquation(image, center, aEllipse, bEllipse, color, aBorder, bBorder, borderColor);
