@@ -84,7 +84,7 @@ export class DocumentActionsMenu extends HTMLRenderer {
             selector: $(document),
             callback: (_) => {
                 let actionstoDisable = this.actions.filter((action) => {
-                    return action.name === "Import image" || action.name === "Export image";
+                    return /*action.name === "Import image" ||*/ action.name === "Export image";
                 });
 
                 for (let action of actionstoDisable) {
