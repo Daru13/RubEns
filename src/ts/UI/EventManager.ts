@@ -105,9 +105,11 @@ export class EventManager {
             }
 
             // Check if the handler selector applies to the event target node
-            let matchingElement = $(event.target).closest(handler.selector);
-            if (matchingElement.length === 0) {
-                continue;
+            if (handler.selector) {
+                let matchingElement = $(event.target).closest(handler.selector);
+                if (matchingElement.length === 0) {
+                    continue;
+                }
             }
 
             // Notify the handler
@@ -123,7 +125,7 @@ export class EventManager {
      * @author Camille Gobert
      */
     private startListeningFor (eventType: string) {
-        $(document)[0].addEventListener(eventType, (event) => this.dispatchEvent(event));
+        window.addEventListener(eventType, (event) => this.dispatchEvent(event));
     }
 
 
