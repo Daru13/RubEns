@@ -142,6 +142,17 @@ export class Canvas {
 
 
     /**
+     * Draw a canvas on this canvas.
+     * Both canvas should have the same size.
+     *
+     * @author Mathieu Fehr
+     */
+    drawCanvas(canvas: Canvas) {
+        this.canvas2DContext.drawImage(canvas.canvas, this.width, this.height);
+    }
+
+
+    /**
      * Export the current image in the specified format
      * @param {ImageFormat} format    The format of the file.
      * @param {string}      fileName  The name of the file, without its extension.
