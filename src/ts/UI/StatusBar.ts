@@ -206,8 +206,8 @@ export class StatusBar extends HTMLRenderer {
             return;
         }
 
-        let mousePositionAsString = "("  + this.lastKnownMousePosition.x
-                                  + ", " + this.lastKnownMousePosition.y + ")";
+        let mousePositionAsString = "("  + Math.round(this.lastKnownMousePosition.x)
+                                  + ", " + Math.round(this.lastKnownMousePosition.y) + ")";
         this.mousePositionNode.html(mousePositionAsString);
     }
 
