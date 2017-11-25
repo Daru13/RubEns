@@ -14,10 +14,19 @@ export class Canvas {
      */
     canvas: HTMLCanvasElement;
 
+    /**
+     * Canvas width, i.e. width of its content.
+     */
     width: number;
 
+    /**
+     * Canvas height, i.e. height of its content.
+     */
     height: number;
 
+    /**
+     * Value of the `id` property of the related HTML node.
+     */
     id: string;
 
     /**
