@@ -7,7 +7,7 @@ all: build doc test
 build:
 	@echo "Building the application..."
 	@mkdir -p build
-	@cp -r -u src/css src/js src/index.html build
+	@cp -r -u src/css src/js src/img src/index.html build
 	@tsc
 
 # Build the web documentation
