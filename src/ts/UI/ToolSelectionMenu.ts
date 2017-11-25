@@ -56,14 +56,12 @@ export class ToolSelectionMenu extends HTMLRenderer {
 
         this.app.eventManager.registerEventHandler({
             eventTypes: ["rubens_documentCreated"],
-            selector  : $(document),
             callback  : (event: CustomEvent) => {
                 $(".tool_button").prop("disabled", false);
             }
         });
         this.app.eventManager.registerEventHandler({
             eventTypes: ["rubens_documentClosed"],
-            selector  : $(document),
             callback  : (event: CustomEvent) => {
                 $(".tool_button").prop("disabled", true);
                 $(".tool_button.selected").removeClass("selected");

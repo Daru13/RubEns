@@ -137,7 +137,6 @@ export class RubEns {
 
         this.eventManager.registerEventHandler({
             eventTypes: ["rubens_documentCreated"],
-            selector  : $(document),
             callback  : (event: CustomEvent) => {
                 let newDocument = event.detail.document;
                 for (let tool of this.tools) {
@@ -149,7 +148,6 @@ export class RubEns {
 
         this.eventManager.registerEventHandler({
             eventTypes: ["rubens_documentClosed"],
-            selector  : $(document),
             callback  : (_) => {
                 for (let tool of this.tools) {
                     tool.documentParameters = undefined;

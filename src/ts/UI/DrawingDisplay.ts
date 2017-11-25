@@ -20,7 +20,6 @@ export class DrawingDisplay extends HTMLRenderer {
      */
     protected documentChangedHandler = {
         eventTypes: ["rubens_documentCreated", "rubens_documentClosed"],
-        selector  : $(document),
         callback  : (_) => { this.updateCanvasContainerNode(); }
     };
 
