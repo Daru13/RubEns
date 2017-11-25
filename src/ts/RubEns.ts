@@ -189,23 +189,54 @@ export class RubEns {
 
 
     /**
-     * Create a new document, and set it as the current one.
-     * If a document is already open, call the [[closeDocument]] method first.
-     * @param  {DocumentParameters} parameters Set of document parameters.
+     * Create a new, empty document, and set it as the current document.
+     * If a document is already open, it calls the [[closeDocument]] method first.
+     * @param  {DocumentParameters} parameters Optionnal document parameters.
      *
      * @author Camille Gobert
      */
-    createDocument (parameters?: DocumentParameters) {
+    createEmptyDocument (parameters?: DocumentParameters) {
         if (this.document) {
             this.closeDocument();
         }
 
-        this.document = new Document(parameters || new DocumentParameters(),
-                                     this.eventManager);
+        parameters = parameters || new DocumentParameters();
+        this.document = new Document(parameters, this.eventManager);
 
         // Notify that the document has changed
         EventManager.spawnEvent("rubens_documentCreated", {document: this.document});
     }
+
+
+    /**
+     * Create a new document from a given image, and set it as the current document.
+     * If a document is already open, it calls the [[closeDocument]] method first.
+     *
+     * Note: if document parameters are provided, its width and height will be overriden.
+     * @param  {HTMLImageElement}   image      Initial content of the new document.
+     * @param  {DocumentParameters} parameters Optionnal document parameters.
+     *
+     * @author Camille Gobert
+     */
+    createDocumentFromImage (image: HTMLImageElement, parameters?: DocumentParameters) {
+        if (this.document) {
+            this.closeDocument();
+        }
+
+        // Set the document dimensions from the image properties
+        parameters = parameters || new DocumentParameters();
+        parameters.width.value  = image.width;
+        parameters.height.value = image.height;
+
+        this.document = new Document(parameters, this.eventManager);
+
+        // Set the initial content of the new document
+        this.document.imageWorkspace.drawingCanvas.importImage(image);
+
+        // Notify that the document has changed
+        EventManager.spawnEvent("rubens_documentCreated", {document: this.document});
+    }
+
 
     /**
      * Close the current document.
@@ -239,7 +270,7 @@ export class RubEns {
      */
     initDocument () {
         if (this.parameters.createDocumentOnStartup) {
-            this.createDocument(new DocumentParameters());
+            this.createEmptyDocument(new DocumentParameters());
         }
     }
 }
