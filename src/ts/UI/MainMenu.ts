@@ -4,6 +4,7 @@ import { DocumentActionsMenu } from "./DocumentActionsMenu";
 import { RubEns } from "../RubEns";
 import { DocumentParameters } from "../DocumentParameters";
 import { ParametersFieldPopup, ParametersFieldPopupParameters } from "./ParametersFieldPopup";
+import { ImageLoader } from "../utils/ImageLoader";
 
 
 /**
@@ -81,7 +82,7 @@ export class MainMenu extends HTMLRenderer {
                 let popupParameters = new ParametersFieldPopupParameters();
                 let popup = new ParametersFieldPopup(this.rootNode, this.app, popupParameters,
                                                      parametersToDisplay, "New document");
-                popup.onParameterChangesApplied = (_) => { this.app.createDocument(newDocumentParameters); };
+                popup.onParameterChangesApplied = (_) => { this.app.createEmptyDocument(newDocumentParameters); };
 
                 popup.show();
             },
@@ -116,8 +117,11 @@ export class MainMenu extends HTMLRenderer {
                 document.importImage();
               }
               else {
-                this.app.createDocument(new DocumentParameters());
-                this.app.document.importImage();
+                console.log("init loading");
+                ImageLoader.load((image) => {
+                    console.log("load callback");
+                    this.app.createDocumentFromImage(image, new DocumentParameters());
+                });
               }
             },
             disabled: false
