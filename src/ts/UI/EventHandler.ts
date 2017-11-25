@@ -39,10 +39,4 @@ export interface EventHandler {
      * Optionnal flag; if defined and set to true, ignore this handler.
      */
     disabled?: boolean;
-
-    /**
-     * Optionnal list of events; if defined, automatically unregister this handler
-     * when one of the listed event is received.
-     */
-    unregisterOnEventTypes?: string[];
 }
