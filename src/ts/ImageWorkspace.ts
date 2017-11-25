@@ -60,7 +60,56 @@ export class ImageWorkspace {
     /**
      * The color of the drawingCanvas background.
      */
-    drawingCanvasBgColor: Color;
+    drawingCanvasBgColor: Color = new Color(211, 211, 211, 255);
+
+
+    /**
+     * Instanciates and initializes a new ImageWorkspace object.
+     * @param  {number}       width        Initial width of all canvases.
+     * @param  {number}       height       Initial height of all canvases.
+     * @param  {EventManager} eventManager Reference to the event manager.
+     * @return {ImageWorkspace}            Fresh instance of ImageWorkspace.
+     *
+     * @author Mathieu Fehr, Camille Gobert
+     */
+    constructor (width: number, height: number, eventManager: EventManager) {
+        this.width        = width;
+        this.height       = height;
+        this.eventManager = eventManager;
+
+        this.createCanvases();
+        this.initSelection();
+    }
+
+
+    /**
+     * Initialize what is related to the selection (e.g. useful properties, selected area).
+     *
+     * @author Camille Gobert
+     */
+    initSelection () {
+        this.selectionBorderColorShift  = 0;
+        this.selectionDrawingIntervalID = null;
+        this.selectedArea               = new SelectedArea(this.width, this.height);
+
+        this.selectedArea.selectEverything();
+    }
+
+
+    /**
+     * Create canvases abstracting the three related HTML nodes.
+     *
+     * @author Camille Gobert
+     */
+    createCanvases () {
+        let width        = this.width;
+        let height       = this.height;
+        let eventManager = this.eventManager;
+
+        this.drawingCanvas   = new Canvas(width, height, "drawing_canvas",   eventManager);
+        this.workingCanvas   = new Canvas(width, height, "working_canvas",   eventManager);
+        this.selectionCanvas = new Canvas(width, height, "selection_canvas", eventManager);
+    }
 
 
     /**
@@ -102,7 +151,9 @@ export class ImageWorkspace {
 
 
     /**
-     * Clear the selection
+     * Clear the selection.
+     *
+     * @author Mathieu Fehr
      */
     clearSelection () {
         if(this.selectionDrawingIntervalID !== null) {
@@ -122,6 +173,7 @@ export class ImageWorkspace {
      * Display a representation of the selection given in parameters.
      * The selection canvas is equal to the drawing canvas, where the pixels selected have alpha = 0.
      * The selection hull is colored to distinguish the pixels selected.
+     * @param {SelectedArea} selection The selected area instance to display.
      *
      * @author Mathieu Fehr
      */
@@ -183,37 +235,5 @@ export class ImageWorkspace {
         });
 
         this.selectionCanvas.setImageData(imageData);
-    }
-
-    /**
-     * Instantiates and initializes a new ImageWorkspace object.
-     * @return {ImageWorkspace} Fresh instance of ImageWorkspace.
-     *
-     * @author Mathieu Fehr
-     */
-    constructor (width: number, height: number, eventManager: EventManager) {
-        this.width        = width;
-        this.height       = height;
-        this.eventManager = eventManager;
-
-        this.selectionBorderColorShift = 0;
-        this.selectionDrawingIntervalID = null;
-
-        this.drawingCanvasBgColor = new Color(211, 211, 211, 255);
-
-        this.selectedArea = new SelectedArea(this.width, this.height);
-        this.selectedArea.selectEverything();
-
-        this.createCanvases();
-    }
-
-
-    createCanvases () {
-        let width  = this.width;
-        let height = this.height;
-
-        this.drawingCanvas   = new Canvas(width, height, "drawing_canvas", this.eventManager);
-        this.workingCanvas   = new Canvas(width, height, "working_canvas", this.eventManager);
-        this.selectionCanvas = new Canvas(width, height, "selection_canvas", this.eventManager);
     }
 }
