@@ -81,7 +81,6 @@ export class DocumentActionsMenu extends HTMLRenderer {
         // TODO: temporary, improve and move elsewhere!
         this.app.eventManager.registerEventHandler({
             eventTypes: ["rubens_documentCreated", "rubens_documentClosed"],
-            selector: $(document),
             callback: (_) => {
                 let actionstoDisable = this.actions.filter((action) => {
                     return /*action.name === "Import image" ||*/ action.name === "Export image";

@@ -47,14 +47,12 @@ export class Sidebar extends HTMLRenderer {
         // TODO: move the handlers elsewhere!
         this.app.eventManager.registerEventHandler({
             eventTypes: ["rubens_toolChanged"],
-            selector: $(document),
             callback: (event) => {
                 this.updateCurrentToolParametersField();
         }});
 
         this.app.eventManager.registerEventHandler({
             eventTypes: ["rubens_documentCreated", "rubens_documentClosed"],
-            selector: $(document),
             callback: (event) => {
                 this.updateRootNode();
         }});

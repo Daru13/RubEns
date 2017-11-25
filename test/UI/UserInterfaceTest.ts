@@ -164,7 +164,6 @@ describe("Test of the user interface:", function () {
         let dummyCounter = 0;
         let dummyEventHandler: EventHandler = {
             eventTypes: ["rubens_test"],
-            selector: $(document),
             callback: (_) => { dummyCounter++; },
             disabled: false
         };
