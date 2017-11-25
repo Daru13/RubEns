@@ -1,18 +1,4 @@
 /**
- * Interface of an event handler callback function.
- *
- * @author Camille Gobert
- */
-export interface EventHandlerCallback {
-    /**
-     * Callback function called upon the reception of some event.
-     * It receives the related event as a parameter.
-     */
-    (event: Event): void;
-}
-
-
-/**
  * Interface which must be implemented by any class meant to handle events
  * received from the UI, by registering themselves to the event manager.
  *
@@ -33,7 +19,7 @@ export interface EventHandler {
     /**
      * Callback function called when an event is accepted by the selector.
      */
-    callback: EventHandlerCallback;
+    callback: (event: Event) => void;
 
     /**
      * Optionnal flag; if defined and set to true, ignore this handler.
