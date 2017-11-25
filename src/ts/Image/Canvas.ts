@@ -57,7 +57,6 @@ export class Canvas {
      */
     protected documentResizedHandler = {
         eventTypes: ["rubens_documentResized"],
-        selector  : $(document),
         callback  : (event) => {
             let newWidth  = event.detail.newWidth;
             let newHeight = event.detail.newHeight;
@@ -70,7 +69,14 @@ export class Canvas {
 
 
     /**
-     * Basic constructor
+     * Instanciates and initializes a new Canvas object.
+     * @param  {number}       width        Width of the canvas (content).
+     * @param  {number}       height       Height of the canvas (content).
+     * @param  {string}       id           `id` of the related HTML canvas node.
+     * @param  {EventManager} eventManager Reference to the event manager instance.
+     * @return {Canvas}                    Fresh instance of Canvas.
+     *
+     * @author Camille Gobert
      */
     constructor (width: number, height: number, id: string, eventManager: EventManager) {
         this.width        = width;
@@ -78,20 +84,28 @@ export class Canvas {
         this.id           = id;
         this.eventManager = eventManager;
 
-        let canvas = $("<canvas>");
-        canvas.attr("id", id);
-
-        canvas.attr("width", width + "px");
-        canvas.css("width", width + "px");
-        canvas.attr("height", height + "px");
-        canvas.css("height", height + "px");
-
-        this.canvas             = <HTMLCanvasElement> canvas[0];
-        this.canvas2DContext    = this.canvas.getContext("2d");
-        this.canvasBoundingRect = this.canvas.getBoundingClientRect();
-
         eventManager.registerEventHandler(this.windowResizedHandler);
         eventManager.registerEventHandler(this.documentResizedHandler);
+
+        this.createCanvasNode();
+    }
+
+
+    /**
+     * Create the HTML node related to this canvas, and update related properties.
+     *
+     * @author Camille Gobert
+     */
+    createCanvasNode () {
+        let canvas  = $("<canvas>");
+        canvas.attr("id", this.id);
+
+        this.canvas          = <HTMLCanvasElement> canvas[0];
+        this.canvas2DContext = this.canvas.getContext("2d");
+
+        this.updateDimensions(this.width, this.height);
+        this.updatePosition();
+        this.updateBoundingRect();
     }
 
 
@@ -153,12 +167,12 @@ export class Canvas {
     /**
      * Import the image in the specified format.
      * The image should have the same size as the canvas.
-     * @param {HTMLImageElement} image The image to import
+     * @param {HTMLImageElement} image The image to import.
      *
      * @author Mathieu Fehr
      */
     importImage (image: HTMLImageElement) {
-        this.canvas2DContext.drawImage(image,0,0);
+        this.canvas2DContext.drawImage(image, 0, 0);
     }
 
 
