@@ -199,34 +199,35 @@ canvas {
     margin: 0;
     padding: 8px;
     background-color: #8898A3;
-    border: 2px solid #2A2E33;
-    border-bottom-width: 4px;
+    border: 2px solid #3B4148;
+    /*border-bottom-width: 4px;*/
     border-radius: 4px;
+    box-shadow: 0 -2px 0 0 #3B4148 inset;
     font-weight: bold;
     color: #F3F5F8;
     text-shadow: 0 0 2px #1D2024;
-    animation: 150ms ease-in;
+    animation: 250ms ease-in;
 }
 
 #tool_selection_menu .tool_button.selected,
 #tool_selection_menu .tool_button.selected:hover {
     background-color: #5D6870;
-    border-bottom-width: 2px;
+    box-shadow: none;
 }
 
 #tool_selection_menu .tool_button:hover,
 #document_actions_menu .document_action_button:hover {
     background-color: #6E7B85;
-    border-bottom-width: 2px;
+    box-shadow: none;
 }
 
 #tool_selection_menu .tool_button:disabled,
 #document_actions_menu .document_action_button:disabled {
     opacity: 0.5;
+    box-shadow: none;
 
     /* Do not override normal properties on hover */
     background-color: #8898A3;
-    border-bottom-width: 4px;
 }
 
 
@@ -279,8 +280,7 @@ canvas {
     height: 40px;
     width: 120px;
     background-color: #8898A3;
-    border: 2px solid #2A2E33;
-    border-bottom-width: 4px;
+    border: 2px solid #3B4148;
     border-radius: 4px;
     font-weight: bold;
     color: #F3F5F8;
@@ -363,8 +363,8 @@ canvas {
     margin: 0;
     padding: 5px;
     background-color: #8898A3;
-    border: 2px solid #2A2E33;
-    border-bottom-width: 4px;
+    border: 2px solid #3B4148;
+    box-shadow: 0 -2px 0 0 #3B4148 inset;
     border-radius: 4px;
     font-weight: bold;
     color: #F3F5F8;
@@ -374,7 +374,7 @@ canvas {
 
 .popup button:hover {
     background-color: #5D6870;
-    border-bottom-width: 2px;
+    box-shadow: none;
 }
 
 .popup_close_button {
