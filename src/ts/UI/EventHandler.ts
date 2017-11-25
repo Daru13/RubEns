@@ -11,10 +11,12 @@ export interface EventHandler {
     eventTypes: string[];
 
     /**
-     * Selector in the jQuery format, to filter which events should be handled.
-     * This selector will be applied to the root of the document.
+     * Optionnal elector to filter which events should be handled.
+     *
+     * If defined, this selector will be applied to the `window` element,
+     * in a standard jQuery filtering fashion.
      */
-    selector: JQuery | string;
+    selector?: JQuery | string;
 
     /**
      * Callback function called when an event is accepted by the selector.
