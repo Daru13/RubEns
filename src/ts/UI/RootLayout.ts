@@ -35,7 +35,7 @@ export class RootLayout extends HTMLRenderer {
         this.mainMenu       = new MainMenu(this.rootNode, app);
         this.drawingDisplay = new DrawingDisplay(this.rootNode, app);
         this.sidebar        = new Sidebar(this.rootNode, app);
-        this.statusBar      = new StatusBar(this.rootNode);
+        this.statusBar      = new StatusBar(this.rootNode, app);
 
         // TODO: debug code, to be removed!
         /*

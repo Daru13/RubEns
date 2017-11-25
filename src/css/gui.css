@@ -84,6 +84,7 @@
     height: 30px;
     background-color: #4C555C;
     border-top: 2px solid #2A2E33;
+    font-size: 0.9rem;
     line-height: 28px;
     vertical-align: middle;
     /*box-shadow: 0 0 10px #2A2A2A;*/
@@ -398,4 +399,32 @@ canvas {
 
 .popup .parameters_field {
     margin: 0;
+}
+
+
+
+/******************************************************************
+/* Popup(s)
+/*****************************************************************/
+
+#status_bar > * {
+    display: inline-block;
+    padding: 0 8px;
+    border-right: 2px solid #2A2E33;
+    text-align: center;
+}
+
+#status_bar strong {
+    font-weight: 700;
+    text-decoration: none;
+}
+
+#status_bar > .mouse_position {
+    min-width: 90px;
+}
+
+#status_bar > .current_tool {
+    float: right;
+    border-right: none;
+    border-left: 2px solid #2A2E33;
 }
