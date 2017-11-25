@@ -1,6 +1,7 @@
 import { Canvas } from "./Image/Canvas";
 import { SelectedArea } from "./Image/SelectedArea";
-import {Color} from "./utils/Color";
+import { Color } from "./utils/Color";
+import { EventManager } from "./UI/EventManager";
 
 
 /**
@@ -19,6 +20,11 @@ export class ImageWorkspace {
      * the width of the canvases and the selection area.
      */
     width: number;
+
+    /**
+     * Reference to the application event manager.
+     */
+    eventManager: EventManager;
 
     /**
      * Canvas used to display the actual image.
@@ -98,7 +104,7 @@ export class ImageWorkspace {
     /**
      * Clear the selection
      */
-    clearSelection() {
+    clearSelection () {
         if(this.selectionDrawingIntervalID !== null) {
             window.clearInterval(this.selectionDrawingIntervalID);
             this.selectionDrawingIntervalID = null;
@@ -119,7 +125,7 @@ export class ImageWorkspace {
      *
      * @author Mathieu Fehr
      */
-    displaySelection(selection: SelectedArea) {
+    displaySelection (selection: SelectedArea) {
         let imageData = this.drawingCanvas.getImageData();
 
         if(this.selectionDrawingIntervalID === null) {
@@ -185,9 +191,10 @@ export class ImageWorkspace {
      *
      * @author Mathieu Fehr
      */
-    constructor (width: number, height: number) {
-        this.width  = width;
-        this.height = height;
+    constructor (width: number, height: number, eventManager: EventManager) {
+        this.width        = width;
+        this.height       = height;
+        this.eventManager = eventManager;
 
         this.selectionBorderColorShift = 0;
         this.selectionDrawingIntervalID = null;
@@ -200,12 +207,13 @@ export class ImageWorkspace {
         this.createCanvases();
     }
 
+
     createCanvases () {
         let width  = this.width;
         let height = this.height;
 
-        this.drawingCanvas   = new Canvas(width, height, "drawing_canvas");
-        this.workingCanvas   = new Canvas(width, height, "working_canvas");
-        this.selectionCanvas = new Canvas(width, height, "selection_canvas");
+        this.drawingCanvas   = new Canvas(width, height, "drawing_canvas", this.eventManager);
+        this.workingCanvas   = new Canvas(width, height, "working_canvas", this.eventManager);
+        this.selectionCanvas = new Canvas(width, height, "selection_canvas", this.eventManager);
     }
 }

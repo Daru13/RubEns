@@ -44,8 +44,10 @@ export class Document {
         this.eventManager = eventManager;
 
         this.imageWorkspace = new ImageWorkspace(this.parameters.width.value,
-                                                 this.parameters.height.value);
+                                                 this.parameters.height.value,
+                                                 eventManager);
     }
+
 
     /**
      * Export the current image in png format.
