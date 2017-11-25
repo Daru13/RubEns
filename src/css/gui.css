@@ -197,10 +197,9 @@ canvas {
 #tool_selection_menu .tool_button,
 #document_actions_menu .document_action_button {
     margin: 0;
-    padding: 8px;
+    padding: 8px 8px 10px 8px;
     background-color: #8898A3;
     border: 2px solid #3B4148;
-    /*border-bottom-width: 4px;*/
     border-radius: 4px;
     box-shadow: 0 -2px 0 0 #3B4148 inset;
     font-weight: bold;
@@ -217,6 +216,7 @@ canvas {
 
 #tool_selection_menu .tool_button:hover,
 #document_actions_menu .document_action_button:hover {
+    padding: 8px;
     background-color: #6E7B85;
     box-shadow: none;
 }
@@ -287,6 +287,11 @@ canvas {
     text-shadow: 0 0 2px #2A2E33;
 }
 
+/*
+.parameters_field .parameter input:focus {
+    border-color: #48788A;
+}
+*/
 
 /* Typed parameters */
 
@@ -369,10 +374,15 @@ canvas {
     font-weight: bold;
     color: #F3F5F8;
     text-shadow: 0 0 2px #1D2024;
-    animation: 150ms ease-in;
+    animation: 250ms ease-in;
 }
 
 .popup button:hover {
+    background-color: #6E7B85;
+    box-shadow: none;
+}
+
+.popup button:selected {
     background-color: #5D6870;
     box-shadow: none;
 }
