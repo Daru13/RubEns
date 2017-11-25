@@ -1,7 +1,7 @@
 import { Canvas } from "./Image/Canvas";
 import { SelectedArea } from "./Image/SelectedArea";
 import { Color } from "./utils/Color";
-import { EventManager } from "./UI/EventManager";
+import { EventManager } from "./EventManager";
 
 
 /**

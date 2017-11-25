@@ -1,5 +1,5 @@
-import { EventManager } from "../UI/EventManager";
-import { EventHandler } from "../UI/EventHandler";
+import { EventManager } from "../EventManager";
+import { EventHandler } from "../EventHandler";
 import { ImageWorkspace } from "../ImageWorkspace";
 import { DocumentParameters } from "../DocumentParameters";
 

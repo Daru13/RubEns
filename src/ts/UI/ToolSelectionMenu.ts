@@ -2,7 +2,7 @@ import * as $ from "jquery";
 import { HTMLRenderer } from "./HTMLRenderer";
 import { Tool } from "../Tools/Tool";
 import { RubEns } from "../RubEns";
-import { EventManager } from "./EventManager";
+import { EventManager } from "../EventManager";
 
 
 /**

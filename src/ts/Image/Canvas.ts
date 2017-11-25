@@ -1,7 +1,7 @@
 import * as $ from "jquery";
 import { ImageFormat } from "./ImageFormat"
 import { Point } from "../utils/Point";
-import { EventManager } from "../UI/EventManager";
+import { EventManager } from "../EventManager";
 
 
 /**

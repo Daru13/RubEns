@@ -1,7 +1,7 @@
 import { DocumentParameters } from "./DocumentParameters";
 import { ImageFormat } from "./Image/ImageFormat";
 import { Tool } from "./Tools/Tool";
-import { EventManager } from "./UI/EventManager";
+import { EventManager } from "./EventManager";
 import { ImageWorkspace } from "./ImageWorkspace";
 
 /**

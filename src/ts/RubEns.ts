@@ -1,7 +1,7 @@
 import { RubEnsParameters } from "./RubEnsParameters";
 import { Document } from "./Document";
 import { DocumentParameters } from "./DocumentParameters";
-import { EventManager } from "./UI/EventManager";
+import { EventManager } from "./EventManager";
 import { SupportChecker } from "./SupportChecker";
 import { RootLayout } from "./UI/RootLayout";
 
