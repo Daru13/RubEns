@@ -127,21 +127,34 @@ describe("Test of the user interface:", function () {
 
     describe("Drawing display:", function () {
 
-        it("Should create a single drawing canvas", function () {
+        it("Should contain zero or three canvases", function () {
             JSDOMPromise.then(_ => {
-                assert($("#drawing_canvas").length === 1);
+                let nb_html_canvases = $("#canvas_container").children().length;
+                assert(nb_html_canvases === 0 || nb_html_canvases === 3);
             });
         });
 
-        it("Should create a single working canvas", function () {
+        it("Should create three canvases when a document is created", function () {
             JSDOMPromise.then(_ => {
-                assert($("#working_canvas").length === 1);
+                rubEns.createEmptyDocument();
+
+                // Simulate/handle event dispatch delay
+                setTimeout(function () {
+                    let nb_html_canvases = $("#canvas_container").children().length;
+                    assert(nb_html_canvases === 3);
+                }, 2);
             });
         });
 
-        it("Should create a single selection canvas", function () {
+        it("Should remove three canvases when a document is closed", function () {
             JSDOMPromise.then(_ => {
-                assert($("#selection_canvas").length === 1);
+                rubEns.closeDocument();
+
+                // Simulate/handle event dispatch delay
+                setTimeout(function () {
+                    let nb_html_canvases = $("#canvas_container").children().length;
+                    assert(nb_html_canvases === 0);
+                }, 2);
             });
         });
     });
