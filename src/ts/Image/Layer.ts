@@ -32,10 +32,30 @@ class Layer {
      *
      * @param {number} height               The height of the layer.
      * @param {number} width                The width of the layer.
-     * @param {EventHandler} eventHandler   The event handler.
+     * @param {EventManager} eventManager   The event handler.
+     * @param {string} name                 The name of the layer.
+     *
+     * @author Mathieu Fehr
      */
-    constructor(width: number, height: number, eventManager: EventManager) {
+    constructor(width: number, height: number, eventManager: EventManager, name: string) {
         this.canvas = new Canvas(width,height, eventManager);
         this.fusionMode = FusionMode.Addition;
+    }
+
+
+    /**
+     * Draw the layer on a canvas of the same size.
+     *
+     * @param {Canvas} canvas   The canvas used to draw the layer.
+     *
+     * @author Mathieu Fehr
+     */
+    drawOnCanvas(canvas: Canvas) {
+        // In this function, we will check the fusion mode
+        switch(this.fusionMode) {
+            case FusionMode.Addition:
+                canvas.drawCanvas(this.canvas);
+                break;
+        }
     }
 }
