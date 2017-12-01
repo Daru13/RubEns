@@ -2,6 +2,7 @@ import * as $ from "jquery";
 import { HTMLRenderer } from "./HTMLRenderer";
 import { ParametersField } from "./ParametersField";
 import { RubEns } from "../RubEns";
+import { HistoryList } from "./HistoryList";
 
 /**
  * Main UI element representing the sidebar of the GUI.
@@ -28,6 +29,11 @@ export class Sidebar extends HTMLRenderer {
     currentToolParametersField: ParametersField;
 
     /**
+     * Instance of the history list.
+     */
+    historyList: HistoryList;
+
+    /**
      * Instanciates and initializes a new Sidebar object and its sub-modules.
      * @param  {JQuery}  parentNode Parent node owning current instance.
      * @param  {RubEns}  app        Related app instance.
@@ -41,8 +47,9 @@ export class Sidebar extends HTMLRenderer {
 
         this.app = app;
 
-        this.globalParametersField      = new ParametersField(this.rootNode, app);
+        this.globalParametersField      = new ParametersField(this.rootNode, app, "Tool parameters");
         this.currentToolParametersField = new ParametersField(this.rootNode, app);
+        this.historyList                = new HistoryList(this.rootNode, app);
 
         // TODO: move the handlers elsewhere!
         this.app.eventManager.registerEventHandler({
@@ -68,6 +75,7 @@ export class Sidebar extends HTMLRenderer {
     updateRootNode () {
         this.updateGlobalParametersField();
         this.updateCurrentToolParametersField();
+        this.historyList.updateRootNode();
     }
 
     /**
