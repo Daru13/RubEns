@@ -32,22 +32,36 @@ export class ParametersField extends HTMLRenderer {
     private wrappedParameters: Parameter[];
 
     /**
+     * Title of the parameters field.
+     * If empty or undefined, it is considered as no title.
+     */
+    private title: string;
+
+    /**
+     * Reference to the title node.
+     */
+    private titleNode: JQuery;
+
+    /**
      * Instanciates and initializes a new, empty ParametersField object.
      * @param  {JQuery}   parentNode Parent node owning current instance.
      * @param  {RubEns}   app        Related app instance.
+     * @param  {string}   title      Optionnal title (none by default).
      * @return {ParametersField}     Fresh instance of Parameter.
      *
      * @author Camille Gobert
      */
-    constructor (parentNode: JQuery, app: RubEns) {
+    constructor (parentNode: JQuery, app: RubEns, title = "") {
         super(parentNode);
         this.createRootNode();
 
-        this.app = app;
+        this.app   = app;
+        this.title = title;
 
         this.parameters        = [];
         this.wrappedParameters = [];
     }
+
 
     /**
      * Wrap a parameter into an UI parameter, whose root node is appended to
@@ -119,7 +133,7 @@ export class ParametersField extends HTMLRenderer {
     }
 
     /**
-     * Empty the root node and re-wrap and append all parameters.
+     * Empty the root node and re-wrap and append the (optionnal) title + all parameters.
      *
      * @author Camille Gobert
      */
@@ -127,10 +141,58 @@ export class ParametersField extends HTMLRenderer {
         this.stopHandlingAllChanges();
 
         this.rootNode.empty();
+        this.createTitleNode();
         this.wrapAndDisplayAllParameters();
 
         this.updateRootNodeEmptyClass();
     }
+
+
+    /**
+     * Create the title node.
+     *
+     * @author Camille Gobert
+     */
+    private createTitleNode () {
+        let titleNode = $("<h3>");
+        titleNode.html(this.title);
+
+        this.rootNode.append(titleNode);
+        this.titleNode = titleNode;
+
+        this.updateTitleNode();
+    }
+
+
+    /**
+     * Update the title node, so it matches the parameters field title.
+     * If the title is empty, it hides the title node.
+     *
+     * @author Camille Gobert
+     */
+    private updateTitleNode () {
+        if (this.title === "") {
+            this.titleNode.hide();
+            return;
+        }
+
+        this.titleNode.html(this.title);
+        this.titleNode.show();
+    }
+
+
+    /**
+     * Set the title of the parameters field, and update the UI accordingly.
+     * If the new title is empty, it hides the title node.
+     * @param  {string} title The new title.
+     *
+     * @author Camille Gobert
+     */
+    setTitle (title: string) {
+        this.title = title;
+        this.updateTitleNode();
+    }
+
 
     /**
      * Returns the index of the given parameter, or -1 if it does not belong

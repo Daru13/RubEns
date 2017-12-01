@@ -47,7 +47,7 @@ export class Sidebar extends HTMLRenderer {
 
         this.app = app;
 
-        this.globalParametersField      = new ParametersField(this.rootNode, app);
+        this.globalParametersField      = new ParametersField(this.rootNode, app, "Tool parameters");
         this.currentToolParametersField = new ParametersField(this.rootNode, app);
         this.historyList                = new HistoryList(this.rootNode, app);
 
