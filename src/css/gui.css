@@ -505,10 +505,34 @@ canvas {
 }
 
 .history_step.canceled {
-    color: #B8BABC;
     background-color: #5D6870;
+    color: #B8BABC;
+}
+
+.history_step.current,
+.history_step.current:hover {
+    background-color: #6481A1;
 }
 
 .history_step:hover {
     background-color: #8898A3;
+    color: #F3F5F8;
+}
+
+.history_step:hover::after {
+    content: "undo";
+    float: right;
+    color: #3B4148;
+    text-shadow: none;
+}
+
+.history_step.canceled:hover::after {
+    content: "redo";
+    float: right;
+    color: #3B4148;
+    text-shadow: none;
+}
+
+.history_step.current:hover::after {
+    content: none;
 }
