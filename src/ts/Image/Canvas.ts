@@ -1,16 +1,17 @@
 import * as $ from "jquery";
 import { ImageFormat } from "./ImageFormat"
-import { Point } from "../utils/Point";
 import { EventManager } from "../EventManager";
 
 
 /**
  * This class abstracts an HTML5 canvas.
+ * The canvas is not displayed in the screen.
+ * To have a displayable Canvas, see DisplayableCanvas.
  */
 export class Canvas {
 
     /**
-     * The canvas node.
+     * The canvas HTML node.
      */
     canvas: HTMLCanvasElement;
 
@@ -25,19 +26,9 @@ export class Canvas {
     height: number;
 
     /**
-     * Value of the `id` property of the related HTML node.
-     */
-    id: string;
-
-    /**
      * The 2D context of the canvas.
      */
     private canvas2DContext: CanvasRenderingContext2D;
-
-    /**
-     * The bounding rectangle of the canvas.
-     */
-    private canvasBoundingRect: ClientRect;
 
     /**
      * Reference to the application event manager.
@@ -81,9 +72,12 @@ export class Canvas {
     constructor (width: number, height: number, id: string, eventManager: EventManager) {
         this.width        = width;
         this.height       = height;
-        this.id           = id;
         this.eventManager = eventManager;
 
+        let canvas = $("<canvas>");
+
+        canvas.attr("width", width + "px");
+        canvas.attr("height", height + "px");
         eventManager.registerEventHandler(this.windowResizedHandler);
         eventManager.registerEventHandler(this.documentResizedHandler);
 
@@ -229,40 +223,5 @@ export class Canvas {
         // Set the CSS negative margins (for proper centering)
         canvas.css("margin-left", marginLeftAsString);
         canvas.css("margin-top" , marginTopAsString);
-    }
-
-
-    /**
-     * Update the bounding rectangle of the canvas (from its HTML node).
-     *
-     * Note: this method relies on the dimensions and position of the HTML node.
-     * Therfore, it should be called only *after* those properties have been updated!
-     *
-     * @author Camille Gobert
-     */
-    updateBoundingRect () {
-        this.canvasBoundingRect = this.canvas.getBoundingClientRect();
-    }
-
-
-    /**
-     * Get the position of a mouse event relative to the canvas,
-     * @param  {MouseEnvet} event The mouse event
-     * @return                    The position of the mouse event relative to the canvas.
-     *
-     * @author Camille Gobert
-     */
-    getMouseEventCoordinates (event: MouseEvent) {
-        let boundingRect = this.canvasBoundingRect;
-
-        let mouseX = (event.clientX - boundingRect.left);
-        let mouseY = (event.clientY - boundingRect.top);
-
-        let coordinates = new Point(mouseX, mouseY);
-
-        coordinates.x *= (boundingRect.right  - boundingRect.left) / this.canvas.width;
-        coordinates.y *= (boundingRect.bottom - boundingRect.top)  / this.canvas.height;
-
-        return coordinates;
     }
 }
