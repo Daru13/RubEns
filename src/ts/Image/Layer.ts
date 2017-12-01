@@ -26,6 +26,16 @@ class Layer {
      */
     private fusionMode: FusionMode;
 
+    /**
+     * The name of the layer.
+     */
+    name: string;
+
+    /**
+     * Boolean indicating if the layer is displayed or not
+     */
+    isDisplayed: boolean;
+
 
     /**
      * Create a new layer with given height and width.
@@ -40,6 +50,8 @@ class Layer {
     constructor(width: number, height: number, eventManager: EventManager, name: string) {
         this.canvas = new Canvas(width,height, eventManager);
         this.fusionMode = FusionMode.Addition;
+        this.name = name;
+        this.isDisplayed = true;
     }
 
 
