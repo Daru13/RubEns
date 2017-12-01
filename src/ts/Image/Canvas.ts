@@ -175,4 +175,14 @@ export class Canvas {
     }
 
 
+    /**
+     * Draw another canvas on the current canvas.
+     *
+     * @param {Canvas} canvas The canvas to draw on the current canvas.
+     *
+     * @author Mathieu Fehr
+     */
+    drawCanvas (canvas: Canvas) {
+        this.canvas2DContext.drawImage(canvas.canvas, 0, 0);
+    }
 }
