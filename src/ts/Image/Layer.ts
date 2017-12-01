@@ -1,4 +1,5 @@
 import { Canvas } from "./Canvas";
+import { EventManager } from "../EventManager";
 
 
 /**
@@ -29,11 +30,12 @@ class Layer {
     /**
      * Create a new layer with given height and width.
      *
-     * @param {number} height   The height of the layer
-     * @param {number} width    The width of the layer
+     * @param {number} height               The height of the layer.
+     * @param {number} width                The width of the layer.
+     * @param {EventHandler} eventHandler   The event handler.
      */
-    constructor(width: number, height: number) {
-        this.canvas = new Canvas(width,height);
+    constructor(width: number, height: number, eventManager: EventManager) {
+        this.canvas = new Canvas(width,height, eventManager);
         this.fusionMode = FusionMode.Addition;
     }
 }

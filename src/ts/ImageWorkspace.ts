@@ -1,8 +1,6 @@
-import { Canvas } from "./Image/Canvas";
 import { SelectedArea } from "./Image/SelectedArea";
 import { Color } from "./utils/Color";
 import { EventManager } from "./EventManager";
-import { Color } from "./utils/Color";
 import { DisplayableCanvas } from "./Image/DisplayableCanvas";
 
 
@@ -108,9 +106,9 @@ export class ImageWorkspace {
         let height = this.height;
         let eventManager = this.eventManager;
 
-        this.drawingCanvas = new Canvas(width, height, "drawing_canvas", eventManager);
-        this.workingCanvas = new Canvas(width, height, "working_canvas", eventManager);
-        this.selectionCanvas = new Canvas(width, height, "selection_canvas", eventManager);
+        this.drawingCanvas = new DisplayableCanvas(width, height, "drawing_canvas", eventManager);
+        this.workingCanvas = new DisplayableCanvas(width, height, "working_canvas", eventManager);
+        this.selectionCanvas = new DisplayableCanvas(width, height, "selection_canvas", eventManager);
     }
 
 
