@@ -1,4 +1,4 @@
-
+import { Document } from "./Document";
 
 type HistoryFunction = () => void;
 
@@ -77,72 +77,64 @@ export class ImageHistory implements History {
 
 
     /**
-     * [applyOnCanvas description]
-     * @param  {HistoryFunction} redo [description]
-     * @param  {HistoryFunction} undo [description]
-     * @return {void}               [description]
+     * This function stores the functions given in argument and calls this function.
+     * And icreases numberOfActionOnCanvas
+     * @param  {HistoryFunction} redo the function to apply.
+     * @param  {HistoryFunction} undo the inverse function of undo.
+     * @return {void} works by side-effect.
      */
     applyOnCanvas(redo: HistoryFunction, undo?: HistoryFunction){
-        if (this.historyMap.currentStep < this.historyMap.numberOfStep) {
-        // First, we have to clear the hstory, if the current step is not the head of history
-            for (var i = this.historyMap.currentStep+1; i <this.historyMap.numberOfStep; i++){
-                this.historyMap.map[i] = null;
-            }
-            this.historyMap.numberOfStep = this.historyMap.numberOfStep;
-            for (var i = this.historyMap.numberOfStep; i < this.historyMap.map[this.historyMap.currentStep].nearestBackwardImage; i++){
-                this.historyMap.map[i].nearestForwardImage = -1;
-            }
-
-        }
-        this.historyMap.currentStep += 1;
-        this.historyMap.numberOfStep += 1;
+        this.clearHead;
+        this.currentStep += 1;
+        this.numberOfStep += 1;
         // Then, we increment the numpber of steps.
-        if (this.historyMap.map[this.historyMap.currentStep-1].numberOfActionOnCanvs <= this.boundOnCanvas){
-        // Then we check if we have reached the number of action on cnvas between two images.
-            this.historyMap.map[this.historyMap.numberOfStep] =
+        if (this.map[this.currentStep-1].numberOfActionOnCanvas <= this.boundOnCanvas){
+        // Case 1: limit of action on Canvas isn't reached
+            this.map[this.numberOfStep] =
                 {redo: redo,
                  undo: undo,
-                 image: null,
+                 image: null, //TODO: add getImageData
                  nearestForwardImage: -1,
-                 nearestBackwardImage: this.historyMap.map[this.historyMap.numberOfStep-1].nearestBackwardImage,
-                 numberOfActionOnCanvs: this.historyMap.map[this.historyMap.numberOfStep-1].numberOfActionOnCanvs +1,
+                 nearestBackwardImage: this.map[this.numberOfStep-1].nearestBackwardImage,
+                 numberOfActionOnCanvas: this.map[this.numberOfStep-1].numberOfActionOnCanvas +1,
             }
         }
         else {
-            if (this.historyMap.numberOfImages > this.boundOnImages) {
-                // First, we clear the latest stored image, if we reached the limit.
-                var beginning = this.historyMap.firstAvailableStep;
-                var end = this.historyMap.map[beginning+1].nearestForwardImage;
-                for (var i = beginning; i < end; i++){
-                    this.historyMap.map[i] = null;
+        // Case 2: limit of action on Canvas is reached.
+            if (this.numberOfImages > this.boundOnImages) {
+            // Case 2.1: we have to clear an image and the steps after until the next image associated.
+                var beginning = this.firstAvailableStep;
+                var end = this.map[beginning+1].nearestForwardImage;
+                for (let i = beginning; i < end; i++){
+                    delete this.map[i];
                 }
-                this.historyMap.firstAvailableStep = end;
+                this.firstAvailableStep = end;
             }
             // Then, we
-            var thisStep: number = this.historyMap.numberOfStep;
-            for (var i: number = this.historyMap.map[thisStep-1].nearestBackwardImage+1; i < thisStep; i++){
-                this.historyMap.map[i].nearestForwardImage = thisStep;
+            var thisStep: number = this.numberOfStep;
+            for (let i: number = this.map[thisStep-1].nearestBackwardImage+1; i < thisStep; i++){
+                this.map[i].nearestForwardImage = thisStep;
             }
 
-            this.historyMap.map[this.historyMap.numberOfStep] =
+            this.map[this.numberOfStep] =
                 {redo: redo,
                  undo: undo,
-                 image: null, //TODO : add getImageData
-                 nearestForwardImage: this.historyMap.numberOfStep,
-                 nearestBackwardImage: this.historyMap.numberOfStep,
-                 numberOfActionOnCanvs: this.historyMap.map[this.historyMap.numberOfStep-1].numberOfActionOnCanvs +1,
+                 image: this.document.imageWorkspace.drawingCanvas.getImageData(),
+                 nearestForwardImage: this.numberOfStep,
+                 nearestBackwardImage: this.numberOfStep,
+                 numberOfActionOnCanvas: this.map[this.numberOfStep-1].numberOfActionOnCanvas +1,
                 }
-            this.historyMap.numberOfImages ++;
+            this.numberOfImages ++;
         }
         redo();
     }
 
 
     goToStep(stepNumber: number){
-        if (stepNumber > this.historyMap.numberOfStep || stepNumber < this.historyMap.firstAvailableStep){
+        if (stepNumber > this.numberOfStep || stepNumber < this.firstAvailableStep){
             return null;
         }
-        var step: HistoryStep = this.historyMap.map[stepNumber];
+        var step: HistoryStep = this.map[stepNumber];
 
         // We check if we can use the undo function.
         var useUndo: boolean = true;
@@ -151,23 +143,33 @@ export class ImageHistory implements History {
             useUndo = false;
         }
         for(var i = stepNumber + 1; useUndo && (i < step.nearestForwardImage); i++){
-            if (this.historyMap.map[i].undo != null) { useUndo = false; }
+            if (this.map[i].undo != null) { useUndo = false; }
         }
-        // Dependeing on the results of everal check above, we use undo function, or not.
+        // Dependeing on the results of several check above, we use undo function, or not.
         if (useUndo) {
-            // put a setImageData
+        // Case 1: we use undo functions.
+            this.document.imageWorkspace.drawingCanvas.setImageData(this.map[step.nearestForwardImage].image);
             for (var i = step.nearestForwardImage-1; i > stepNumber; i--){
-                this.historyMap.map[i].undo();
+                this.map[i].undo();
             }
         }
         else {
-            // getImageData
+        // Case 2: we use redo functions.
+            this.document.imageWorkspace.drawingCanvas.setImageData(this.map[step.nearestBackwardImage].image)1y2,;
             for (var i = step.nearestBackwardImage; i <= stepNumber; i++){
-                this.historyMap.map[i].redo();
+                this.map[i].redo();
             }
         }
-        this.historyMap.currentStep = stepNumber;
+        this.currentStep = stepNumber;
+    // TODO: if we can redo from the current Step, we have to !
     }
 
+    goToLatestStep(){
+        this.goToStep(this.currentStep-1);
+    }
+
+    goToNextStep(){
+        this.goToStep(this.currentStep+1);
+    }
 
 }
