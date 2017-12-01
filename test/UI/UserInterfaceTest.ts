@@ -142,7 +142,7 @@ describe("Test of the user interface:", function () {
                 setTimeout(function () {
                     let nb_html_canvases = $("#canvas_container").children().length;
                     assert(nb_html_canvases === 3);
-                }, 2);
+                }, 5);
             });
         });
 
@@ -204,7 +204,7 @@ describe("Test of the user interface:", function () {
                 // Attempt to simulate event bubbling delday...
                 setTimeout(function() {
                     assert(dummyCounter === 1 /* not 2 */);
-                }, 2);
+                }, 5);
             });
         });
 
