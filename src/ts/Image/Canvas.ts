@@ -1,16 +1,17 @@
 import * as $ from "jquery";
 import { ImageFormat } from "./ImageFormat"
-import { Point } from "../utils/Point";
 import { EventManager } from "../EventManager";
 
 
 /**
  * This class abstracts an HTML5 canvas.
+ * The canvas is not displayed in the screen.
+ * To have a displayable Canvas, see DisplayableCanvas.
  */
 export class Canvas {
 
     /**
-     * The canvas node.
+     * The canvas HTML node.
      */
     canvas: HTMLCanvasElement;
 
@@ -25,32 +26,15 @@ export class Canvas {
     height: number;
 
     /**
-     * Value of the `id` property of the related HTML node.
+     * The event manager.
      */
-    id: string;
+    protected eventManager: EventManager;
 
     /**
      * The 2D context of the canvas.
      */
     private canvas2DContext: CanvasRenderingContext2D;
 
-    /**
-     * The bounding rectangle of the canvas.
-     */
-    private canvasBoundingRect: ClientRect;
-
-    /**
-     * Reference to the application event manager.
-     */
-    eventManager: EventManager;
-
-    /**
-     * Event handler for window resized.
-     */
-    protected windowResizedHandler = {
-        eventTypes: ["resize"],
-        callback  : (_) => { this.updateBoundingRect(); }
-    };
 
     /**
      * Event handler for document resized.
@@ -62,8 +46,6 @@ export class Canvas {
             let newHeight = event.detail.newHeight;
 
             this.updateDimensions(newWidth, newHeight);
-            this.updatePosition();
-            this.updateBoundingRect();
         }
     };
 
@@ -72,40 +54,35 @@ export class Canvas {
      * Instanciates and initializes a new Canvas object.
      * @param  {number}       width        Width of the canvas (content).
      * @param  {number}       height       Height of the canvas (content).
-     * @param  {string}       id           `id` of the related HTML canvas node.
-     * @param  {EventManager} eventManager Reference to the event manager instance.
+     * @param  {EventManager} eventManager The event manager.
      * @return {Canvas}                    Fresh instance of Canvas.
      *
      * @author Camille Gobert
      */
-    constructor (width: number, height: number, id: string, eventManager: EventManager) {
+    constructor (width: number, height: number, eventManager: EventManager) {
         this.width        = width;
         this.height       = height;
-        this.id           = id;
         this.eventManager = eventManager;
 
-        eventManager.registerEventHandler(this.windowResizedHandler);
         eventManager.registerEventHandler(this.documentResizedHandler);
-
         this.createCanvasNode();
     }
 
 
     /**
-     * Create the HTML node related to this canvas, and update related properties.
+     * Create the HTML canvas node.
      *
      * @author Camille Gobert
      */
-    createCanvasNode () {
-        let canvas  = $("<canvas>");
-        canvas.attr("id", this.id);
+    createCanvasNode() {
+        let canvas = $("<canvas>");
 
-        this.canvas          = <HTMLCanvasElement> canvas[0];
+        this.canvas = <HTMLCanvasElement> canvas[0];
         this.canvas2DContext = this.canvas.getContext("2d");
 
+        canvas.attr("width", this.width + "px");
+        canvas.attr("height", this.height + "px");
         this.updateDimensions(this.width, this.height);
-        this.updatePosition();
-        this.updateBoundingRect();
     }
 
 
@@ -138,6 +115,28 @@ export class Canvas {
      */
     clear () {
         this.canvas2DContext.clearRect(0, 0, this.width, this.height);
+    }
+
+
+    /**
+     * Update the canvas dimensions.
+     * It only updates the internal dimensions
+     * , HTML node and CSS dimensions.
+     * @param {number} width  New width.
+     * @param {number} height New height.
+     *
+     * @author Camille Gobert
+     */
+    updateDimensions (width: number, height: number) {
+        // Set the internal dimensions
+        this.width  = width;
+        this.height = height;
+
+        let canvas = $(this.canvas);
+
+        // Set the HTML node dimensions
+        canvas.attr("width" , width + "px");
+        canvas.attr("height", height + "px");
     }
 
 
@@ -177,81 +176,13 @@ export class Canvas {
 
 
     /**
-     * Update the canvas dimensions.
-     * It updates the internal, HTML node and CSS dimensions.
-     * @param {number} width  New width.
-     * @param {number} height New height.
+     * Draw another canvas on the current canvas.
      *
-     * @author Camille Gobert
+     * @param {Canvas} canvas The canvas to draw on the current canvas.
+     *
+     * @author Mathieu Fehr
      */
-    updateDimensions (width: number, height: number) {
-        // Set the internal dimensions
-        this.width  = width;
-        this.height = height;
-
-        let canvas = $(this.canvas);
-
-        // Set the HTML node dimensions
-        canvas.attr("width" , width);
-        canvas.attr("height", height);
-
-        // Set the CSS dimensions (via `style` attribute)
-        let widthAsString  = width  + "px";
-        let heightAsString = height + "px";
-
-        canvas.css("width" , widthAsString);
-        canvas.css("height", heightAsString);
-    }
-
-
-    /**
-     * Update the canvas positions.
-     *
-     * @author Camille Gobert
-     */
-    updatePosition () {
-        let canvas = $(this.canvas);
-
-        let marginLeftAsString = (- Math.floor(this.width  / 2)) + "px";
-        let marginTopAsString  = (- Math.floor(this.height / 2)) + "px";
-
-        // Set the CSS negative margins (for proper centering)
-        canvas.css("margin-left", marginLeftAsString);
-        canvas.css("margin-top" , marginTopAsString);
-    }
-
-
-    /**
-     * Update the bounding rectangle of the canvas (from its HTML node).
-     *
-     * Note: this method relies on the dimensions and position of the HTML node.
-     * Therfore, it should be called only *after* those properties have been updated!
-     *
-     * @author Camille Gobert
-     */
-    updateBoundingRect () {
-        this.canvasBoundingRect = this.canvas.getBoundingClientRect();
-    }
-
-
-    /**
-     * Get the position of a mouse event relative to the canvas,
-     * @param  {MouseEnvet} event The mouse event
-     * @return                    The position of the mouse event relative to the canvas.
-     *
-     * @author Camille Gobert
-     */
-    getMouseEventCoordinates (event: MouseEvent) {
-        let boundingRect = this.canvasBoundingRect;
-
-        let mouseX = (event.clientX - boundingRect.left);
-        let mouseY = (event.clientY - boundingRect.top);
-
-        let coordinates = new Point(mouseX, mouseY);
-
-        coordinates.x *= (boundingRect.right  - boundingRect.left) / this.canvas.width;
-        coordinates.y *= (boundingRect.bottom - boundingRect.top)  / this.canvas.height;
-
-        return coordinates;
+    drawCanvas (canvas: Canvas) {
+        this.canvas2DContext.drawImage(canvas.canvas, 0, 0);
     }
 }
