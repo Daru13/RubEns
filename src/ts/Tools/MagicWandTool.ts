@@ -62,7 +62,11 @@ export class MagicWandTool extends Tool {
         let imageWidth = this.workspace.width;
 
         let selectedArea = new SelectedArea(imageWidth, imageHeight);
-        let imageData = this.workspace.drawingCanvas.getImageData();
+
+        if(this.workspace.drawingLayers.selectedLayer === null) {
+            return;
+        }
+        let imageData = this.workspace.drawingLayers.selectedLayer.canvas.getImageData();
 
         // The color of the source pixel
         let r = imageData.data[4 * (source.x + imageWidth * source.y)    ];

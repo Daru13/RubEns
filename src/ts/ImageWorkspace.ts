@@ -2,6 +2,7 @@ import { SelectedArea } from "./Image/SelectedArea";
 import { Color } from "./utils/Color";
 import { EventManager } from "./EventManager";
 import { DisplayableCanvas } from "./Image/DisplayableCanvas";
+import { LayerManager } from "./Image/LayerManager";
 
 
 /**
@@ -28,6 +29,11 @@ export class ImageWorkspace {
 
     /**
      * Canvas used to display the actual image.
+     */
+    drawingLayers: LayerManager;
+
+    /**
+     * Canvas used to display the layers.
      */
     drawingCanvas: DisplayableCanvas;
 
@@ -107,21 +113,27 @@ export class ImageWorkspace {
         let eventManager = this.eventManager;
 
         this.drawingCanvas = new DisplayableCanvas(width, height, "drawing_canvas", eventManager);
+        this.drawingLayers = new LayerManager(width, height, eventManager);
         this.workingCanvas = new DisplayableCanvas(width, height, "working_canvas", eventManager);
         this.selectionCanvas = new DisplayableCanvas(width, height, "selection_canvas", eventManager);
     }
 
 
     /**
-     * Apply the working canvas in the drawingCanvas.
+     * Apply the working canvas in the selected layer.
      * When a tool want to apply an operation in the drawingCanvas, it should draw it in the
      * working canvas, and then call this function.
      *
      * @author Mathieu Fehr
      */
     applyWorkingCanvas() {
+        // We check that there is a selected layer
+        if(this.drawingLayers.selectedLayer === null) {
+            return;
+        }
+
         let workingImageData = this.workingCanvas.getImageData();
-        let drawingImageData = this.drawingCanvas.getImageData();
+        let drawingImageData = this.drawingLayers.selectedLayer.canvas.getImageData();
 
         // We select only the pixels that are in the selection
         this.selectedArea.data.forEach((value, index) => {
@@ -145,7 +157,9 @@ export class ImageWorkspace {
             }
         });
 
-        this.drawingCanvas.setImageData(drawingImageData);
+        this.drawingLayers.selectedLayer.canvas.setImageData(drawingImageData);
+        this.drawingCanvas.clear();
+        this.drawingLayers.drawOn(this.drawingCanvas);
         this.workingCanvas.clear();
     }
 

@@ -19,7 +19,7 @@ export class Layer {
     /**
      * The canvas containing the data of the layer.
      */
-    private canvas: Canvas;
+    canvas: Canvas;
 
     /**
      * The fusion mode used by the later.
