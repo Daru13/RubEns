@@ -104,7 +104,7 @@ export class LayerManager {
                 return this.selectedLayer === value;
             });
             this.selectedLayer = new Layer(this.width, this.height, this.eventManager, name, this.lastId);
-            this.layers.splice(position, 0, )
+            this.layers.splice(position, 0, this.selectedLayer);
         }
     }
 
