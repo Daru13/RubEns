@@ -96,7 +96,7 @@ export class LayerManager {
     createLayer(name = "New Layer") {
         this.lastId += 1;
 
-        if(this.selectedLayer === null) {
+        if(this.selectedLayer == null) {
             this.selectedLayer = new Layer(this.width, this.height, this.eventManager, name, this.lastId);
             this.layers.push(this.selectedLayer);
         } else {
