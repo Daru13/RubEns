@@ -48,7 +48,7 @@ export class LayerManager {
     /**
      * The last id used to create a layer
      */
-    private lastId: number = 0;
+    private lastId: number = -1;
 
 
     /**
