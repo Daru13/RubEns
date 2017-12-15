@@ -57,6 +57,8 @@ export class LayerManager {
      * @param {number} width                The width of the layer manager.
      * @param {number} height               The height of the layer manager.
      * @param {EventManager} eventManager   The eventManager used to dispatch events to layers.
+     *
+     * @author Mathieu Fehr
      */
     constructor(width: number, height: number, eventManager: EventManager) {
         this.width = width;
@@ -71,18 +73,23 @@ export class LayerManager {
      * Delete a layer, given its id
      *
      * @param {number} id   The id of the layer to delete
+     *
+     * @author Mathieu Fehr
      */
     deleteLayer(id: number) {
-        this.layers.filter((value: Layer) => {
+        let position = this.layers.findIndex((value: Layer) => {
             return id !== value.id;
         });
+        this.layers.splice(position, 1);
 
         // We change the selected layer if necessary
         if(this.selectedLayer.id === id) {
             if(this.layers.length === 0) {
                 this.selectedLayer = null;
-            } else {
+            } else if(position === 0) {
                 this.selectedLayer = this.layers[0];
+            } else {
+                this.selectedLayer = this.layers[position-1];
             }
         }
     }
@@ -92,6 +99,8 @@ export class LayerManager {
      * Create a new layer at the top of the layer list
      *
      * @param {string} name The name of the new layer
+     *
+     * @author Mathieu Fehr
      */
     createLayer(name = "New Layer") {
         this.lastId += 1;
@@ -114,10 +123,12 @@ export class LayerManager {
      *
      * @param {number} id           The id of the layer.
      * @param {number} nextPosition The new position of the layer.
+     *
+     * @author Mathieu Fehr
      */
     moveLayer(id: number, nextPosition: number) {
         if(nextPosition < 0) {
-            console.error("The new posiiton of the layer should be positive");
+            console.error("The new position of the layer should be positive");
             nextPosition = 0;
         } else if(nextPosition >= this.layers.length) {
             console.error("The new position of the layer should be less than the number of layers");
@@ -140,6 +151,8 @@ export class LayerManager {
      * If there is no layer with such id, the selected layer is not changed.
      *
      * @param {number} id   The id of the layer.
+     *
+     * @author Mathieu Fehr
      */
     selectLayer(id: number) {
         let index = this.layers.findIndex((layer: Layer) => {
@@ -156,6 +169,8 @@ export class LayerManager {
      * Draw all the layers on the given canvas.
      *
      * @param {Canvas} canvas The canvas where the layers should be drawn.
+     *
+     * @author Mathieu Fehr
      */
     drawOn(canvas: Canvas) {
         for(let i = this.layers.length-1; i>=0; i--) {
