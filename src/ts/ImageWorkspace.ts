@@ -114,6 +114,7 @@ export class ImageWorkspace {
 
         this.drawingCanvas = new DisplayableCanvas(width, height, "drawing_canvas", eventManager);
         this.drawingLayers = new LayerManager(width, height, eventManager);
+        this.drawingLayers.createLayer();
         this.workingCanvas = new DisplayableCanvas(width, height, "working_canvas", eventManager);
         this.selectionCanvas = new DisplayableCanvas(width, height, "selection_canvas", eventManager);
     }

@@ -49,9 +49,6 @@ export class LayerManager {
     constructor(width: number, height: number, eventManager: EventManager) {
         this.width = width;
         this.height = height;
-        this.lastId += 1;
-        this.selectedLayer = new Layer(width, height, eventManager, "New Layer", this.lastId);
-        this.layers.push(this.selectedLayer);
         this.eventManager = eventManager;
     }
 
@@ -82,7 +79,7 @@ export class LayerManager {
      *
      * @param {string} name The name of the new layer
      */
-    createLayer(name: string) {
+    createLayer(name = "New Layer") {
         this.lastId += 1;
 
         if(this.selectedLayer === null) {
