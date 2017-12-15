@@ -62,10 +62,6 @@ export class LayerManager {
      * @param {number} id   The id of the layer to delete
      */
     deleteLayer(id: number) {
-        let position = this.layers.findIndex((value: Layer) => {
-            return id === value.id;
-        });
-
         this.layers.filter((value: Layer) => {
             return id !== value.id;
         });
