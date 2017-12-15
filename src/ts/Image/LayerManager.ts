@@ -135,6 +135,22 @@ export class LayerManager {
         this.layers.splice(nextPosition, 0, layer);
     }
 
+    /**
+     * Select a layer given its id.
+     * If there is no layer with such id, the selected layer is not changed.
+     *
+     * @param {number} id   The id of the layer.
+     */
+    selectLayer(id: number) {
+        let index = this.layers.findIndex((layer: Layer) => {
+            return id === layer.id;
+        });
+
+        if(index !== -1) {
+            this.selectedLayer = this.layers[index];
+        }
+    }
+
 
     /**
      * Draw all the layers on the given canvas.
