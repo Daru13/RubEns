@@ -28,6 +28,18 @@ export class LayerManager {
      */
     selectedLayer: Layer;
 
+
+    /**
+     * Event handler for document resize.
+     */
+    protected documentResizedHandler = {
+        eventTypes: ["rubens_documentResized"],
+        callback  : (event) => {
+            this.width  = event.detail.newWidth;
+            this.height = event.detail.newHeight;
+        }
+    };
+
     /**
      * The event manager used to dispatch events
      */
@@ -50,6 +62,8 @@ export class LayerManager {
         this.width = width;
         this.height = height;
         this.eventManager = eventManager;
+
+        eventManager.registerEventHandler(this.documentResizedHandler);
     }
 
 
@@ -92,7 +106,6 @@ export class LayerManager {
             this.selectedLayer = new Layer(this.width, this.height, this.eventManager, name, this.lastId);
             this.layers.splice(position, 0, )
         }
-
     }
 
 
