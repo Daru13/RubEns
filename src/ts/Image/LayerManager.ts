@@ -66,24 +66,35 @@ export class LayerManager {
         eventManager.registerEventHandler(this.documentResizedHandler);
     }
 
+    /**
+     * Returns the index of the layer with the given id, or -1 if it is not found.
+     * @param  {number} id The id of the layer to search.
+     * @return {number}    The index of the layer with the given id, or -1.
+     *
+     * @author Camille Gobert
+     */
+    private getLayerIndexFromId (id: number) {
+        return this.layers.findIndex((layer: Layer) => { return layer.id === id; });
+    }
+
 
     /**
-     * Delete a layer, given its id
+     * Delete a layer, given its id.
      *
      * @param {number} id   The id of the layer to delete
      */
-    deleteLayer(id: number) {
-        this.layers.filter((value: Layer) => {
-            return id !== value.id;
-        });
+    deleteLayer (id: number) {
+        let layerIndex = this.getLayerIndexFromId(id);
+        if (layerIndex >= 0) {
+            this.layers.splice(layerIndex, 1);
 
-        // We change the selected layer if necessary
-        if(this.selectedLayer.id === id) {
-            if(this.layers.length === 0) {
+            if (this.layers.length === 0) {
                 this.selectedLayer = null;
             } else {
-                this.selectedLayer = this.layers[0];
+                this.selectedLayer = this.layers[Math.max(0, layerIndex - 1)];
             }
+
+            EventManager.spawnEvent("rubens_deleteLayer");
         }
     }
 
