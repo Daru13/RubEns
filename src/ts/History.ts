@@ -106,7 +106,7 @@ export class History {
             nearestBackwardImage: 0,
             numberOfActionOnCanvas:0,
         }
-        this.numberOfStep = 1;
+        this.numberOfStep = 0;
         this.numberOfImages = 1;
         this.currentStep = 0;
     }
