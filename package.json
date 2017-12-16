@@ -1,0 +1,40 @@
+{
+  "name": "rubEns",
+  "version": "0.1.0",
+  "description": "Simple web painting app written in Typescript, made for a software engineering course project.",
+  "directories": {
+    "doc": "docs",
+    "test": "test"
+  },
+  "dependencies": {
+    "amd-loader": "0.0.8",
+    "jquery": "^3.2.1",
+    "ts-mocha": "^1.0.3"
+  },
+  "devDependencies": {
+    "@types/jquery": "^3.2.16",
+    "canvas": "^1.6.7",
+    "jsdom": "^11.5.1",
+    "jsdom-global": "^3.0.2",
+    "typedoc": "^0.9.0",
+    "typescript": "^2.5.2"
+  },
+  "scripts": {
+    "test": "ts-mocha test/**/*.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Daru13/rubEns.git"
+  },
+  "keywords": [
+    "ts",
+    "paint",
+    "app"
+  ],
+  "author": "Camille Gobert, Mathieu Fehr, Josselin Giet",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Daru13/rubEns/issues"
+  },
+  "homepage": "https://github.com/Daru13/rubEns#readme"
+}

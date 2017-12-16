@@ -6,7 +6,7 @@ import { EventManager } from "../EventManager";
  * The different fusion mode for layers.
  */
 enum FusionMode {
-    Addition,       /** Add the canvas on the other one */
+    Blend,       /** Add the canvas on the other one */
 }
 
 
@@ -14,17 +14,32 @@ enum FusionMode {
  * Represent a layer for an image.
  * Internally, it is represented by a canvas, not visible by the user.
  */
-class Layer {
+export class Layer {
 
     /**
      * The canvas containing the data of the layer.
      */
-    private canvas: Canvas;
+    canvas: Canvas;
 
     /**
      * The fusion mode used by the later.
      */
-    private fusionMode: FusionMode;
+    fusionMode: FusionMode = FusionMode.Blend;
+
+    /**
+     * The name of the layer.
+     */
+    name: string;
+
+    /**
+     * The id of the layer
+     */
+    readonly id: number;
+
+    /**
+     * Boolean indicating if the layer needs to be displayed or not.
+     */
+    isActive: boolean = true;
 
 
     /**
@@ -32,10 +47,37 @@ class Layer {
      *
      * @param {number} height               The height of the layer.
      * @param {number} width                The width of the layer.
-     * @param {EventHandler} eventHandler   The event handler.
+     * @param {EventManager} eventManager   The event handler.
+     * @param {string} name                 The name of the layer.
+     * @param {number} id                   The id of the layer.
+     *
+     * @author Mathieu Fehr
      */
-    constructor(width: number, height: number, eventManager: EventManager) {
+    constructor(width: number, height: number, eventManager: EventManager, name: string, id: number) {
         this.canvas = new Canvas(width,height, eventManager);
-        this.fusionMode = FusionMode.Addition;
+        this.name = name;
+        this.id = id;
+    }
+
+
+    /**
+     * Draw the layer on a canvas of the same size if the
+     *
+     * @param {Canvas} canvas   The canvas used to draw the layer.
+     *
+     * @author Mathieu Fehr
+     */
+    drawOnCanvas(canvas: Canvas) {
+        // We first check if we need to draw the layer
+        if(!this.isActive) {
+            return;
+        }
+
+        // In this function, we will check the fusion mode
+        switch(this.fusionMode) {
+            case FusionMode.Blend:
+                canvas.drawCanvas(this.canvas);
+                break;
+        }
     }
 }

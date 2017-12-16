@@ -11,21 +11,10 @@
     }
   },
 
-  "install": [
-    "npm install typescript -g",
-    "npm install mocha -g",
-    "npm install ts-mocha -g",
-    "npm install amd-loader -g",
-    "npm install typedoc -g",
-    "npm install jquery -g",
-    "npm install jquery",
-    "npm install --save-dev @types/jquery",
-    "npm install jsdom",
-    "npm install jsdom-global",
-    "npm install canvas@1.6.7"
-  ],
+  "install": [],
 
   "script": [
+    "make setup",
     "make all"
   ],
 

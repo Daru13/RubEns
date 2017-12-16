@@ -117,7 +117,10 @@ export class Document {
                 // TODO change interface when image size is not the same
                 // self.parameters.height = img.height;
                 // self.parameters.width = img.width;
-                self.imageWorkspace.drawingCanvas.importImage(img);
+                if(self.imageWorkspace.drawingLayers.selectedLayer === null) {
+                    self.imageWorkspace.drawingLayers.createLayer("New Layer");
+                }
+                self.imageWorkspace.drawingLayers.selectedLayer.canvas.importImage(img);
                 onCopyEnd();
             });
             img.src = reader.result;

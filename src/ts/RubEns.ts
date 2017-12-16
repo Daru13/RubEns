@@ -235,7 +235,8 @@ export class RubEns {
         this.document = new Document(parameters, this.eventManager);
 
         // Set the initial content of the new document
-        this.document.imageWorkspace.drawingCanvas.importImage(image);
+        // We are sure that there is a selected layer at this point
+        this.document.imageWorkspace.drawingLayers.selectedLayer.canvas.importImage(image);
 
         // Notify that the document has changed
         EventManager.spawnEvent("rubens_documentCreated", {document: this.document});
