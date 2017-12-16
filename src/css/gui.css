@@ -68,6 +68,8 @@
     position: absolute;
     right: 0;
     top: 80px;
+    display: flex;
+    flex-direction: column;
     width: 400px;
     height: calc(100% - 30px - 80px);
     background-color: #5D6870;
@@ -456,6 +458,7 @@ canvas {
 /*****************************************************************/
 
 #history {
+    flex-shrink: 0;
     margin: 5px;
     padding: 0;
     min-height: 80px;
