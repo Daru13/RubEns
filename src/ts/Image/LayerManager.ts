@@ -106,6 +106,7 @@ export class LayerManager {
      */
     createLayer(name = "New Layer") {
         this.lastId += 1;
+        name += "(" + this.lastId + ")";
 
         if(this.selectedLayer == null) {
             this.selectedLayer = new Layer(this.width, this.height, this.eventManager, name, this.lastId);
@@ -117,6 +118,8 @@ export class LayerManager {
             this.selectedLayer = new Layer(this.width, this.height, this.eventManager, name, this.lastId);
             this.layers.splice(position, 0, this.selectedLayer);
         }
+
+        EventManager.spawnEvent("rubens_addLayer");
     }
 
 
@@ -159,6 +162,8 @@ export class LayerManager {
 
         if(index !== -1) {
             this.selectedLayer = this.layers[index];
+
+            EventManager.spawnEvent("rubens_selectLayer");
         }
     }
 
