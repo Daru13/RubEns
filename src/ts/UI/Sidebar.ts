@@ -3,6 +3,8 @@ import { HTMLRenderer } from "./HTMLRenderer";
 import { ParametersField } from "./ParametersField";
 import { RubEns } from "../RubEns";
 import { HistoryList } from "./HistoryList";
+import { LayerList } from "./LayerList";
+
 
 /**
  * Main UI element representing the sidebar of the GUI.
@@ -34,6 +36,11 @@ export class Sidebar extends HTMLRenderer {
     historyList: HistoryList;
 
     /**
+     * Instance of the layer list.
+     */
+    layerList: LayerList;
+
+    /**
      * Instanciates and initializes a new Sidebar object and its sub-modules.
      * @param  {JQuery}  parentNode Parent node owning current instance.
      * @param  {RubEns}  app        Related app instance.
@@ -50,6 +57,7 @@ export class Sidebar extends HTMLRenderer {
         this.globalParametersField      = new ParametersField(this.rootNode, app, "Tool parameters");
         this.currentToolParametersField = new ParametersField(this.rootNode, app);
         this.historyList                = new HistoryList(this.rootNode, app);
+        this.layerList                  = new LayerList(this.rootNode, app);
 
         // TODO: move the handlers elsewhere!
         this.app.eventManager.registerEventHandler({
