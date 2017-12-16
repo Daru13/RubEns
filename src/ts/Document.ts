@@ -3,6 +3,7 @@ import { ImageFormat } from "./Image/ImageFormat";
 import { Tool } from "./Tools/Tool";
 import { EventManager } from "./EventManager";
 import { ImageWorkspace } from "./ImageWorkspace";
+import { History } from "./History"
 
 /**
  * Document representing an open image and all its metadata.
@@ -15,6 +16,8 @@ export class Document {
      * Workspace containing the image and related data and canvases.
      */
     imageWorkspace: ImageWorkspace;
+
+    history: History;
 
     /**
      * Parameters of the document.
@@ -42,10 +45,10 @@ export class Document {
     constructor (parameters: DocumentParameters, eventManager: EventManager) {
         this.parameters   = parameters;
         this.eventManager = eventManager;
-
         this.imageWorkspace = new ImageWorkspace(this.parameters.width.value,
                                                  this.parameters.height.value,
                                                  eventManager);
+        this.history = new History(this);
     }
 
 

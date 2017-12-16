@@ -113,6 +113,12 @@ export class RubEns {
                 if (ev.ctrlKey && ev.key.toLowerCase() == "i") {
                     this.document.importImage();
                 }
+                if (ev.ctrlKey && ev.key.toLowerCase() == "z") {
+                    this.document.history.goToLatestStep();
+                }
+                if (ev.ctrlKey && ev.key.toLowerCase() == "y") {
+                    this.document.history.goToNextStep();
+                }
             }
         });
     }
