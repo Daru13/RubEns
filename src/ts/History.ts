@@ -229,8 +229,6 @@ export class History {
      * @author Josselin GIET
      */
     goToStep(stepNumber: number){
-        console.log(stepNumber);
-        console.log(this.numberOfStep)
         if (stepNumber > this.numberOfStep || stepNumber < this.firstAvailableStep){
             alert("Unavailable step!");
             return;
