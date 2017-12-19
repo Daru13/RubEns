@@ -91,7 +91,7 @@ export class LayerManager {
         let layerIndex = this.getLayerIndexFromId(id);
         if (layerIndex >= 0) {
             this.layers.splice(layerIndex, 1);
-            
+
             if (this.layers.length === 0) {
                 this.selectedLayer = null;
             } else {
@@ -100,6 +100,16 @@ export class LayerManager {
 
             EventManager.spawnEvent("rubens_deleteLayer");
         }
+    }
+
+
+    /**
+     * Delete the currently selected layer.
+     *
+     * @author Camille Gobert
+     */
+    deleteSelectedLayer () {
+        this.deleteLayer(this.selectedLayer.id);
     }
 
 
@@ -156,6 +166,35 @@ export class LayerManager {
 
         this.layers.splice(nextPosition, 0, layer);
     }
+
+
+    /**
+     * Move the currently selected layer up.
+     *
+     * @author Camille Gobert
+     */
+    moveSelectedLayerUp () {
+        // Moving up means going down in the index space
+        let selectedLayerIndex = this.getLayerIndexFromId(this.selectedLayer.id);
+        let nextPosition = Math.max(selectedLayerIndex - 1, 0);
+
+        this.moveLayer(this.selectedLayer.id, nextPosition);
+    }
+
+
+    /**
+     * Move the currently selected layer down.
+     *
+     * @author Camille Gobert
+     */
+    moveSelectedLayerDown () {
+        // Moving down means going up in the index space
+        let selectedLayerIndex = this.getLayerIndexFromId(this.selectedLayer.id);
+        let nextPosition = Math.min(selectedLayerIndex + 1, this.layers.length - 1);
+
+        this.moveLayer(this.selectedLayer.id, nextPosition);
+    }
+
 
     /**
      * Select a layer given its id.
