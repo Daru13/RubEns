@@ -43,7 +43,7 @@ export class LayerList extends HTMLRenderer {
      * Event handler for history changes (undo, redo, new step saved).
      */
     private layerChangeHandler = {
-        eventTypes: ["rubens_addLayer", "rubens_deleteLayer", "rubens_selectLayer"],
+        eventTypes: ["rubens_addLayer", "rubens_deleteLayer", "rubens_selectLayer", "rubens_moveLayer"],
         callback: (_) => {
             this.updateLayerListNode();
             this.updateBlendingModesMenuNode();
@@ -204,6 +204,22 @@ export class LayerList extends HTMLRenderer {
 
         menuNode.append(removeLayerButtonNode);
 
+        // Button to move up the selected layer
+        let moveLayerUpButtonNode = $("<button>");
+        moveLayerUpButtonNode.attr("id", "layers_move_up_button");
+        moveLayerUpButtonNode.attr("type", "button");
+        moveLayerUpButtonNode.html("&uarr;");
+
+        menuNode.append(moveLayerUpButtonNode);
+
+        // Button to move down the selected layer
+        let moveLayerDownButtonNode = $("<button>");
+        moveLayerDownButtonNode.attr("id", "layers_move_down_button");
+        moveLayerDownButtonNode.attr("type", "button");
+        moveLayerDownButtonNode.html("&darr;");
+
+        menuNode.append(moveLayerDownButtonNode);
+
         this.menuNode = menuNode;
         this.rootNode.append(menuNode);
 
@@ -326,6 +342,18 @@ export class LayerList extends HTMLRenderer {
              &&  eventTarget.closest("#layers_remove_button").length === 1) {
             console.log("Attempt to del layer:" + this.layerManager.selectedLayer.id);
             this.layerManager.deleteLayer(this.layerManager.selectedLayer.id);
+        }
+
+        // Move layer up
+        else if (eventType === "click"
+             &&  eventTarget.closest("#layers_move_up_button").length === 1) {
+            this.layerManager.moveSelectedLayerUp();
+        }
+
+        // Move layer down
+        else if (eventType === "click"
+             &&  eventTarget.closest("#layers_move_down_button").length === 1) {
+            this.layerManager.moveSelectedLayerDown();
         }
     }
 
