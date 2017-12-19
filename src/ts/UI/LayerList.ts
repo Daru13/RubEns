@@ -6,12 +6,6 @@ import { LayerManager } from "../Image/LayerManager";
 
 
 /**
- * Constant meaning no maximum number of history steps to display.
- */
-const UNLIMITED_HISTORY_STEPS = -1;
-
-
-/**
  * UI element representing a History instance, as a list of history steps.
  *
  * It allows to navigate back and forth through the related history,
