@@ -145,26 +145,23 @@ export class LayerManager {
      * @param {number} id           The id of the layer.
      * @param {number} nextPosition The new position of the layer.
      *
-     * @author Mathieu Fehr
+     * @author Mathieu Fehr, Camille Gobert
      */
-    moveLayer(id: number, nextPosition: number) {
-        if(nextPosition < 0) {
+    moveLayer (id: number, nextPosition: number) {
+        if (nextPosition < 0) {
             console.error("The new position of the layer should be positive");
             nextPosition = 0;
-        } else if(nextPosition >= this.layers.length) {
+        }
+        else if (nextPosition >= this.layers.length) {
             console.error("The new position of the layer should be less than the number of layers");
             nextPosition = this.layers.length - 1;
         }
 
-        let layer = this.layers.find((value: Layer) => {
-            return value.id === id;
-        });
+        let layerIndex = this.getLayerIndexFromId(id);
+        let movedLayer = this.layers.splice(layerIndex, 1)[0];
+        this.layers.splice(nextPosition, 0, movedLayer);
 
-        this.layers.filter((value: Layer) => {
-            return value.id !== id;
-        });
-
-        this.layers.splice(nextPosition, 0, layer);
+        EventManager.spawnEvent("rubens_moveLayer");
     }
 
 
