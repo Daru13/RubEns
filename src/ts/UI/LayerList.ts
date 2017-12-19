@@ -341,7 +341,7 @@ export class LayerList extends HTMLRenderer {
         else if (eventType === "click"
              &&  eventTarget.closest("#layers_remove_button").length === 1) {
             console.log("Attempt to del layer:" + this.layerManager.selectedLayer.id);
-            this.layerManager.deleteLayer(this.layerManager.selectedLayer.id);
+            this.layerManager.deleteSelectedLayer();
         }
 
         // Move layer up
