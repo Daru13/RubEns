@@ -21,7 +21,7 @@ export class LayerManager {
     /**
      * The layers composing the canvas
      */
-    layers: Array<Layer> = [];
+    layers: Array<Layer>;
 
     /**
      * Selected layer
@@ -61,9 +61,11 @@ export class LayerManager {
      * @author Mathieu Fehr
      */
     constructor(width: number, height: number, eventManager: EventManager) {
-        this.width = width;
-        this.height = height;
-        this.eventManager = eventManager;
+        this.width         = width;
+        this.height        = height;
+        this.layers        = [];
+        this.selectedLayer = null;
+        this.eventManager  = eventManager;
 
         eventManager.registerEventHandler(this.documentResizedHandler);
     }
@@ -109,7 +111,8 @@ export class LayerManager {
 
             if (this.layers.length === 0) {
                 this.selectedLayer = null;
-            } else {
+            }
+            else {
                 this.selectedLayer = this.layers[Math.max(0, layerIndex - 1)];
             }
 
@@ -141,18 +144,17 @@ export class LayerManager {
 
         // If no name was specified, make a default name
         if (! name) {
-            name = "Layer " + this.lastId ;
+            name = "Layer " + (this.lastId + 1);
         }
-
         let newLayer = new Layer(this.width, this.height, this.eventManager, name, this.lastId);
 
         // Insert the new layer at the right position
-        if (! this.selectedLayer) {
+        if (this.layers.length === 0) {
             this.layers.push(newLayer);
         }
         else {
             let selectedLayerIndex = this.getSelectedLayerIndex();
-            this.layers.splice(selectedLayerIndex, 0, this.selectedLayer);
+            this.layers.splice(selectedLayerIndex, 0, newLayer);
         }
 
         this.selectedLayer = newLayer;
