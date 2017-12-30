@@ -180,6 +180,30 @@ export class LayerList extends HTMLRenderer {
 
 
     /**
+     * Create all the action buttons for the menu.
+     *
+     * @author Camille Gobert
+     */
+    private createActionsButtons () {
+        // Generically create, set up and append a button to the menu node
+        let addMenuButton = (id: string, content: string) => {
+            let buttonNode = $("<button>");
+            buttonNode.attr("id", id);
+            buttonNode.attr("type", "button");
+            buttonNode.html(content);
+
+            this.menuNode.append(buttonNode);
+        }
+
+        addMenuButton("layers_add_button", "+");
+        addMenuButton("layers_remove_button", "−");
+
+        addMenuButton("layers_move_up_button", "&uarr;");
+        addMenuButton("layers_move_down_button", "&darr;");
+    }
+
+
+    /**
      * Create the menu node, and all the controls it contains.
      *
      * @author Camille Gobert
@@ -188,41 +212,11 @@ export class LayerList extends HTMLRenderer {
         let menuNode = $("<div>");
         menuNode.attr("id", "layers_menu");
 
-        // Button to add a new layer
-        let addLayerButtonNode = $("<button>");
-        addLayerButtonNode.attr("id", "layers_add_button");
-        addLayerButtonNode.attr("type", "button");
-        addLayerButtonNode.html("+");
-
-        menuNode.append(addLayerButtonNode);
-
-        // Button to remove the selected layer
-        let removeLayerButtonNode = $("<button>");
-        removeLayerButtonNode.attr("id", "layers_remove_button");
-        removeLayerButtonNode.attr("type", "button");
-        removeLayerButtonNode.html("−");
-
-        menuNode.append(removeLayerButtonNode);
-
-        // Button to move up the selected layer
-        let moveLayerUpButtonNode = $("<button>");
-        moveLayerUpButtonNode.attr("id", "layers_move_up_button");
-        moveLayerUpButtonNode.attr("type", "button");
-        moveLayerUpButtonNode.html("&uarr;");
-
-        menuNode.append(moveLayerUpButtonNode);
-
-        // Button to move down the selected layer
-        let moveLayerDownButtonNode = $("<button>");
-        moveLayerDownButtonNode.attr("id", "layers_move_down_button");
-        moveLayerDownButtonNode.attr("type", "button");
-        moveLayerDownButtonNode.html("&darr;");
-
-        menuNode.append(moveLayerDownButtonNode);
-
         this.menuNode = menuNode;
         this.rootNode.append(menuNode);
 
+        // Create and append content to the menu
+        this.createActionsButtons();
         this.createBlendingModeMenuNode();
     }
 
