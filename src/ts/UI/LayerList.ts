@@ -1,7 +1,7 @@
 import * as $ from "jquery";
 import { HTMLRenderer } from "./HTMLRenderer";
 import { RubEns } from "../RubEns";
-import { Layer } from "../Image/Layer";
+import { Layer, BlendModes } from "../Image/Layer";
 import { LayerManager } from "../Image/LayerManager";
 
 
@@ -44,7 +44,8 @@ export class LayerList extends HTMLRenderer {
      */
     private layerChangeHandler = {
         eventTypes: ["rubens_addLayer", "rubens_deleteLayer", "rubens_selectLayer",
-                     "rubens_moveLayer", "rubens_mergeLayers"],
+                     "rubens_moveLayer", "rubens_mergeLayers", "rubens_renameLayer",
+                     "rubens_changeLayerBlendMode"],
         callback: (_) => {
             this.updateLayerListNode();
             this.updateBlendModesMenuNode();
@@ -69,13 +70,23 @@ export class LayerList extends HTMLRenderer {
     };
 
     /**
-     * Event handler for menu actions.
+     * Event handler for menu button clicks.
      */
-     private menuActionHandler = {
-        eventTypes: ["click", "change"],
-        selector: "#layers_menu",
-        callback: (event) => { this.onMenuAction(event); }
+     private menuButtonClickHandler = {
+        eventTypes: ["click"],
+        selector: "#layers_menu button",
+        callback: (event) => { this.onMenuButtonClick(event); }
     };
+
+    /**
+     * Event handler for blend mode menu changes.
+     */
+     private menuBlendModeChange = {
+        eventTypes: ["change"],
+        selector: "#layers_blend_modes_menu",
+        callback: (event) => { this.onMenuBlendModeChange(event); }
+    };
+
 
     /**
      * Instanciates and initializes a new, empty LayerList object.
@@ -145,7 +156,7 @@ export class LayerList extends HTMLRenderer {
 
 
     /**
-     * Create the blend mode menu node, and initally updates it.
+     * Create the blend mode menu node.
      *
      * @author Camille Gobert
      */
@@ -153,30 +164,29 @@ export class LayerList extends HTMLRenderer {
         let blendModesMenuNode = $("<select>");
         blendModesMenuNode.attr("id", "layers_blend_modes_menu");
 
-        // Set up the available blending modes
-        let availableBlendModes = [
-            "Normal",
-            "Add",
-            "Substract",
-            "(Dummy mode)"
-        ];
-
-        for (let blendingMode of availableBlendModes) {
+        for (let blendingMode in BlendModes) {
             blendModesMenuNode.append($("<option>" + blendingMode + "</option>"));
         }
 
         this.menuNode.append(blendModesMenuNode);
-        this.updateBlendModesMenuNode();
     }
 
 
     /**
      * Update the blending mode menu node by selecting the right field.
+     * If there is no document, nothing happens.
      *
      * @author Camille Gobert
      */
     private updateBlendModesMenuNode () {
-        // TODO
+        if (! this.app.document) {
+            return;
+        }
+
+        let selectedLayerBlendMode = this.layerManager.selectedLayer.blendMode;
+
+        $("#layers_blend_modes_menu > option").prop("selected", false);
+        $("#layers_blend_modes_menu > option:contains(" + selectedLayerBlendMode + ")").prop("selected", true);
     }
 
 
@@ -310,48 +320,63 @@ export class LayerList extends HTMLRenderer {
 
 
     /**
-     * Callback function called whenever an action occurs on the menu (see [[menuActionHandler]]).
+     * Callback function called whenever a menu button is clicked.
      * @param  {Event} event The event triggering the action.
      *
      * @author Camille Gobert
      */
-    private onMenuAction (event) {
-        let eventType   = event.type;
+    private onMenuButtonClick (event) {
         let eventTarget = $(event.target);
 
-        // Blending mode update
-        if (eventType === "change"
-        &&  eventTarget.closest("#layers_blend_modes_menu").length === 1) {
-            let newBlendingMode = eventTarget.val();
-
-            // TODO: change the blending mode of currently selected layer
-            console.log("Blending mode selected (val: " + newBlendingMode + ")");
-        }
-
         // Layer addition
-        else if (eventType === "click"
-             &&  eventTarget.closest("#layers_add_button").length === 1) {
+        if (eventTarget.closest("#layers_add_button").length === 1) {
             this.layerManager.createLayer();
         }
 
         // Layer removal
-        else if (eventType === "click"
-             &&  eventTarget.closest("#layers_remove_button").length === 1) {
+        else if (eventTarget.closest("#layers_remove_button").length === 1) {
             console.log("Attempt to del layer:" + this.layerManager.selectedLayer.id);
             this.layerManager.deleteSelectedLayer();
         }
 
         // Move layer up
-        else if (eventType === "click"
-             &&  eventTarget.closest("#layers_move_up_button").length === 1) {
+        else if (eventTarget.closest("#layers_move_up_button").length === 1) {
             this.layerManager.moveSelectedLayerUp();
         }
 
         // Move layer down
-        else if (eventType === "click"
-             &&  eventTarget.closest("#layers_move_down_button").length === 1) {
+        else if (eventTarget.closest("#layers_move_down_button").length === 1) {
             this.layerManager.moveSelectedLayerDown();
         }
+
+        // Merge layers
+        else if (eventTarget.closest("#layers_merge_button").length === 1) {
+            this.layerManager.mergeSelectedLayerWithBelowLayer();
+        }
+    }
+
+
+    /**
+     * Callback function called whenever the blending mode menu changes.
+     * @param  {Event} event The event triggering the action.
+     *
+     * @author Camille Gobert
+     */
+    private onMenuBlendModeChange (event) {
+        let eventTarget = $(event.target);
+        let selectedModeValue = eventTarget.val();
+
+        // This seems to be required in order to get the right type for newBlendMode
+        // Otherwise, TypeScript refuses the string obtained from the selected menu option
+        let newBlendMode = null;
+        for (let blendMode in BlendModes) {
+            if (blendMode == selectedModeValue) {
+                newBlendMode = blendMode;
+            }
+        }
+
+        this.layerManager.changeSelectedLayerBlendMode(newBlendMode);
+        console.log("Blend mode changed to " + newBlendMode);
     }
 
 
@@ -364,7 +389,8 @@ export class LayerList extends HTMLRenderer {
         this.app.eventManager.registerEventHandler(this.layerChangeHandler);
         this.app.eventManager.registerEventHandler(this.documentChangedHandler);
         this.app.eventManager.registerEventHandler(this.layerClickHandler);
-        this.app.eventManager.registerEventHandler(this.menuActionHandler);
+        this.app.eventManager.registerEventHandler(this.menuButtonClickHandler);
+        this.app.eventManager.registerEventHandler(this.menuBlendModeChange);
     }
 
 
@@ -377,6 +403,7 @@ export class LayerList extends HTMLRenderer {
         this.app.eventManager.unregisterEventHandler(this.layerChangeHandler);
         this.app.eventManager.unregisterEventHandler(this.documentChangedHandler);
         this.app.eventManager.unregisterEventHandler(this.layerClickHandler);
-        this.app.eventManager.unregisterEventHandler(this.menuActionHandler);
+        this.app.eventManager.unregisterEventHandler(this.menuButtonClickHandler);
+        this.app.eventManager.unregisterEventHandler(this.menuBlendModeChange);
     }
 }
