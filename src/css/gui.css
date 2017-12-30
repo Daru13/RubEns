@@ -630,16 +630,26 @@ canvas {
     overflow-y: auto;
 }
 
+#layer_list_empty_space {
+    flex-grow: 1;
+    background-color: #4C555C;
+}
+
 .layer {
     display: block;
     width: 100%;
     height: 35px;
     margin: 0;
-    padding: 0 5px;
     border-top: 2px solid #3B4148;
     line-height: 35px;
     overflow: hidden;
     text-shadow: 0 0 1px #2A2E33;
+}
+
+.layer:hover,
+.layer.hidden:hover {
+    background-color: #8898A3;
+    color: #F3F5F8;
 }
 
 .layer.selected,
@@ -647,51 +657,54 @@ canvas {
     background-color: #6481A1;
 }
 
-.layer:hover {
-    background-color: #8898A3;
-    color: #F3F5F8;
+.layer.hidden {
+    background-color: #5D6870;
+}
+
+.layer.hidden.selected,
+.layer.hidden.selected:hover {
+    background-color: #6481A1;
 }
 
 .layer_name {
     display: inline-block;
     height: 35px;
-    margin: 0 0 0 13px;
+    margin: 0;
     line-height: 33px;
-    vertical-align: middle;
-
+    vertical-align: top;
     transition: 250ms ease-in-out;
 }
 
-/* Temporary hack? */
-.layer_name:hover {
-    height: 30px;
-    margin: 1px 0 0 5px;
-    padding: 0 8px;
-    vertical-align: top;
-    box-shadow: 0 0 2px 0 #000000 inset;
-    border-radius: 3px;
+.layer.hidden .layer_name {
+    opacity: 0.7;
 }
 
 .layer_visibility_switch {
     display: inline-block;
     width: 35px;
-    height: 35px;
+    height: 33px;
+    margin: 0 5px;
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAABAElEQVQ4Ed3BT0oCcRzG4XehM8PYIuwIEXUEwX+LIjqI1D4QQvcRtRGUISiCgnYi4g1aKANCV9FxqcEnBvnyG2HwAD6PdIDwqHJHly63VClqHy54JyEr4Y1z5cHnhT/ybHjG0y5OiDFDagQE1BlhppTlcMQv5l4ZtDFzSjJ8Y4YSARErEgb4EmPMp7a4walJRJi+RAPnSilinEBihVlKhDgzpYhxAokEs5AIcWZKcY1TlxhgehJNnEtt8YUZSfj0WbKghycxwXzIUGKOaSuDB0xMKIcyU8yYBiEhTSaYH461C48nNuRZ80hReTjjlSVZCyJOtQ8FKrTo0KFFhYIO0D/p87cLNWMsSQAAAABJRU5ErkJggg==);
     background-repeat: no-repeat;
-    background-position: 5px 3px;
-    vertical-align: middle;
+    background-position: center 5px;
+    vertical-align: top;
+    opacity: 0.9;
 }
 
-.layer_visibility_switch.hidden {
+.layer:hover .layer_visibility_switch {
+    opacity: 1;
+}
+
+.layer.hidden .layer_visibility_switch {
     background-image:  url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAABNElEQVR4Ac3Rv0pCYRjH8Qc6x+M5EkV0C15DEikV5BB0FxLdgEvS0lJzNiT0B1qiIbHc6rgIkRA0dhvZVjh8g3z/PKaQNPX9DWf6oO/7yj+NDW6JkWk2/NwB94ZkWGGHPWpss0w4GcR0HLlA16dBfhwICakhATeMNuCA8CdYpAfAAzEhBSKyFGli6zKvwSwvAI6IWxVbj9iDK2wfhgScUidCaGE7s2ATX5nUkWuOEEr41obgGV9EzABIv0kDIcHXHYIevizCOxgyg5AbB2V8RYRjcGT0L63aQ19iayJE1OnzaUjoLvccsSCnzlHFvn6qCU/6WoUFHrG1KJGQsKV+ZZ85RAMhwyEDJtXRTyno5Tmhj+6NV0808AsoUGGXGhWWCEjoaCL8OkPaDkxF2qxPC9z+CL4AuA+wdf5eJfsAAAAASUVORK5CYII=);
-    opacity: 0.7;
+    opacity: 0.6;
 }
 
 .layer_name_input {
     display: inline-block;
-    height: 28px;
+    height: 27px;
     width: 180px;
-    margin: 2px 0 0 0;
+    margin: 3px 0 0 0;
     padding: 0 5px;
     background-color: #8898A3;
     border: 2px solid #3B4148;
@@ -704,4 +717,12 @@ canvas {
 
 .layer_name_input::selection {
     background-color: #3B4148;
+    text-shadow: none;
+}
+
+/* It is required to make one rule per selector, otherwise Firefox ignores
+   the rule, since it does not recognize unprefixed ::selection pseudo-selector */
+.layer_name_input::-moz-selection {
+    background-color: #3B4148;
+    text-shadow: none;
 }

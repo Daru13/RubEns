@@ -268,8 +268,9 @@ export class LayerList extends HTMLRenderer {
         layerListNode.attr("id", "layer_list");
 
         // Add an empty element before the layer list, in order to stick the list to the bottom
-        // This little hack is kinda required before of some flexbox issues with overflow-y (for scrolling)
-        this.rootNode.append($("<div>").css("flex-grow", 1));
+        // This little hack seems required because of some flexbox issues with overflow-y (for scrolling)
+        this.rootNode.append($("<div>")
+                     .attr("id", "layer_list_empty_space"));
 
         this.rootNode.append(layerListNode);
         this.layerListNode = layerListNode;
@@ -322,10 +323,6 @@ export class LayerList extends HTMLRenderer {
         let visibilitySwitchNode = $("<div>");
         visibilitySwitchNode.addClass("layer_visibility_switch");
 
-        if (layer.hidden) {
-            visibilitySwitchNode.addClass("hidden");
-        }
-
         layerNode.append(visibilitySwitchNode);
 
         // Append the name of the layer
@@ -338,6 +335,11 @@ export class LayerList extends HTMLRenderer {
         // If required, mark the layer as selected
         if (layer === this.layerManager.selectedLayer) {
             layerNode.addClass("selected");
+        }
+
+        // If required, mark the layer as hidden
+        if (layer.hidden) {
+            layerNode.addClass("hidden");
         }
 
         return layerNode;
@@ -406,7 +408,7 @@ export class LayerList extends HTMLRenderer {
         eventTarget.replaceWith(nameInputNode);
         this.layerNameInputIsVisible = true;
 
-        // Immediately give the input focus, and select the text it contains
+        // Immediately give the input focus, and select the text it containsI
         nameInputNode.focus()
                      .select();
     }
