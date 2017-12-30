@@ -1,6 +1,6 @@
-import { Layer } from "./Layer";
+import { Layer, BlendModes } from "./Layer";
 import { EventManager } from "../EventManager";
-import {Canvas} from "./Canvas";
+import { Canvas } from "./Canvas";
 
 /**
  * Canvas composed by multiple layers.
@@ -270,6 +270,64 @@ export class LayerManager {
         let bottomLayerIndex = topLayerIndex + 1;
 
         this.mergeLayersWithIndices(topLayerIndex, bottomLayerIndex);
+    }
+
+
+    /**
+     * Rename a layer.
+     * If there is no layer with the given id, nothing happens.
+     *
+     * @param {number} id   The id of the layer.
+     * @param {string} name The new name of the layer.
+     *
+     * @author Camille Gobert
+     */
+    renameLayer (id: number, name: string) {
+        let index = this.getLayerIndexFromId(id);
+        this.layers[index].name = name;
+
+        EventManager.spawnEvent("rubens_renameLayer");
+    }
+
+
+    /**
+     * Rename the currently selected layer.
+     * See [[renameLayer]] for details.
+     * @param {string} name The new name of the layer.
+     *
+     * @author Camille Gobert
+     */
+    renameSelectedLayer (name: string) {
+        this.renameLayer(this.selectedLayer.id, name);
+    }
+
+
+    /**
+     * Update the blend mode of a layer.
+     * If there is no layer with the given id, nothing happens.
+     *
+     * @param {number}     id   The id of the layer.
+     * @param {BlendModes} mode The new blend mode of the layer.
+     *
+     * @author Camille Gobert
+     */
+    changeLayerBlendMode (id: number, mode: BlendModes) {
+        let index = this.getLayerIndexFromId(id);
+        this.layers[index].blendMode = mode;
+
+        EventManager.spawnEvent("rubens_changeLayerBlendMode");
+    }
+
+
+    /**
+     * Update the blend mode of the currently selected layer.
+     * See [[renameLayer]] for details.
+     * @param {BlendModes} mode The new blend mode of the layer.
+     *
+     * @author Camille Gobert
+     */
+    changeSelectedLayerBlendMode (mode: BlendModes) {
+        this.changeLayerBlendMode(this.selectedLayer.id, mode);
     }
 
 
