@@ -45,7 +45,7 @@ export class LayerList extends HTMLRenderer {
     private layerChangeHandler = {
         eventTypes: ["rubens_addLayer", "rubens_deleteLayer", "rubens_selectLayer",
                      "rubens_moveLayer", "rubens_mergeLayers", "rubens_renameLayer",
-                     "rubens_changeLayerBlendMode"],
+                     "rubens_changeLayerBlendMode", "rubens_changeLayerVisibility"],
         callback: (_) => {
             this.updateLayerListNode();
             this.updateBlendModesMenuNode();
@@ -288,11 +288,21 @@ export class LayerList extends HTMLRenderer {
      */
     private getLayerAsListElement (layer: Layer) {
         let layerNode = $("<li>");
-        layerNode.html(layer.name);
+        layerNode.append($("<p>" + layer.name + "</p>"));
         layerNode.addClass("layer");
 
         // Layer identifier (in order to retrieve the right layer from the UI)
         layerNode.attr("data-layer-id", layer.id);
+
+        // Prepend a visibility switch control
+        let visibilitySwitchNode = $("<div>");
+        visibilitySwitchNode.addClass("layer_visibility_switch");
+
+        if (layer.hidden) {
+            visibilitySwitchNode.addClass("hidden");
+        }
+
+        layerNode.prepend(visibilitySwitchNode);
 
         // If required, mark the layer as selected
         if (layer === this.layerManager.selectedLayer) {
@@ -310,12 +320,19 @@ export class LayerList extends HTMLRenderer {
      * @author Camille Gobert
      */
     private onLayerClick (event: Event) {
-        // Retrieve the layer identifier
-        let layerId = $(event.target).closest(".layer")
-                                     .attr("data-layer-id");
+        let eventTarget = $(event.target);
 
-        this.layerManager.selectLayer(parseInt(layerId));
-        console.log("Layer clicked (id:" + layerId + ")");
+        // Retrieve the layer identifier
+        let layerId = parseInt(eventTarget.closest(".layer")
+                                          .attr("data-layer-id"));
+
+        // Either select a new layer, or swicth the visibility of a layer
+        if (eventTarget.closest(".layer_visibility_switch").length > 0) {
+            this.layerManager.switchLayerVisibility(layerId);
+        }
+        else {
+            this.layerManager.selectLayer(layerId);
+        }
     }
 
 

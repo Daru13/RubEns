@@ -343,6 +343,22 @@ export class LayerManager {
 
 
     /**
+     * Switch the visibility of a layer, i.e. its `hidden` state.
+     * If there is no layer with the given id, nothing happens.
+     *
+     * @param {number} id   The id of the layer.
+     *
+     * @author Camille Gobert
+     */
+    switchLayerVisibility (id: number) {
+        let index = this.getLayerIndexFromId(id);
+        this.layers[index].hidden = ! this.layers[index].hidden;
+
+        EventManager.spawnEvent("rubens_changeLayerVisibility");
+    }
+
+
+    /**
      * Draw all the layers on the given canvas.
      *
      * @param {Canvas} canvas The canvas where the layers should be drawn.

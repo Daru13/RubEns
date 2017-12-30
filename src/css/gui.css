@@ -637,8 +637,7 @@ canvas {
     margin: 0;
     padding: 0 10px;
     border-top: 2px solid #3B4148;
-    line-height: 28px;
-    vertical-align: middle;
+    line-height: 35px;
     overflow: hidden;
     text-shadow: 0 0 1px #2A2E33;
 }
@@ -651,4 +650,23 @@ canvas {
 .layer:hover {
     background-color: #8898A3;
     color: #F3F5F8;
+}
+
+.layer > p {
+    display: inline-block;
+    height: 35px;
+    margin: 0 0 0 10px;
+    vertical-align: middle;
+}
+
+.layer_visibility_switch {
+    display: inline-block;
+    width: 35px;
+    height: 35px;
+    background-color: red;
+    vertical-align: middle;
+}
+
+.layer_visibility_switch.hidden {
+    background-color: grey;
 }
