@@ -43,7 +43,8 @@ export class LayerList extends HTMLRenderer {
      * Event handler for history changes (undo, redo, new step saved).
      */
     private layerChangeHandler = {
-        eventTypes: ["rubens_addLayer", "rubens_deleteLayer", "rubens_selectLayer", "rubens_moveLayer"],
+        eventTypes: ["rubens_addLayer", "rubens_deleteLayer", "rubens_selectLayer",
+                     "rubens_moveLayer", "rubens_mergeLayers"],
         callback: (_) => {
             this.updateLayerListNode();
             this.updateBlendingModesMenuNode();
@@ -200,6 +201,8 @@ export class LayerList extends HTMLRenderer {
 
         addMenuButton("layers_move_up_button", "&uarr;");
         addMenuButton("layers_move_down_button", "&darr;");
+
+        addMenuButton("layers_merge_button", "&DownArrowBar;");
     }
 
 
