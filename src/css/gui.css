@@ -635,7 +635,7 @@ canvas {
     width: 100%;
     height: 35px;
     margin: 0;
-    padding: 0 10px;
+    padding: 0 5px;
     border-top: 2px solid #3B4148;
     line-height: 35px;
     overflow: hidden;
@@ -655,7 +655,8 @@ canvas {
 .layer > p {
     display: inline-block;
     height: 35px;
-    margin: 0 0 0 10px;
+    margin: 0 0 0 5px;
+    line-height: 33px;
     vertical-align: middle;
 }
 
@@ -663,10 +664,13 @@ canvas {
     display: inline-block;
     width: 35px;
     height: 35px;
-    background-color: red;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAABAElEQVQ4Ed3BT0oCcRzG4XehM8PYIuwIEXUEwX+LIjqI1D4QQvcRtRGUISiCgnYi4g1aKANCV9FxqcEnBvnyG2HwAD6PdIDwqHJHly63VClqHy54JyEr4Y1z5cHnhT/ybHjG0y5OiDFDagQE1BlhppTlcMQv5l4ZtDFzSjJ8Y4YSARErEgb4EmPMp7a4walJRJi+RAPnSilinEBihVlKhDgzpYhxAokEs5AIcWZKcY1TlxhgehJNnEtt8YUZSfj0WbKghycxwXzIUGKOaSuDB0xMKIcyU8yYBiEhTSaYH461C48nNuRZ80hReTjjlSVZCyJOtQ8FKrTo0KFFhYIO0D/p87cLNWMsSQAAAABJRU5ErkJggg==);
+    background-repeat: no-repeat;
+    background-position: 5px 3px;
     vertical-align: middle;
 }
 
 .layer_visibility_switch.hidden {
-    background-color: grey;
+    background-image:  url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAABNElEQVR4Ac3Rv0pCYRjH8Qc6x+M5EkV0C15DEikV5BB0FxLdgEvS0lJzNiT0B1qiIbHc6rgIkRA0dhvZVjh8g3z/PKaQNPX9DWf6oO/7yj+NDW6JkWk2/NwB94ZkWGGHPWpss0w4GcR0HLlA16dBfhwICakhATeMNuCA8CdYpAfAAzEhBSKyFGli6zKvwSwvAI6IWxVbj9iDK2wfhgScUidCaGE7s2ATX5nUkWuOEEr41obgGV9EzABIv0kDIcHXHYIevizCOxgyg5AbB2V8RYRjcGT0L63aQ19iayJE1OnzaUjoLvccsSCnzlHFvn6qCU/6WoUFHrG1KJGQsKV+ZZ85RAMhwyEDJtXRTyno5Tmhj+6NV0808AsoUGGXGhWWCEjoaCL8OkPaDkxF2qxPC9z+CL4AuA+wdf5eJfsAAAAASUVORK5CYII=);
+    opacity: 0.7;
 }
