@@ -233,6 +233,56 @@ export class LayerManager {
 
 
     /**
+     * Merge two layers, according to the top layer blending mode.
+     * If one of the given indices does not index any layer, nothing happens.
+     *
+     * @param  {number} topLayerIndex    Index of the top layer.
+     * @param  {number} bottomLayerIndex Index of the bottom layer.
+     *
+     * @author Camille Gobert
+     */
+    private mergeLayersWithIndices (topLayerIndex: number, bottomLayerIndex: number) {
+        let topLayer    = this.layers[topLayerIndex];
+        let bottomLayer = this.layers[bottomLayerIndex];
+
+        if ((! topLayer) || (! bottomLayer)) {
+            return;
+        }
+
+        // TODO: actually implement layer merging
+
+        EventManager.spawnEvent("rubens_mergeLayers");
+    }
+
+
+    /**
+     * Merge one layer with the one below.
+     * If there is no layer with the given id, or no layer below, nothing happens.
+     *
+     * @param  {number} id The id of the top layer.
+     *
+     * @author Camille Gobert
+     */
+    private mergeLayerWithBelowLayer (id: number) {
+        let topLayerIndex    = this.getLayerIndexFromId(id);
+        let bottomLayerIndex = topLayerIndex + 1;
+
+        this.mergeLayersWithIndices(topLayerIndex, bottomLayerIndex);
+    }
+
+
+    /**
+     * Merge the currently selected layer with the one below.
+     * If there is no selected layer, or no layer below, nothing happens.
+     *
+     * @author Camille Gobert
+     */
+    mergeSelectedLayerWithBelowLayer () {
+        this.mergeLayerWithBelowLayer(this.selectedLayer.id);
+    }
+
+
+    /**
      * Draw all the layers on the given canvas.
      *
      * @param {Canvas} canvas The canvas where the layers should be drawn.
