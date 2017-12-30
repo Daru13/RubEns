@@ -6,10 +6,10 @@ import { LayerManager } from "../Image/LayerManager";
 
 
 /**
- * UI element representing a History instance, as a list of history steps.
+ * UI element representing a list of layers, with controls to modify it.
  *
- * It allows to navigate back and forth through the related history,
- * by displaying all the saved steps in a chronological order.
+ * It allows to add and remove layers, move them around, merge them, rename them,
+ * hide/display them, and to change each layer blend mode.
  */
 export class LayerList extends HTMLRenderer {
     protected rootNodeId = "layers";
