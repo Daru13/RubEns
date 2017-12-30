@@ -655,9 +655,21 @@ canvas {
 .layer_name {
     display: inline-block;
     height: 35px;
-    margin: 0 0 0 5px;
+    margin: 0 0 0 13px;
     line-height: 33px;
     vertical-align: middle;
+
+    transition: 250ms ease-in-out;
+}
+
+/* Temporary hack? */
+.layer_name:hover {
+    height: 30px;
+    margin: 1px 0 0 5px;
+    padding: 0 8px;
+    vertical-align: top;
+    box-shadow: 0 0 2px 0 #000000 inset;
+    border-radius: 3px;
 }
 
 .layer_visibility_switch {
@@ -679,11 +691,17 @@ canvas {
     display: inline-block;
     height: 28px;
     width: 180px;
+    margin: 2px 0 0 0;
+    padding: 0 5px;
     background-color: #8898A3;
     border: 2px solid #3B4148;
     border-radius: 4px;
     font-weight: bold;
     color: #F3F5F8;
-    vertical-align: middle;
+    vertical-align: top;
     text-shadow: 0 0 2px #2A2E33;
+}
+
+.layer_name_input::selection {
+    background-color: #3B4148;
 }
