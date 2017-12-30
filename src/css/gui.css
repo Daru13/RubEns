@@ -588,16 +588,18 @@ canvas {
 }
 
 #layers button {
-    margin: 0;
+    width: 25px;
+    height: 32px;
     margin: 5px;
-    padding: 5px;
+    padding: 2px;
     background-color: #8898A3;
     border: 2px solid #3B4148;
     box-shadow: 0 -2px 0 0 #3B4148 inset;
     border-radius: 4px;
-    font-size: 1.15rem;
+    font-size: 1.25rem;
     font-weight: bold;
     color: #F3F5F8;
+    vertical-align: middle;
     text-shadow: 0 0 2px #1D2024;
     animation: 250ms ease-in;
 }
