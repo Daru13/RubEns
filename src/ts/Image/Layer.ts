@@ -3,15 +3,20 @@ import { EventManager } from "../EventManager";
 
 
 /**
- * The different fusion mode for layers.
+ * All the available blend modes for layers.
  */
-enum FusionMode {
-    Blend,       /** Add the canvas on the other one */
+export enum BlendModes {
+    Normal    = "Normal",
+    Add       = "Add",
+    Substract = "Substract",
+    Multiply  = "Multiply"
+
+    // TODO: add more
 }
 
 
 /**
- * Represent a layer for an image.
+ * Represent a layer in an document.
  * Internally, it is represented by a canvas, not visible by the user.
  */
 export class Layer {
@@ -22,9 +27,9 @@ export class Layer {
     canvas: Canvas;
 
     /**
-     * The fusion mode used by the later.
+     * The blend mode used by the layer.
      */
-    fusionMode: FusionMode = FusionMode.Blend;
+    blendMode: BlendModes;
 
     /**
      * The name of the layer.
@@ -32,14 +37,14 @@ export class Layer {
     name: string;
 
     /**
-     * The id of the layer
+     * The id of the layer.
      */
     readonly id: number;
 
     /**
-     * Boolean indicating if the layer needs to be displayed or not.
+     * Flag indicating whether the layer must be hidden or not.
      */
-    isActive: boolean = true;
+    hidden: boolean;
 
 
     /**
@@ -55,8 +60,11 @@ export class Layer {
      */
     constructor(width: number, height: number, eventManager: EventManager, name: string, id: number) {
         this.canvas = new Canvas(width,height, eventManager);
-        this.name = name;
-        this.id = id;
+        this.name   = name;
+        this.id     = id;
+
+        this.blendMode = BlendModes.Normal;
+        this.hidden    = false;
     }
 
 
@@ -69,13 +77,15 @@ export class Layer {
      */
     drawOnCanvas(canvas: Canvas) {
         // We first check if we need to draw the layer
-        if(!this.isActive) {
+        if (this.hidden) {
             return;
         }
 
-        // In this function, we will check the fusion mode
-        switch(this.fusionMode) {
-            case FusionMode.Blend:
+        // In this function, we will check the blend mode
+        switch (this.blendMode) {
+            default: // TODO: implement other blend modes
+
+            case BlendModes.Normal:
                 canvas.drawCanvas(this.canvas);
                 break;
         }

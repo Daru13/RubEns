@@ -235,7 +235,7 @@ export class LayerManager {
 
 
     /**
-     * Merge two layers, according to the top layer blending mode.
+     * Merge two layers, according to the top layer blend mode.
      * If one of the given indices does not index any layer, nothing happens.
      *
      * @param  {number} topLayerIndex    Index of the top layer.

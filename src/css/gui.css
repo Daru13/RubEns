@@ -614,7 +614,7 @@ canvas {
     box-shadow: none;
 }
 
-#layers_blending_modes_menu {
+#layers_blend_modes_menu {
     float: right;
     height: 35px;
     margin: 7px 0 0 0;

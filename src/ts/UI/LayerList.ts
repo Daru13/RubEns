@@ -47,7 +47,7 @@ export class LayerList extends HTMLRenderer {
                      "rubens_moveLayer", "rubens_mergeLayers"],
         callback: (_) => {
             this.updateLayerListNode();
-            this.updateBlendingModesMenuNode();
+            this.updateBlendModesMenuNode();
         }
     };
 
@@ -126,7 +126,7 @@ export class LayerList extends HTMLRenderer {
         }
 
         this.updateLayerListNode();
-        this.updateBlendingModesMenuNode();
+        this.updateBlendModesMenuNode();
     }
 
 
@@ -145,28 +145,28 @@ export class LayerList extends HTMLRenderer {
 
 
     /**
-     * Create the blending mode menu node, and initally updates it.
+     * Create the blend mode menu node, and initally updates it.
      *
      * @author Camille Gobert
      */
-    private createBlendingModeMenuNode () {
-        let blendingModesMenuNode = $("<select>");
-        blendingModesMenuNode.attr("id", "layers_blending_modes_menu");
+    private createBlendModeMenuNode () {
+        let blendModesMenuNode = $("<select>");
+        blendModesMenuNode.attr("id", "layers_blend_modes_menu");
 
         // Set up the available blending modes
-        let availableBlendingModes = [
+        let availableBlendModes = [
             "Normal",
             "Add",
             "Substract",
             "(Dummy mode)"
         ];
 
-        for (let blendingMode of availableBlendingModes) {
-            blendingModesMenuNode.append($("<option>" + blendingMode + "</option>"));
+        for (let blendingMode of availableBlendModes) {
+            blendModesMenuNode.append($("<option>" + blendingMode + "</option>"));
         }
 
-        this.menuNode.append(blendingModesMenuNode);
-        this.updateBlendingModesMenuNode();
+        this.menuNode.append(blendModesMenuNode);
+        this.updateBlendModesMenuNode();
     }
 
 
@@ -175,7 +175,7 @@ export class LayerList extends HTMLRenderer {
      *
      * @author Camille Gobert
      */
-    private updateBlendingModesMenuNode () {
+    private updateBlendModesMenuNode () {
         // TODO
     }
 
@@ -220,7 +220,7 @@ export class LayerList extends HTMLRenderer {
 
         // Create and append content to the menu
         this.createActionsButtons();
-        this.createBlendingModeMenuNode();
+        this.createBlendModeMenuNode();
     }
 
 
@@ -321,7 +321,7 @@ export class LayerList extends HTMLRenderer {
 
         // Blending mode update
         if (eventType === "change"
-        &&  eventTarget.closest("#layers_blending_modes_menu").length === 1) {
+        &&  eventTarget.closest("#layers_blend_modes_menu").length === 1) {
             let newBlendingMode = eventTarget.val();
 
             // TODO: change the blending mode of currently selected layer
