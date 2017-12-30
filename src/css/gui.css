@@ -652,7 +652,7 @@ canvas {
     color: #F3F5F8;
 }
 
-.layer > p {
+.layer_name {
     display: inline-block;
     height: 35px;
     margin: 0 0 0 5px;
@@ -673,4 +673,17 @@ canvas {
 .layer_visibility_switch.hidden {
     background-image:  url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAABNElEQVR4Ac3Rv0pCYRjH8Qc6x+M5EkV0C15DEikV5BB0FxLdgEvS0lJzNiT0B1qiIbHc6rgIkRA0dhvZVjh8g3z/PKaQNPX9DWf6oO/7yj+NDW6JkWk2/NwB94ZkWGGHPWpss0w4GcR0HLlA16dBfhwICakhATeMNuCA8CdYpAfAAzEhBSKyFGli6zKvwSwvAI6IWxVbj9iDK2wfhgScUidCaGE7s2ATX5nUkWuOEEr41obgGV9EzABIv0kDIcHXHYIevizCOxgyg5AbB2V8RYRjcGT0L63aQ19iayJE1OnzaUjoLvccsSCnzlHFvn6qCU/6WoUFHrG1KJGQsKV+ZZ85RAMhwyEDJtXRTyno5Tmhj+6NV0808AsoUGGXGhWWCEjoaCL8OkPaDkxF2qxPC9z+CL4AuA+wdf5eJfsAAAAASUVORK5CYII=);
     opacity: 0.7;
+}
+
+.layer_name_input {
+    display: inline-block;
+    height: 28px;
+    width: 180px;
+    background-color: #8898A3;
+    border: 2px solid #3B4148;
+    border-radius: 4px;
+    font-weight: bold;
+    color: #F3F5F8;
+    vertical-align: middle;
+    text-shadow: 0 0 2px #2A2E33;
 }

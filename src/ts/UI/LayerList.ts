@@ -39,6 +39,18 @@ export class LayerList extends HTMLRenderer {
      */
     private menuNode: JQuery;
 
+
+    /**
+     * Flag indicating whether a layer name input is displayed or not.
+     */
+    private layerNameInputIsVisible: boolean;
+
+    /**
+     * Flag indicating whether a click on a layer name has just been recorded.
+     * This is used to *hack* the click + dblclick binding of a single element (see [[onLayerClick]]).
+     */
+    private clickOnLayerNameRecentlyRecorded: boolean;
+
     /**
      * Event handler for history changes (undo, redo, new step saved).
      */
@@ -67,6 +79,15 @@ export class LayerList extends HTMLRenderer {
         eventTypes: ["click"],
         selector: ".layer",
         callback: (event) => { this.onLayerClick(event); }
+    };
+
+    /**
+     * Event handler for layer name input changes.
+     */
+     private layerNameInputChangeHandler = {
+        eventTypes: ["change", "focusout"],
+        selector: ".layer_name_input",
+        callback: (event) => { this.onLayerNameInputChange(event); }
     };
 
     /**
@@ -103,6 +124,9 @@ export class LayerList extends HTMLRenderer {
 
         this.app          = app;
         this.layerManager = null;
+
+        this.layerNameInputIsVisible          = false;
+        this.clickOnLayerNameRecentlyRecorded = false;
 
         this.registerEventHandlers();
         this.updateRootNode();
@@ -260,6 +284,7 @@ export class LayerList extends HTMLRenderer {
      */
     private updateLayerListNode () {
         this.layerListNode.empty();
+        this.layerNameInputIsVisible = false;
 
         if (! this.app.document) {
             return;
@@ -288,13 +313,12 @@ export class LayerList extends HTMLRenderer {
      */
     private getLayerAsListElement (layer: Layer) {
         let layerNode = $("<li>");
-        layerNode.append($("<p>" + layer.name + "</p>"));
         layerNode.addClass("layer");
 
         // Layer identifier (in order to retrieve the right layer from the UI)
         layerNode.attr("data-layer-id", layer.id);
 
-        // Prepend a visibility switch control
+        // Append a visibility switch control
         let visibilitySwitchNode = $("<div>");
         visibilitySwitchNode.addClass("layer_visibility_switch");
 
@@ -302,7 +326,14 @@ export class LayerList extends HTMLRenderer {
             visibilitySwitchNode.addClass("hidden");
         }
 
-        layerNode.prepend(visibilitySwitchNode);
+        layerNode.append(visibilitySwitchNode);
+
+        // Append the name of the layer
+        let layerNameNode = $("<p>");
+        layerNameNode.addClass("layer_name");
+        layerNameNode.html(layer.name);
+
+        layerNode.append(layerNameNode);
 
         // If required, mark the layer as selected
         if (layer === this.layerManager.selectedLayer) {
@@ -326,13 +357,71 @@ export class LayerList extends HTMLRenderer {
         let layerId = parseInt(eventTarget.closest(".layer")
                                           .attr("data-layer-id"));
 
-        // Either select a new layer, or swicth the visibility of a layer
+        // If a layer name input is displayed, there is nothing else do do here for now
+        if (this.layerNameInputIsVisible) {
+            return;
+        }
+
+        // Handle a potential double-click on the layer name
+        if (eventTarget.closest(".layer_name").length > 0) {
+            if (this.clickOnLayerNameRecentlyRecorded) {
+                this.clickOnLayerNameRecentlyRecorded = false;
+                this.onLayerNameDoubleClick(event);
+
+                return;
+            }
+            else {
+                this.clickOnLayerNameRecentlyRecorded = true;
+                setTimeout(() => {
+                    this.clickOnLayerNameRecentlyRecorded = false;
+                }, 650);
+            }
+        }
+
+
         if (eventTarget.closest(".layer_visibility_switch").length > 0) {
             this.layerManager.switchLayerVisibility(layerId);
         }
         else {
             this.layerManager.selectLayer(layerId);
         }
+    }
+
+
+    /**
+     * Callback function called whenever a layer name is double clicked.
+     * @param  {Event}  event The event triggering the action.
+     *
+     * @author Camille Gobert
+     */
+    private onLayerNameDoubleClick (event: Event) {
+        let eventTarget = $(event.target);
+
+        // Replace the name by an input element, where it can be edited
+        let nameInputNode = $("<input>");
+        nameInputNode.attr("type", "text");
+        nameInputNode.addClass("layer_name_input");
+        nameInputNode.val(eventTarget.text());
+
+        eventTarget.replaceWith(nameInputNode);
+        this.layerNameInputIsVisible = true;
+
+        // Immediately give the input focus, and select the text it contains
+        nameInputNode.focus()
+                     .select();
+    }
+
+
+    private onLayerNameInputChange (event: Event) {
+        let eventTarget = $(event.target);
+
+        // Retrieve the layer identifier
+        let layerId = parseInt(eventTarget.closest(".layer")
+                                          .attr("data-layer-id"));
+
+        // Rename the layer
+        let newName = <string> eventTarget.val();
+        this.layerManager.renameLayer(layerId, newName);
     }
 
 
@@ -406,6 +495,7 @@ export class LayerList extends HTMLRenderer {
         this.app.eventManager.registerEventHandler(this.layerChangeHandler);
         this.app.eventManager.registerEventHandler(this.documentChangedHandler);
         this.app.eventManager.registerEventHandler(this.layerClickHandler);
+        this.app.eventManager.registerEventHandler(this.layerNameInputChangeHandler);
         this.app.eventManager.registerEventHandler(this.menuButtonClickHandler);
         this.app.eventManager.registerEventHandler(this.menuBlendModeChange);
     }
@@ -420,6 +510,7 @@ export class LayerList extends HTMLRenderer {
         this.app.eventManager.unregisterEventHandler(this.layerChangeHandler);
         this.app.eventManager.unregisterEventHandler(this.documentChangedHandler);
         this.app.eventManager.unregisterEventHandler(this.layerClickHandler);
+        this.app.eventManager.unregisterEventHandler(this.layerNameInputChangeHandler);
         this.app.eventManager.unregisterEventHandler(this.menuButtonClickHandler);
         this.app.eventManager.unregisterEventHandler(this.menuBlendModeChange);
     }

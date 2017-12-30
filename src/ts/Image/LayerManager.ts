@@ -284,9 +284,11 @@ export class LayerManager {
      */
     renameLayer (id: number, name: string) {
         let index = this.getLayerIndexFromId(id);
-        this.layers[index].name = name;
 
-        EventManager.spawnEvent("rubens_renameLayer");
+        if (index !== -1) {
+            this.layers[index].name = name;
+            EventManager.spawnEvent("rubens_renameLayer");
+        }
     }
 
 
@@ -313,9 +315,11 @@ export class LayerManager {
      */
     changeLayerBlendMode (id: number, mode: BlendModes) {
         let index = this.getLayerIndexFromId(id);
-        this.layers[index].blendMode = mode;
 
-        EventManager.spawnEvent("rubens_changeLayerBlendMode");
+        if (index !== -1) {
+            this.layers[index].blendMode = mode;
+            EventManager.spawnEvent("rubens_changeLayerBlendMode");
+        }
     }
 
 
