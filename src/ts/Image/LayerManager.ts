@@ -81,6 +81,21 @@ export class LayerManager {
 
 
     /**
+     * Returns the index of the currently selected layer, or -1 if it does not exist.
+     * @return {number}    The index of the currently selected layer, or -1.
+     *
+     * @author Camille Gobert
+     */
+    private getSelectedLayerIndex () {
+        if (! this.selectedLayer) {
+            return -1;
+        }
+
+        return this.getLayerIndexFromId(this.selectedLayer.id);
+    }
+
+
+    /**
      * Delete a layer, given its id.
      *
      * @param {number} id   The id of the layer to delete
@@ -114,26 +129,33 @@ export class LayerManager {
 
 
     /**
-     * Create a new layer at the top of the layer list
+     * Create a new layer  and insert it above the currently selected layer.
+     * If there is no layer yet, the new layer is simply appended to the list of layers.
      *
-     * @param {string} name The name of the new layer
+     * @param {string} name The name of the new layer (optionnal).
      *
-     * @author Mathieu Fehr
+     * @author Mathieu Fehr, Camille Gobert
      */
-    createLayer(name = "New Layer") {
+    createLayer (name?: string) {
         this.lastId += 1;
-        name += "(" + this.lastId + ")";
 
-        if(this.selectedLayer == null) {
-            this.selectedLayer = new Layer(this.width, this.height, this.eventManager, name, this.lastId);
-            this.layers.push(this.selectedLayer);
-        } else {
-            let position = this.layers.findIndex((value: Layer) => {
-                return this.selectedLayer === value;
-            });
-            this.selectedLayer = new Layer(this.width, this.height, this.eventManager, name, this.lastId);
-            this.layers.splice(position, 0, this.selectedLayer);
+        // If no name was specified, make a default name
+        if (! name) {
+            name = "Layer " + this.lastId ;
         }
+
+        let newLayer = new Layer(this.width, this.height, this.eventManager, name, this.lastId);
+
+        // Insert the new layer at the right position
+        if (! this.selectedLayer) {
+            this.layers.push(newLayer);
+        }
+        else {
+            let selectedLayerIndex = this.getSelectedLayerIndex();
+            this.layers.splice(selectedLayerIndex, 0, this.selectedLayer);
+        }
+
+        this.selectedLayer = newLayer;
 
         EventManager.spawnEvent("rubens_addLayer");
     }
@@ -199,16 +221,12 @@ export class LayerManager {
      *
      * @param {number} id   The id of the layer.
      *
-     * @author Mathieu Fehr
+     * @author Mathieu Fehr, Camille Gobert
      */
-    selectLayer(id: number) {
-        let index = this.layers.findIndex((layer: Layer) => {
-            return id === layer.id;
-        });
-
-        if(index !== -1) {
+    selectLayer (id: number) {
+        let index = this.getLayerIndexFromId(id);
+        if (index !== -1) {
             this.selectedLayer = this.layers[index];
-
             EventManager.spawnEvent("rubens_selectLayer");
         }
     }
@@ -221,8 +239,8 @@ export class LayerManager {
      *
      * @author Mathieu Fehr
      */
-    drawOn(canvas: Canvas) {
-        for(let i = this.layers.length-1; i>=0; i--) {
+    drawOn (canvas: Canvas) {
+        for (let i = this.layers.length - 1; i >= 0; i--) {
             this.layers[i].drawOnCanvas(canvas);
         }
     }
