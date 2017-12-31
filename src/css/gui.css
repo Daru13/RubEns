@@ -96,7 +96,7 @@
 #tool_menu {
     position: absolute;
     left: 0;
-    top: 50%;
+    top: calc(50% - 155px);
     background-color: #5D6870;
     border: 2px solid #2A2E33;
     border-left: none;
@@ -211,12 +211,6 @@ canvas {
     color: #F3F5F8;
     text-shadow: 0 0 2px #1D2024;
     animation: 250ms ease-in;
-}
-
-#tool_selection_menu .tool_button.selected:hover {
-    color: #B8BABC;
-    background-color: #5D6870;
-    box-shadow: none;
 }
 
 #document_actions_menu .document_action_button:hover {
@@ -734,9 +728,8 @@ canvas {
 
 #tool_menu > h3 {
     display: block;
-    width: 100%;
     margin: 0;
-    padding: 5px 0;
+    padding: 5px;
     background-color: #2A2E33;
     font-size: 1.15rem;
     font-weight: 700;
@@ -747,7 +740,7 @@ canvas {
 
 #tool_selection_menu {
     display: inline-block;
-    margin: 0;
+    margin: 5px 0 5px 5px;
     padding: 0;
 }
 
@@ -758,35 +751,63 @@ canvas {
     list-style: none;
 }
 
-#tool_selection_menu .tool_button {
+.tool_button {
+    width: 32px;
+    height: 32px;
     margin: 0;
-    padding: 8px 8px 10px 8px;
-    background-color: #8898A3;
-    border: 2px solid #3B4148;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    border: none;
     border-radius: 4px;
-    box-shadow: 0 -2px 0 0 #3B4148 inset;
-    font-weight: bold;
-    color: #F3F5F8;
-    text-shadow: 0 0 2px #1D2024;
     animation: 250ms ease-in;
 }
 
-#tool_selection_menu .tool_button.selected {
-    color: #B8BABC;
-    background-color: #5D6870;
-    box-shadow: none;
-}
-
-#tool_selection_menu .tool_button:hover {
-    padding: 8px;
+.tool_button:hover {
     background-color: #6E7B85;
-    box-shadow: none;
 }
 
-#tool_selection_menu .tool_button:disabled {
-    opacity: 0.5;
-    box-shadow: none;
+.tool_button.selected,
+.tool_button.selected:hover {
+    background-color: #3B4148;
+}
 
-    /* Do not override normal properties on hover */
-    background-color: #8898A3;
+.tool_button:disabled,
+.tool_button:disabled:hover {
+    opacity: 0.5;
+    background-color: transparent;
+}
+
+/* Tools */
+
+.tool_button[data-tool-classname = "LineTool"] {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAAImSURBVHjarNbPa9pwGMfxd+ysLu2EbkwGJnUlB7WXeUlOlWE7mCsrjEEPOe3/2N/gn+LBS4ROjBp/TCvtug7GDrl4yLnstMNa3OVrSJ3r1DSQU+D1Cc/z8H2+EvfzrAFR4AEgAb/Fe7N2T/hD4AnwDNgC1oEb4DoSEo8IPKnruu66btfzvEvTNF+KoGhYfAPYMQzjeDAYfPc8bzJ9gV1gMxICjwNP8/n8i3K5/FFV1dz043g8HokSTVbFZSCdyWSObNseBf/csqw2sCf6EVsV304mk69brdZZEK9UKnWgACiiN5FVGroN7He73a9BvFqt2gJPifJFxMgujRcdx7kI4rVarZtIJIriz+MBWFoab7fb50H85OSkn81mDwF1TlmkhWs+D280GqfZbPat+C7Pqbm0EC7L8kGz2bzV0FardaYoyps78DsDfFxV1dLstDiO80WW5Vf/wf8Z4OOappXq9frnWRwoLoDPDZg2VNE0rVSr1TpBvNPpXAD7C+J/BUhixFKJRKJoWZYTxHu93uWS+K2A6dmSAgrVarUxg3+LxWIHS+J+gF8WoFCpVD7NTMu5oiiHQHpJ3A9YFwfTnmVZ7SBu2/Yol8sdAc9XwP0AGcj0+/3T2WnJ5/PvQuB+wCawG8SHw+EPwzCOgR2xVEJtvjiQNk3zg+d5E9d1r3Rdfw9oIjwULomlvQE8Bh6JLfQTuAJ+ic0UKiB47YiKgOvptSPslePPADJbWoXBJmB8AAAAAElFTkSuQmCC);
+}
+
+.tool_button[data-tool-classname = "RectangleTool"] {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAABCUExURQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABUVFRoaGh8fHx8fHxwcHBwcHKCgoLq6uru7u+Hh4eHh4ePj4+Xl5W8jOkwAAAAVdFJOUwEECQ0PFBYXGCE0Q0RJS4fFxfj6+3EIJFkAAABjSURBVCjP5ZJBDgIxDANtU/X/32UlPFxWoO6WF+DjTKIcHMuObX0DFOxMO4soHB2ec+USRc8R57FyKS8njq9cdq6HP2Y3f+7oR/5YwA5D2Bkg9G6gjFLu1dLBod0z4LPHVRTeFfg6MEishIcAAAAASUVORK5CYII=);
+}
+
+.tool_button[data-tool-classname = "EllipseTool"] {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAAB4UExURQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJeXl6GhoYmJiaGhoaysrJubm56enqOjo+Pj4+Xl5e/hMeIAAAAndFJOUwABAgMECAkKCw4PEhMUFRYcHh8jJCgwMTM2Nzk8QX6Jip6rrKyz/W1WvIUAAAC7SURBVCjPdZLhFoIgDIVHEGDpKoMsgyyKfP83DPVkJ5335z424N4B9GJCZjlinknB4CcmNJrKee8qg3pEjCu0LsQ2KQZnUfEBcV3WQ3lAdal5d56pshnLPWpKxbr5WP/VE6lRAKy0De1EwWoGAl2cguhSizKzhtRiJGyqOAexyqBwLSGXw85TwOMyWBxFX37K6Oc+jmvyg89rIShL3neTXCRMfJ23nLT9tpeMCupy6IOaR1t8o11cBnp9PhIlO7gMHbbzAAAAAElFTkSuQmCC);
+}
+
+.tool_button[data-tool-classname = "FreeHandTool"] {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAAIISURBVHjatJXPixJhHIefdxxZ235SVJetQJYlpGjPXTsk+AdEUGePXnwbyA560CXYU9Ff4EEKuogeFDx0EUw8FUgYmDJC7SE9lCSbvh2akXGS3RltX3gZBt73eb583nfmK5RSnOTQAYQQq+wVgAYErPeZYwKglPorWBGuA6etGQB+AT+s51yirQE/B2xls9lHjUbjNbANXAZCC1yfZyCAIHAJ2DUMI2ua5nQwGKhms/kJuAfcADYBTSnlS7AAl1Lu2XB7WpK7wBVA9yM4Fu6QvAeuAxtKKU9n4Mz8mpTyQSKReCKE+GevUmpWrVbfAlNAeTkDz5Wbpjk1DCML3AYuAIHjIvIFl1LuAbvW+iAgjhKsDZ+ns0TwX+BHCXTgInBnHfgygfO23EylUul14MsEOnAe2IlGo497vd5kHbhbIIAzwHYmk3lar9c/JpPJF51OZ7gq3C0IAFcjkch9O5Z2u/01Ho/vt1qtz6577gnuFmwA4Vwu99xZcbfb/SmlfFkqld6l0+lnwC2vcLdgE4jk8/k37sz7/f5hLBZ7COxYX6gnuLvhaMAsHA5vOReMRqNvhUJhv1wuN4EDYLzwn/HaMq0ONA6FQuNKpfKqWCx+qNVqX3RdHw2HwwPguwX/7bs7KaUQQgSBU8BZKwIFTKz2NwEO/VZuR2QLtCUNfOrsrauMueAkx58BALgFINoumjgHAAAAAElFTkSuQmCC);
+}
+
+.tool_button[data-tool-classname = "RectangleSelectionTool"] {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAAL7SURBVHjatJbPThtJEMZ/848ZkOMlI2Gwe9MKjoMvJuG20nJAviKtBBJPwEvwBnvIQ+yrcIEDByRIuMxKexlpjEI23mUxeMYzY+8hNWhiETZsQkmtVn9T3VVd39fdY/DJTMAGPMACJsAIyGXsis8YSO7BiznIGhji4Nbrdd+yrJrnebO2bSf1ev2j7/tJv993e73eQpqmnuM4caPR+PAlfGVlZdBsNm/29vYyCTo2gBnAB/T+/v6bZrP5k2EYptZ6FRgAlTAM30lW3IOvAX8BmSQdA7EJ2MvLy08PDg5+bbVa67Zte5ZlzVAyy7JminYPXiT64/Hx8W+tVmsJcG3AqFarltb6Z9M0baXUL8A58LfUNVNKvZJ6J3fg3trami2YH0XRYZZl8WQyWQA+2kB2enr6Xmv9WrIYAv9IGXKZmAipeYnkW/zk5IRarVbd3t5+AWAYhpnnuQMYtpAxkgUBbqSlMk6lntNWxs2LiwuOjo7+KD66rnstfOABi8BLaTXBHmIGMAssAW2g3e12nwOzJuC1220dhuFZFEW/SzD3gQEmku0QuAKufN9PgNwGzDRNywu6Uu+HWnHwKgD9fn8EWCYwdhwnKTkmpdP4EHOBxSiKgjAM3/V6vYVCpnEQBKHWuiOOlxLk/+7gkwLS1ANMW7KN5fR9yw7ycmKO48TA2JTIntSu8g0cJMB7pVRba73aaDQ+AMn3UlF5BwNg8Fgq8h5TRR5QeywVGYDZ6XT8u1SUyqIx4IiaKqXbs/x6TV94RVlM4MnZ2dnNXSoqZJqIYw14DjwDqsCc9BpoSl/gPwDPOp3OqsyLlVKvyyqyAQ4PD9319XUHmI+i6PaVUkq15W55EkXR2yl8AFSm8FfAn8BAKWUAqQlwfn5+S2qWZXGe56M8z0efaVCw/8CT4rLb2tq6BnKjIGljY2Pu8vLSHw6HS2mauo7jJEEQhEDS7Xbnv+bhD4Ig3N3dHW5ubt7s7OzkwMSY0rFTIm0s3Ixl7H3Fr0ssormtyL8DAA7BfudfdQfTAAAAAElFTkSuQmCC);
+}
+
+.tool_button[data-tool-classname = "EllipseSelectionTool"] {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAAL1SURBVHjanJbLT1NBFMZ/7b19QKUQUEBqAR+RhbGmCRE3LgwLE/8C4t6NiSb+D+5Ys3CFbgz+ASZuXJEAl5KWEBMfiQseA0GDCkihtQ833yQTbLEwyc3c3Jk53znf+c6ZG+LkEQZ8IKq5BpSBClDXek3vtUYGvP8ARIAO4CJwATgHVJ21hGYcoFONdmB4bm7unTGmboypA9eBfiBdKBTeAhlgSGDhRhS471EZTQAxRRgeGhq63+Bcore390EQBFOKLtGIkZDzxIBOURIC9oAjgZ4H2oAS8E00dS8sLLxIp9P3AFKp1CDwXWf+AYkAfcDtIAjmRUVGhtsF3K05rqcPyOTz+ffALeAS0KX9UZedkA5cDoJg1hhTX11dLc3MzDxX6F4TdbUBPcCAjA8CV4BhfY8ez4GVIMaYxYmJiTfAnybKqImuX6LlN9BujPmaz+dfS3Xt1r6lqBu4BtwERoBeRRZqQW1J4Mb8/Pys6L0jCv2wU0zIk21gS96VW9R2FSj5vl8HWFlZmZTdkOU/qQQhw3uN1NBCQXaJ+0PgJ1D0rSKMMSuSW0b8ngagChQdwdhqx1cocWdzvIUW0qztxBVJ1dJmm5Xr7ZHrwSmMJ4G0MeajMeaL6PJ9GdxOpVIjTg5KZwBoW1xcnATY2tpaEl11X1rfk9GIFtpEXVnRtKKkmud5VYDR0dGnwAFQsX2orl6UVD1ElLQfkm7lhLvC3hdxp7iKwC5w6FayD3QaYz6tra0tTU9PPxZYtInHvhLar6KKA/uqox1JteYC1AE2NjYWPM+LjY+PP5FHMR1u1PB6crncy/X19Q/qP8hwyd5wLkAFOBgbG3u2ubmZ8zwvqvz4om4QuKo5KYDYwMDA3XA47C8vL08p2tDxVu1yaj1N6NuuIus2xny2G6W4PaCjUCi8AiLZbPYRsCEVVlwe3Q55pMVdgVeOFaE7ysBONpt96CS2ePzyb6VT2l5lE3mkRO7LAd+huHoWAHtX2zu6qiSWm/2quOPvAOFF89InseqNAAAAAElFTkSuQmCC);
+}
+
+.tool_button[data-tool-classname = "MagicWandTool"] {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAACPklEQVQ4y4XUy0uUURjH8e+8jnN5HadxvKTopJmKDjbpFIShZlqJWIsiLSMXWWIEKRVYjN0WriRCFJSgVSsL0cTGiEBNyyKVFuKmELLxEP0HgZenxQxC+o6ds/19nvNwbghRhoYFHQfxOCPTRRwWogATZnd8W26rrzRv4OKHzpO+Su/HwO08dCNgwowVpzttrvf7bOahxvqeQPrxM9XLvx+X4zQCGrZLaTe85blXDtZXUNn/XMnwWGYtfjJxGQPH8KmFgWd1FFDW+Gj5j5LQ+v2HQ10j13EbA72vOHj5Tin+5ruhNSVKxqYT66YHJh4Yr2DCwi7S8b7sU6JEyejkkdbxV0fL8RBnDGyk4KWipCX4fmVjcp6GmgtLP7pqSCTWCFhIxt/9JLQWnKptL2sK3Ar2dZ4vKczfjQ3TdmDGzYGep+FmxgYpvnniS393FUnYiYGtIAYnBW0dP1eVKBl6jZ/U7KSSVI8LKxpsBRoO9tU2zS8pUTI6Ya0gHR0LFmIj8X+Ahk7W4XMzi0qUvPtcdBoP9s0gW4GGzp6U6ok5JUpmFiobyELfFt8EGnY8CcfHZ5UoWfx1tpkcHAbxCNCwkZFQ9faTEiWh1ZZ28nESY3iPJVw9g/LglBIlobVrHRTiwhzlnQhYSHUfe/FGbSgJrTYH8OGOGgcBBwVfv4WbuRqOx8JOIJ79SpSsrDfdo2jH6hGgk93bqWRk0FdK8o7VI8CMi714ySEJK6b/AxNm7DjQsRjufJST3v4N2I0K/AVZS9Cs/2LVcwAAAABJRU5ErkJggg==);
+}
+
+.tool_button[data-tool-classname = "BucketTool"] {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAALpSURBVHjapJVNSBRhGMd/Mzt+pG7lRyu6yq4VuUWFiHsTsYtgshpIdAjaW8f2rpANoeSpRShikvImC14iPEh6WvAiZAjBmEUlvYpuypZhaup2eTYW82N3feFhhmHm93+f532e/2iktzTAIaEDO8A2sHvUh4404QZwEigBioEcICFCicM+1tMQcACFQLlpmp1KqTnAC5QCebKBY60CwDswMNCjlEokw+v1NgMVks2xVglwVSmVsCwrAtxVSiUikcgQcFGyy7pEOpAXCAQ8AKurqyvAbiwWm29sbAwCRVKmrAQ0IBcoHBsb2waIRCLvgfV4PL4o7xgSGQtosrNioDIcDgcBenp6OoGiaDT6DqC6ujpPGFomArrAS4CawcHBUEdHxy0Av99/ra2trWJmZiYGUFVVlX/UARqHwYeHh7uamppaU1+wLOvB8vLyZwDDMAr2DN9/lTD2gZcBNaOjow/r6uqa9tuVy+WqsW17KhqN6oATiAO/95nshJYCzxf4uYmJiX6fz+c/Kv2FhYU5v98fAj4CP4E/YiGbcr+rCfwEcAY4Pzk5+djj8VxOd0jW1tZWfD7fHRHYkEy+Az+ATV0msRg4Oz09/TwTOIDT6Sw1TfOGUiqqlJqybXsC8EjpHP/qbtt2xOVyebMZ9d7e3reLi4tzIlgeDAabgdNArg4YtbW1JU6nsywb+Pj4+MjW1pZqaGjoTz7r6+vrTwoYwM7s7Gw8G/jIyMjLUCj0DFiXw93b8pouJ/7d7XZfzwQ+NDT0JBQKPQW+AMsSACwtLX0Q0R0d2AJWgU9ut7sjHXg4HH7U3d39AvgqM/ALiHV1dd2cn59/U19ff1s6aSN1DgqASsCnlHp1ENw0zfuWZb0GvqX0frLVC8UdNiWDjb01KwIuAO2pP5dkBAKBe8AVsZKcPSanCzxXrvpB5pcUaU2Fi/9fku4wjvMHS4p4gIaWlpZ2wA/UAKcyhWuHiOSKPznEKTelIXYyEfg7AESYDDQN/DnGAAAAAElFTkSuQmCC);
 }
