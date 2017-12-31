@@ -1,5 +1,4 @@
 import { HTMLRenderer } from "./HTMLRenderer";
-import { ToolSelectionMenu } from "./ToolSelectionMenu";
 import { DocumentActionsMenu } from "./DocumentActionsMenu";
 import { RubEns } from "../RubEns";
 import { DocumentParameters } from "../DocumentParameters";
@@ -10,10 +9,9 @@ import { ImageLoader } from "../utils/ImageLoader";
 /**
 * Main UI element representing the top main menu of the UI.
 *
-* It is meant to display importants actions and tools to the user,
-* organised in a meaningful way, so that the latter can easily interact
-* with the document by the mean of controls presented in this menu.
-* */
+* It is meant to display general and important controls to the user,
+* such as actions concerning the whole document (creation, closing, export, etc).
+*/
 export class MainMenu extends HTMLRenderer {
     protected rootNodeId = "main_menu";
 
@@ -28,17 +26,12 @@ export class MainMenu extends HTMLRenderer {
     documentActionsMenu: DocumentActionsMenu;
 
     /**
-     * Instance of the child tool selection menu.
-     */
-    toolSelectionMenu: ToolSelectionMenu;
-
-    /**
      * Reference to the node containing the app title.
      */
     titleNode: JQuery;
 
     /**
-     * Instanciates and initializes a new MainMenu object and its sub-modules.
+     * Instanciates and initializes a new MainMenu object, and set up the underlying controls.
      * @param  {JQuery}   parentNode Parent node owning current instance.
      * @param  {RubEns}   app        Related app instance.
      * @return {MainMenu}            Fresh instance of MainMenu.
@@ -52,7 +45,6 @@ export class MainMenu extends HTMLRenderer {
         this.app = app;
 
         this.documentActionsMenu = new DocumentActionsMenu(this.rootNode, app);
-        this.toolSelectionMenu   = new ToolSelectionMenu(this.rootNode, app);
         this.createTitleNode();
 
         this.setDefaultDocumentActions();
