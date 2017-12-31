@@ -1,0 +1,189 @@
+/******************************************************************
+/* Parameter fields
+/*****************************************************************/
+
+.parameters_field {
+    margin: 5px;
+    padding: 0;
+    background-color: #6E7B85;
+    border: 2px solid #2A2E33;
+    border-radius: 5px;
+}
+
+.parameters_field.empty {
+    display: none;
+}
+
+.parameters_field > h3 {
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 5px 0;
+    background-color: #2A2E33;
+    font-size: 1.15rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+
+/* Parameters */
+
+.parameters_field .parameter {
+    padding: 5px 10px;
+    border-bottom: 2px solid #2A2E33;
+    line-height: 30px;
+    vertical-align: middle;
+}
+
+.parameters_field .parameter:last-child {
+    margin: 0;
+    border-bottom: none;
+}
+
+.parameters_field .parameter:hover {
+    background-color: #8898A3;
+}
+
+.parameters_field .parameter label {
+    display: inline-block;
+    font-size: 1.05rem;
+    text-shadow: 0 0 1px #2A2E33;
+}
+
+.parameters_field .parameter input {
+    display: inline-block;
+    float: right;
+    height: 30px;
+    width: 120px;
+    background-color: #8898A3;
+    border: 2px solid #3B4148;
+    border-radius: 4px;
+    font-weight: bold;
+    color: #F3F5F8;
+    text-shadow: 0 0 2px #2A2E33;
+}
+
+/*
+.parameters_field .parameter input:focus {
+    border-color: #48788A;
+}
+*/
+
+
+/* Typed parameters */
+
+.parameters_field .parameter input[type="number"] {
+    padding: 5px;
+    font-size: 1.2rem;
+}
+
+.parameters_field .parameter input[type="text"] {
+    width: auto;
+    padding: 5px;
+    font-size: 1.05rem;
+}
+
+.parameters_field .parameter input[type="color"] {
+    padding: 0;
+}
+
+
+/******************************************************************
+/* Popup(s)
+/*****************************************************************/
+
+.popup {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    font-family: "Roboto";
+    font-weight: 400;
+    color: #F3F5F8;
+    z-index: 150;
+}
+
+.popup_container {
+    position: absolute;
+    bottom: 50%;
+    left: 50%;
+    width: 600px;
+    min-height: 250px;
+    margin-left: -300px;
+    margin-bottom: -125px;
+    padding: 10px;
+    background-color: #5D6870;
+    border: 2px solid #2A2E33;
+    box-shadow: 0 0 50px #222222;
+    border-radius: 5px;
+    z-index: 200;
+}
+
+.popup_container > * {
+    z-index: 250;
+}
+
+.popup_title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+.popup_content_wrapper {
+    padding: 0 5px;
+}
+
+.popup_control_wrapper {
+    width: 100%;
+    margin: 10px 0 0 0;
+    text-align: center;
+}
+
+.popup button {
+    margin: 0;
+    padding: 5px;
+    background-color: #8898A3;
+    border: 2px solid #3B4148;
+    box-shadow: 0 -2px 0 0 #3B4148 inset;
+    border-radius: 4px;
+    font-weight: bold;
+    color: #F3F5F8;
+    text-shadow: 0 0 2px #1D2024;
+    animation: 250ms ease-in;
+}
+
+.popup button:hover {
+    background-color: #6E7B85;
+    box-shadow: none;
+}
+
+.popup button:selected {
+    background-color: #5D6870;
+    box-shadow: none;
+}
+
+.popup_close_button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+}
+
+.popup_control_wrapper button {
+    display: inline-block;
+    margin: 0 10px 0 0;
+    padding: 10px;
+    font-size: 1.2rem;
+}
+
+.popup_control_wrapper button:last-child {
+    margin: 0;
+}
+
+.popup .parameters_field {
+    margin: 0;
+}

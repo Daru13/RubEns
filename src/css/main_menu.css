@@ -1,0 +1,103 @@
+/******************************************************************
+/* Main menu
+/*****************************************************************/
+
+#main_menu {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 80px;
+    background-color: #4C555C;
+    border-bottom: 2px solid #2A2E33;
+    box-shadow: 0 0 10px #2A2A2A;
+    clip: auto; /* In case of overflow... */
+    z-index: 100;
+}
+
+
+/* Title */
+
+#app_title,
+#app_title:hover,
+#app_title:visited,
+#app_title:active {
+    display: inline-block;
+    height: 100%;
+    margin: 0;
+    padding: 0 15px;
+    border-right: 2px solid #2A2E33;
+    color: #F3F5F8;
+    text-decoration: none;
+    line-height: 76px;
+    vertical-align: middle;
+    transition: 150ms ease-in-out;
+}
+
+#app_title:hover {
+    background-color: #5D6870;
+}
+
+#app_title > * {
+    margin: 0;
+    color: #F3F5F8;
+    font-size: 2.4rem;
+    font-family: "Lobster";
+    font-weight: 400;
+    text-shadow: 0 1px 3px #1D2024;
+    line-height: 76px;
+    vertical-align: middle;
+}
+
+
+/* Menu */
+
+#document_actions_menu {
+    display: inline-block;
+    padding: 0 15px 0 15px;
+    margin: 0;
+    line-height: 80px;
+    vertical-align: middle;
+    border-right: 2px solid #2A2E33;
+}
+
+
+/* Menus elements */
+
+#document_actions_menu > li {
+    display: inline-block;
+    margin: 0 15px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+#document_actions_menu > li:last-child {
+    margin: 0;
+}
+
+#document_actions_menu .document_action_button {
+    margin: 0;
+    padding: 8px 8px 10px 8px;
+    background-color: #8898A3;
+    border: 2px solid #3B4148;
+    border-radius: 4px;
+    box-shadow: 0 -2px 0 0 #3B4148 inset;
+    font-weight: bold;
+    color: #F3F5F8;
+    text-shadow: 0 0 2px #1D2024;
+    animation: 250ms ease-in;
+}
+
+#document_actions_menu .document_action_button:hover {
+    padding: 8px;
+    background-color: #6E7B85;
+    box-shadow: none;
+}
+
+#document_actions_menu .document_action_button:disabled {
+    opacity: 0.5;
+    box-shadow: none;
+
+    /* Do not override normal properties on hover */
+    background-color: #8898A3;
+}
