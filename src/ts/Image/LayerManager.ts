@@ -251,7 +251,8 @@ export class LayerManager {
             return;
         }
 
-        // TODO: actually implement layer merging
+        topLayer.drawOnCanvas(bottomLayer.canvas);
+        this.deleteLayer(topLayer.id);
 
         EventManager.spawnEvent("rubens_mergeLayers");
     }
