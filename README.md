@@ -2,13 +2,13 @@
 
 **RubEns is a web drawing and image editing app, written in [Typescript](https://www.typescriptlang.org/).**
 
-It has been developed as a software engineering course project by Camille Gobert,
+It is developed as a software engineering course project by Camille Gobert,
 Mathieu Fehr and Josselin Giet, during our studies at the [École Normale Supérieure](https://www.ens.fr/en/ens).
 
-[You can find the latest build online!](https://daru13.github.io/RubEns/)
+[**You can find the latest build online!**](https://daru13.github.io/RubEns/)
 
 
-### Features
+## Features
 
 RubEns aims to offer most of the standard features found in image editing software, such as:
 
@@ -24,7 +24,7 @@ since the goal of this project was to concentrate on clean code and team work. H
 is fully usable, and offers an open source web alternative for simple graphical work.
 
 
-### Requirements
+## Requirements
 
 RubEns is a **pure client-side app**: the only requirement for using it is a modern web browser,
 such as Firefox 57+ or Chrome 63+. Simply click the link above!
@@ -32,7 +32,7 @@ such as Firefox 57+ or Chrome 63+. Simply click the link above!
 Please note that, because of web technologies (e.g. Javascript engines) performance limits and implementation choices (e.g. writing our own primitive drawing tools), you may experience some occasional lag. This mainly occurs on large images, for certain costly operations. We try our best to optimize our code to avoid this, but no guarantee :)!
 
 
-### Development
+## Development
 
 The app is written in Typescript (2.6+), HTML 5 and CSS 3.
 [You can find the source code documentation online!](https://daru13.github.io/RubEns/docs)
