@@ -40,7 +40,7 @@ The app is written in Typescript (2.6+), HTML 5 and CSS 3.
 It also uses several external libraries and tools for development and testing purposes, and a few runtime libraries. The provided `Makefile` and `package.json` ease the setup, building and testing processes. You can find details about those below.
 
 
-#### Installing dependencies
+### Installing dependencies
 
 Several libraries are required in order to compile and test RubEns, listed below. Some Javascript libraries are also required at runtime; they are automatically included to the build target by the building script. Details on version requirements can be found in `package.json`.
 
@@ -68,7 +68,7 @@ Then, simply run `make setup` to prepare the setup the development environement!
 *Please note that even though most dependencies are installed as local packages, we did not manage to setup the testing framework without installing `typescript`, `ts-mocha` and `mocha` as global packages.*
 
 
-#### Compiling and testing
+### Compiling and testing
 
 Once the environement is set up, the Makefile provides the following commands:
 
@@ -79,6 +79,6 @@ Once the environement is set up, the Makefile provides the following commands:
 In addition, you can also run `make` to run the three commands listed above, and `make clean` to remove any build or doc output.
 
 
-#### Guidelines
+### Guidelines
 
 Arriving soon!
