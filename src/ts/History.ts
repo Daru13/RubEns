@@ -174,7 +174,6 @@ export class History {
              nearestBackwardImage: this.listOfActions[this.numberOfStep-1].nearestBackwardImage,
              numberOfActionOnCanvas: this.listOfActions[this.numberOfStep-1].numberOfActionOnCanvas,
         }
-        redo();
     }
 
 
@@ -233,7 +232,6 @@ export class History {
                 this.listOfActions[i].nearestForwardImage = thisStep;
             }
         }
-        redo();
     }
 
     /**
