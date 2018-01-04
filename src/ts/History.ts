@@ -4,23 +4,41 @@ type HistoryFunction = () => void;
 
 /**
  * This interface describes an history's "step".
- * redo: the action to apply. Works only by side effect.
- * undo: a function that cancels the result of the edo`function.
- * image: the image before the redo function is apply.
- * nearestForwardImage: the index of the step storring the nearest image in
- *          the following of the history.
- *          Equals -1 if this image doesn't exits.
- * nearestBackwardImage: the index of the step storring the nearest image in
- *          the steps before this one in the history.
- * numberOfActionOnCanvas: the number of actions on canvas since the latest
- *          image storred.
  */
 export interface HistoryStep {
+    /**
+     * the action to apply. Works only by side effect.
+     * @type {HistoryFunction}
+     */
     redo: HistoryFunction;
+    /**
+     *  a function that cancels the result of the redo`function.
+     * @type {[type]}
+     */
     undo?: HistoryFunction;
+    /**
+     * the image before the redo function is apply.
+     * @type {[type]}
+     */
     image?: ImageData;
+    /**
+     * the index of the step storring the nearest image in
+     *          the following of the history.
+     *          Equals -1 if this image doesn't exists.
+     * @type {number}
+     */
     nearestForwardImage: number;
+    /**
+     * the index of the step storring the nearest image in
+     *          the steps before this one in the history.
+     * @type {number}
+     */
     nearestBackwardImage: number;
+    /**
+     * the number of actions on canvas since the latest
+     *          image storred.
+     * @type {number}
+     */
     numberOfActionOnCanvas: number;
 }
 
