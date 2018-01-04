@@ -1,6 +1,6 @@
-import { Layer } from "./Layer";
+import { Layer, BlendModes } from "./Layer";
 import { EventManager } from "../EventManager";
-import {Canvas} from "./Canvas";
+import { Canvas } from "./Canvas";
 
 /**
  * Canvas composed by multiple layers.
@@ -21,7 +21,7 @@ export class LayerManager {
     /**
      * The layers composing the canvas
      */
-    layers: Array<Layer> = [];
+    layers: Array<Layer>;
 
     /**
      * Selected layer
@@ -61,9 +61,11 @@ export class LayerManager {
      * @author Mathieu Fehr
      */
     constructor(width: number, height: number, eventManager: EventManager) {
-        this.width = width;
-        this.height = height;
-        this.eventManager = eventManager;
+        this.width         = width;
+        this.height        = height;
+        this.layers        = [];
+        this.selectedLayer = null;
+        this.eventManager  = eventManager;
 
         eventManager.registerEventHandler(this.documentResizedHandler);
     }
@@ -81,6 +83,21 @@ export class LayerManager {
 
 
     /**
+     * Returns the index of the currently selected layer, or -1 if it does not exist.
+     * @return {number}    The index of the currently selected layer, or -1.
+     *
+     * @author Camille Gobert
+     */
+    private getSelectedLayerIndex () {
+        if (! this.selectedLayer) {
+            return -1;
+        }
+
+        return this.getLayerIndexFromId(this.selectedLayer.id);
+    }
+
+
+    /**
      * Delete a layer, given its id.
      *
      * @param {number} id   The id of the layer to delete
@@ -91,10 +108,11 @@ export class LayerManager {
         let layerIndex = this.getLayerIndexFromId(id);
         if (layerIndex >= 0) {
             this.layers.splice(layerIndex, 1);
-            
+
             if (this.layers.length === 0) {
                 this.selectedLayer = null;
-            } else {
+            }
+            else {
                 this.selectedLayer = this.layers[Math.max(0, layerIndex - 1)];
             }
 
@@ -104,26 +122,42 @@ export class LayerManager {
 
 
     /**
-     * Create a new layer at the top of the layer list
+     * Delete the currently selected layer.
      *
-     * @param {string} name The name of the new layer
-     *
-     * @author Mathieu Fehr
+     * @author Camille Gobert
      */
-    createLayer(name = "New Layer") {
-        this.lastId += 1;
-        name += "(" + this.lastId + ")";
+    deleteSelectedLayer () {
+        this.deleteLayer(this.selectedLayer.id);
+    }
 
-        if(this.selectedLayer == null) {
-            this.selectedLayer = new Layer(this.width, this.height, this.eventManager, name, this.lastId);
-            this.layers.push(this.selectedLayer);
-        } else {
-            let position = this.layers.findIndex((value: Layer) => {
-                return this.selectedLayer === value;
-            });
-            this.selectedLayer = new Layer(this.width, this.height, this.eventManager, name, this.lastId);
-            this.layers.splice(position, 0, this.selectedLayer);
+
+    /**
+     * Create a new layer  and insert it above the currently selected layer.
+     * If there is no layer yet, the new layer is simply appended to the list of layers.
+     *
+     * @param {string} name The name of the new layer (optionnal).
+     *
+     * @author Mathieu Fehr, Camille Gobert
+     */
+    createLayer (name?: string) {
+        this.lastId += 1;
+
+        // If no name was specified, make a default name
+        if (! name) {
+            name = "Layer " + (this.lastId + 1);
         }
+        let newLayer = new Layer(this.width, this.height, this.eventManager, name, this.lastId);
+
+        // Insert the new layer at the right position
+        if (this.layers.length === 0) {
+            this.layers.push(newLayer);
+        }
+        else {
+            let selectedLayerIndex = this.getSelectedLayerIndex();
+            this.layers.splice(selectedLayerIndex, 0, newLayer);
+        }
+
+        this.selectedLayer = newLayer;
 
         EventManager.spawnEvent("rubens_addLayer");
     }
@@ -135,27 +169,53 @@ export class LayerManager {
      * @param {number} id           The id of the layer.
      * @param {number} nextPosition The new position of the layer.
      *
-     * @author Mathieu Fehr
+     * @author Mathieu Fehr, Camille Gobert
      */
-    moveLayer(id: number, nextPosition: number) {
-        if(nextPosition < 0) {
+    moveLayer (id: number, nextPosition: number) {
+        if (nextPosition < 0) {
             console.error("The new position of the layer should be positive");
             nextPosition = 0;
-        } else if(nextPosition >= this.layers.length) {
+        }
+        else if (nextPosition >= this.layers.length) {
             console.error("The new position of the layer should be less than the number of layers");
             nextPosition = this.layers.length - 1;
         }
 
-        let layer = this.layers.find((value: Layer) => {
-            return value.id === id;
-        });
+        let layerIndex = this.getLayerIndexFromId(id);
+        let movedLayer = this.layers.splice(layerIndex, 1)[0];
+        this.layers.splice(nextPosition, 0, movedLayer);
 
-        this.layers.filter((value: Layer) => {
-            return value.id !== id;
-        });
-
-        this.layers.splice(nextPosition, 0, layer);
+        EventManager.spawnEvent("rubens_moveLayer");
     }
+
+
+    /**
+     * Move the currently selected layer up.
+     *
+     * @author Camille Gobert
+     */
+    moveSelectedLayerUp () {
+        // Moving up means going down in the index space
+        let selectedLayerIndex = this.getLayerIndexFromId(this.selectedLayer.id);
+        let nextPosition = Math.max(selectedLayerIndex - 1, 0);
+
+        this.moveLayer(this.selectedLayer.id, nextPosition);
+    }
+
+
+    /**
+     * Move the currently selected layer down.
+     *
+     * @author Camille Gobert
+     */
+    moveSelectedLayerDown () {
+        // Moving down means going up in the index space
+        let selectedLayerIndex = this.getLayerIndexFromId(this.selectedLayer.id);
+        let nextPosition = Math.min(selectedLayerIndex + 1, this.layers.length - 1);
+
+        this.moveLayer(this.selectedLayer.id, nextPosition);
+    }
+
 
     /**
      * Select a layer given its id.
@@ -163,18 +223,143 @@ export class LayerManager {
      *
      * @param {number} id   The id of the layer.
      *
-     * @author Mathieu Fehr
+     * @author Mathieu Fehr, Camille Gobert
      */
-    selectLayer(id: number) {
-        let index = this.layers.findIndex((layer: Layer) => {
-            return id === layer.id;
-        });
-
-        if(index !== -1) {
+    selectLayer (id: number) {
+        let index = this.getLayerIndexFromId(id);
+        if (index !== -1) {
             this.selectedLayer = this.layers[index];
-
             EventManager.spawnEvent("rubens_selectLayer");
         }
+    }
+
+
+    /**
+     * Merge two layers, according to the top layer blend mode.
+     * If one of the given indices does not index any layer, nothing happens.
+     *
+     * @param  {number} topLayerIndex    Index of the top layer.
+     * @param  {number} bottomLayerIndex Index of the bottom layer.
+     *
+     * @author Camille Gobert
+     */
+    private mergeLayersWithIndices (topLayerIndex: number, bottomLayerIndex: number) {
+        let topLayer    = this.layers[topLayerIndex];
+        let bottomLayer = this.layers[bottomLayerIndex];
+
+        if ((! topLayer) || (! bottomLayer)) {
+            return;
+        }
+
+        topLayer.drawOnCanvas(bottomLayer.canvas);
+        this.deleteLayer(topLayer.id);
+
+        EventManager.spawnEvent("rubens_mergeLayers");
+    }
+
+
+    /**
+     * Merge one layer with the one below.
+     * If there is no layer with the given id, or no layer below, nothing happens.
+     *
+     * @param  {number} id The id of the top layer.
+     *
+     * @author Camille Gobert
+     */
+    private mergeLayerWithBelowLayer (id: number) {
+        let topLayerIndex    = this.getLayerIndexFromId(id);
+        let bottomLayerIndex = topLayerIndex + 1;
+
+        this.mergeLayersWithIndices(topLayerIndex, bottomLayerIndex);
+    }
+
+
+    /**
+     * Rename a layer.
+     * If there is no layer with the given id, nothing happens.
+     *
+     * @param {number} id   The id of the layer.
+     * @param {string} name The new name of the layer.
+     *
+     * @author Camille Gobert
+     */
+    renameLayer (id: number, name: string) {
+        let index = this.getLayerIndexFromId(id);
+
+        if (index !== -1) {
+            this.layers[index].name = name;
+            EventManager.spawnEvent("rubens_renameLayer");
+        }
+    }
+
+
+    /**
+     * Rename the currently selected layer.
+     * See [[renameLayer]] for details.
+     * @param {string} name The new name of the layer.
+     *
+     * @author Camille Gobert
+     */
+    renameSelectedLayer (name: string) {
+        this.renameLayer(this.selectedLayer.id, name);
+    }
+
+
+    /**
+     * Update the blend mode of a layer.
+     * If there is no layer with the given id, nothing happens.
+     *
+     * @param {number}     id   The id of the layer.
+     * @param {BlendModes} mode The new blend mode of the layer.
+     *
+     * @author Camille Gobert
+     */
+    changeLayerBlendMode (id: number, mode: BlendModes) {
+        let index = this.getLayerIndexFromId(id);
+
+        if (index !== -1) {
+            this.layers[index].blendMode = mode;
+            EventManager.spawnEvent("rubens_changeLayerBlendMode");
+        }
+    }
+
+
+    /**
+     * Update the blend mode of the currently selected layer.
+     * See [[renameLayer]] for details.
+     * @param {BlendModes} mode The new blend mode of the layer.
+     *
+     * @author Camille Gobert
+     */
+    changeSelectedLayerBlendMode (mode: BlendModes) {
+        this.changeLayerBlendMode(this.selectedLayer.id, mode);
+    }
+
+
+    /**
+     * Merge the currently selected layer with the one below.
+     * If there is no selected layer, or no layer below, nothing happens.
+     *
+     * @author Camille Gobert
+     */
+    mergeSelectedLayerWithBelowLayer () {
+        this.mergeLayerWithBelowLayer(this.selectedLayer.id);
+    }
+
+
+    /**
+     * Switch the visibility of a layer, i.e. its `hidden` state.
+     * If there is no layer with the given id, nothing happens.
+     *
+     * @param {number} id   The id of the layer.
+     *
+     * @author Camille Gobert
+     */
+    switchLayerVisibility (id: number) {
+        let index = this.getLayerIndexFromId(id);
+        this.layers[index].hidden = ! this.layers[index].hidden;
+
+        EventManager.spawnEvent("rubens_changeLayerVisibility");
     }
 
 
@@ -185,8 +370,8 @@ export class LayerManager {
      *
      * @author Mathieu Fehr
      */
-    drawOn(canvas: Canvas) {
-        for(let i = this.layers.length-1; i>=0; i--) {
+    drawOn (canvas: Canvas) {
+        for (let i = this.layers.length - 1; i >= 0; i--) {
             this.layers[i].drawOnCanvas(canvas);
         }
     }

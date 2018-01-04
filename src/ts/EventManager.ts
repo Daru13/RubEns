@@ -17,6 +17,11 @@ export class EventManager {
     private registeredHandlers: Map<string, Set<EventHandler>>;
 
     /**
+     * Map from known and used event types to event listeners registered in the DOM.
+     */
+    private DOMEventListeners: Map<string, (Event) => void>;
+
+    /**
      * Listening state of the event manager.
      */
     private isListening: boolean;
@@ -31,7 +36,8 @@ export class EventManager {
      */
     constructor () {
         this.registeredHandlers = new Map();
-        this.isListening = false;
+        this.DOMEventListeners  = new Map();
+        this.isListening        = false;
     }
 
     /**
@@ -119,24 +125,39 @@ export class EventManager {
 
 
     /**
-     * Start listening for a particular type of event.
+     * Start listening for a particular type of event, and save the related DOM event listener.
+     * This method has no effect if a listener already exist for the given type of event.
      * @param  {string} eventType The event type to start listenning for.
      *
      * @author Camille Gobert
      */
     private startListeningFor (eventType: string) {
-        window.addEventListener(eventType, (event) => this.dispatchEvent(event));
+        if (this.DOMEventListeners.has(eventType)) {
+            return;
+        }
+
+        let eventListener = (event) => this.dispatchEvent(event);
+        this.DOMEventListeners.set(eventType, eventListener);
+
+        window.addEventListener(eventType, eventListener);
     }
 
 
     /**
-     * Stop listening for a particular type of event.
+     * Stop listening for a particular type of event, and remove the previously saved DOM event listener.
+     * This method has no effet is there is no listener for the gven type of event.
      * @param  {string} eventType The event type to stop listenning for.
      *
      * @author Camille Gobert
      */
     private stopListeningFor (eventType: string) {
-        $(document)[0].removeEventListener(eventType, (event) => this.dispatchEvent(event));
+        let eventListener = this.DOMEventListeners.get(eventType);
+        if (! eventListener) {
+            return;
+        }
+
+        this.DOMEventListeners.delete(eventType);
+        window.removeEventListener(eventType, eventListener);
     }
 
 

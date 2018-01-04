@@ -86,6 +86,16 @@ describe("Test of the user interface:", function () {
                 assert(rubEns.rootLayout.statusBar.rootNode);
             });
         });
+
+        it("Should create a tool menu", function () {
+            JSDOMPromise.then(_ => {
+                assert(rubEns.rootLayout.toolMenu);
+                assert(rubEns.rootLayout.toolMenu.rootNode);
+                
+                assert(rubEns.rootLayout.toolMenu.toolSelectionMenu);
+                assert(rubEns.rootLayout.toolMenu.toolSelectionMenu.rootNode);
+            });
+        });
     });
 
 
@@ -95,13 +105,6 @@ describe("Test of the user interface:", function () {
             JSDOMPromise.then(_ => {
                 assert(rubEns.rootLayout.mainMenu.documentActionsMenu);
                 assert(rubEns.rootLayout.mainMenu.documentActionsMenu.rootNode);
-            });
-        });
-
-        it("Should create a submenu for tool selection", function () {
-            JSDOMPromise.then(_ => {
-                assert(rubEns.rootLayout.mainMenu.toolSelectionMenu);
-                assert(rubEns.rootLayout.mainMenu.toolSelectionMenu.rootNode);
             });
         });
     });

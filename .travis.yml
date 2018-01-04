@@ -15,7 +15,9 @@
 
   "script": [
     "make setup",
-    "make all"
+    "make all",
+    "mv docs build",
+    "touch build/.nojekyll"
   ],
 
   "group": "stable",

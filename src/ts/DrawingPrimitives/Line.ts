@@ -41,23 +41,43 @@ export class Line {
 
         // We compute the value of every pixel in the intersection of the bounding rect and the image
         for(let x = drawingMinX; x <= drawingMaxX; x++) {
-            for(let y = drawingMinY; y <= drawingMaxY; y++) {
 
-                // Get the color of this pixel, and draw it on the image
-                let pixelColor = Line.getColorForPixel(x, y, from, to, thickness, color, image);
+            //x = alpha * from.x + (1-alpha) * to.x;
+            let alpha;
+            if(from.x === to.x) {
+                alpha = 0;
+            } else {
+                alpha = (x - to.x) / (from.x - to.x);
+            }
 
-                let offset = (y * image.width + x) * 4;
-                image.data[offset]     = pixelColor.red;
-                image.data[offset + 1] = pixelColor.green;
-                image.data[offset + 2] = pixelColor.blue;
-                image.data[offset + 3] = pixelColor.alpha;
+            // We compute the median of the y that will be drawn
+            let middleY;
+            if(alpha < 0) {
+                middleY = to.y;
+            } else if(alpha > 1) {
+                middleY = from.y;
+            } else {
+                middleY = Math.round(alpha * (from.y - to.y) + to.y);
+            }
+
+            // Then, we draw the pixels below middleY, and above middleY, and we stop when
+            // we are outside of the segment
+
+            let continueDrawing = true;
+            for(let y = middleY; y <= drawingMaxY && continueDrawing; y++) {
+                continueDrawing = Line.drawPixel(x, y, from, to, thickness, color, image);
+            }
+
+            continueDrawing = true;
+            for(let y = middleY-1; y >= drawingMinY && continueDrawing; y--) {
+                continueDrawing = Line.drawPixel(x, y, from, to, thickness, color, image);
             }
         }
     }
 
-
     /**
-     * Get the color of a pixel for a segment drawing
+     * Draw a single pixel of the segment.
+     * Returns true if the given pixel contains a part of the segment.
      *
      * @param {number} x            The x axis of the pixel.
      * @param {number} y            The y axis of the pixel.
@@ -65,21 +85,18 @@ export class Line {
      * @param {Point} to            The other segment bound.
      * @param {number} thickness    The thickness of the segment.
      * @param {Color} color         The color of the segment.
-     * @param {ImageData} image     The image where the segment will be drawn.
+     * @param {ImageData} image     The image where the segment is being drawn.
      *
-     * @returns {Color}             The color for that pixel of the line draw.
-     *
-     * @author Mathieu Fehr
+     * @returns {boolean} true if the pixel contained a part of the segment.
      */
-    private static getColorForPixel(x: number, y: number, from: Point, to: Point, thickness: number, color: Color, image: ImageData): Color {
-
-        // Get the distance to the segment
-        let distanceToLine = Math.sqrt(Line.distanceToSegmentSquared(from, to, new Point(x,y)));
-
-        // Get the color of the current pixel in the image
-        // We need to get that, because there might be another color already there in the image
-        // For instance, this is useful in the freehand drawing tool.
+    private static drawPixel(x: number, y: number, from: Point, to: Point, thickness: number, color: Color, image: ImageData): boolean {
         let offset = (y * image.width + x) * 4;
+
+        let segmentColor = Line.getPixelColor(x, y, from, to, thickness, color);
+
+        if(segmentColor.alpha === 0) {
+            return false;
+        }
 
         let destRed =    image.data[offset];
         let destGreen =  image.data[offset + 1];
@@ -87,9 +104,39 @@ export class Line {
         let destAlpha =  image.data[offset + 3];
         let destColor = new Color(destRed, destGreen, destBlue, destAlpha);
 
+        let newColor = Color.blend(segmentColor,destColor);
+
+        image.data[offset]     = newColor.red;
+        image.data[offset + 1] = newColor.green;
+        image.data[offset + 2] = newColor.blue;
+        image.data[offset + 3] = newColor.alpha;
+
+        return true;
+    }
+
+
+    /**
+     * Get the color of a segment defined by the points from and to, on a given pixel (x,y).
+     *
+     * @param {number} x            The x axis of the pixel.
+     * @param {number} y            The y axis of the pixel.
+     * @param {Point} from          One segment bound.
+     * @param {Point} to            The other segment bound.
+     * @param {number} thickness    The thickness of the segment.
+     * @param {Color} color         The color of the segment.
+     *
+     * @returns {Color}             The color for that pixel of the line draw.
+     *
+     * @author Mathieu Fehr
+     */
+    private static getPixelColor(x: number, y: number, from: Point, to: Point, thickness: number, color: Color): Color {
+
+        // Get the distance to the segment
+        let distanceToLine = Math.sqrt(Line.distanceToSegmentSquared(from, to, new Point(x,y)));
+
         // If we are near enough of the segment, we can draw the color with full alpha
         if(distanceToLine < thickness - Math.sqrt(2)) {
-            return Color.blend(color, destColor);
+           return color;
         }
 
         // If we are near the border of the segment, we will use multi sampling on the pixel to compute its alpha
@@ -108,11 +155,11 @@ export class Line {
 
             // We compute the value of the new alpha we will apply on that pixel
             let newAlpha = (nbPointsInLine / 81) * color.alpha;
-            return Color.blend(new Color(color.red, color.green, color.blue, newAlpha), destColor);
+            return new Color(color.red, color.green, color.blue, newAlpha);
         }
 
         // If we are too far from the segment, we will not color it.
-        return destColor;
+        return new Color(0,0,0,0);
     }
 
 

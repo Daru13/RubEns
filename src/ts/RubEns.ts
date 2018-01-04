@@ -188,7 +188,7 @@ export class RubEns {
      */
     initUserInterface () {
         this.rootLayout = new RootLayout($("body"), this);
-        this.rootLayout.mainMenu.toolSelectionMenu.setTools(this.tools);
+        this.rootLayout.toolMenu.toolSelectionMenu.setTools(this.tools);
     }
 
 

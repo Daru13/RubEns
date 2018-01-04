@@ -68,6 +68,20 @@ export class ImageWorkspace {
      */
     drawingCanvasBgColor: Color = new Color(211, 211, 211, 255);
 
+    /**
+     * The event handler redrawing the layers when they are modified.
+     */
+    protected layersUpdateHandler = {
+        eventTypes: ["rubens_deleteLayer",
+                     "rubens_moveLayer",
+                     "rubens_mergeLayers",
+                     "rubens_changeLayerBlendMode",
+                     "rubens_changeLayerVisibility"],
+        callback  : (_) => {
+            this.redrawDrawingLayers();
+        }
+    };
+
 
     /**
      * Instanciates and initializes a new ImageWorkspace object.
@@ -85,6 +99,8 @@ export class ImageWorkspace {
 
         this.createCanvases();
         this.initSelection();
+
+        eventManager.registerEventHandler(this.layersUpdateHandler);
     }
 
 
@@ -117,6 +133,17 @@ export class ImageWorkspace {
         this.drawingLayers.createLayer();
         this.workingCanvas = new DisplayableCanvas(width, height, "working_canvas", eventManager);
         this.selectionCanvas = new DisplayableCanvas(width, height, "selection_canvas", eventManager);
+    }
+
+    /**
+     * Redraw the layers on the drawing canvas.
+     * This function has to be called when drawingLayers is modified.
+     *
+     * @author Mathieu Fehr
+     */
+    redrawDrawingLayers() {
+        this.drawingCanvas.clear();
+        this.drawingLayers.drawOn(this.drawingCanvas);
     }
 
 
@@ -159,8 +186,7 @@ export class ImageWorkspace {
         });
 
         this.drawingLayers.selectedLayer.canvas.setImageData(drawingImageData);
-        this.drawingCanvas.clear();
-        this.drawingLayers.drawOn(this.drawingCanvas);
+        this.redrawDrawingLayers();
         this.workingCanvas.clear();
     }
 

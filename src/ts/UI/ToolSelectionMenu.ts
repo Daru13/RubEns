@@ -110,9 +110,9 @@ export class ToolSelectionMenu extends HTMLRenderer {
         let toolClassName = tool.constructor.name;
 
         let toolButton = $("<button>");
-        toolButton.html(toolName);
         toolButton.attr("type", "button");
         toolButton.attr("data-tool-classname", toolClassName);
+        toolButton.attr("title", toolName);
         toolButton.addClass("tool_button");
 
         // A tool is initially disabled
