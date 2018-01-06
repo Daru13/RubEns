@@ -13,12 +13,12 @@ export interface HistoryStep {
     redo: HistoryFunction;
     /**
      *  a function that cancels the result of the redo`function.
-     * @type {[type]}
+     * @type {HistoryFunction}
      */
     undo?: HistoryFunction;
     /**
      * the image before the redo function is apply.
-     * @type {[type]}
+     * @type {HistoryFunction}
      */
     image?: ImageData;
     /**
