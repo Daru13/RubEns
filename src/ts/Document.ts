@@ -115,12 +115,9 @@ export class Document {
             let img = new Image();
             img.addEventListener("load", function() {
                 // TODO change interface when image size is not the same
-                // self.parameters.height = img.height;
-                // self.parameters.width = img.width;
-                if(self.imageWorkspace.drawingLayers.selectedLayer === null) {
-                    self.imageWorkspace.drawingLayers.createLayer("New Layer");
-                }
+                self.imageWorkspace.drawingLayers.createLayer("New Layer");
                 self.imageWorkspace.drawingLayers.selectedLayer.canvas.importImage(img);
+                self.imageWorkspace.redrawDrawingLayers();
                 onCopyEnd();
             });
             img.src = reader.result;
