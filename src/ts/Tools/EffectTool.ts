@@ -1,5 +1,5 @@
 import { Tool } from "./Tool";
-import {Convolution} from "../DrawingPrimitives/Convolution";
+import { Convolution } from "../DrawingPrimitives/Convolution";
 
 /**
  * Tool used to apply an effect on the current layer.
@@ -52,7 +52,7 @@ export class EffectTool extends Tool {
     }
 
     /**
-     * Select the whole image, and change the workspace.
+     * Apply the effect the the layer.
      *
      * @author Mathieu Fehr
      */
