@@ -8,7 +8,7 @@ import { EventManager } from "../EventManager";
 export enum BlendModes {
     Normal    = "Normal",
     Add       = "Add",
-    Substract = "Substract",
+    Subtract  = "Subtract",
     Multiply  = "Multiply"
 
     // TODO: add more
