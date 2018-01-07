@@ -242,6 +242,9 @@ export class RubEns {
 
         // Notify that the document has changed
         EventManager.spawnEvent("rubens_documentCreated", {document: this.document});
+
+        // Update the workspace
+        this.document.imageWorkspace.redrawDrawingLayers();
     }
 
 
