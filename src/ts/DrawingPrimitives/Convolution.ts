@@ -74,12 +74,12 @@ export class Convolution {
             }
 
             // We set the new color
-            if(alphaSum == 0) {
+            if(newColor.alpha == 0) {
                 newArray[4 * position + 3] = 0;
             } else {
-                newArray[4 * position] = Math.round(newColor.red / alphaSum);
-                newArray[4 * position + 1] = Math.round(newColor.green / alphaSum);
-                newArray[4 * position + 2] = Math.round(newColor.blue / alphaSum);
+                newArray[4 * position] = Math.round(newColor.red / newColor.alpha);
+                newArray[4 * position + 1] = Math.round(newColor.green / newColor.alpha);
+                newArray[4 * position + 2] = Math.round(newColor.blue / newColor.alpha);
                 newArray[4 * position + 3] = Math.round(newColor.alpha);
             }
         }
