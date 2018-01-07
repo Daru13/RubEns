@@ -13,6 +13,7 @@ import { FreeHandTool } from "./Tools/FreeHandTool";
 import { RectangleSelectionTool } from "./Tools/RectangleSelectionTool";
 import { MagicWandTool } from "./Tools/MagicWandTool";
 import { BucketTool } from "./Tools/BucketTool";
+import { EffectTool } from "./Tools/EffectTool";
 
 
 /**
@@ -138,7 +139,8 @@ export class RubEns {
             new FreeHandTool(),
             new RectangleSelectionTool(),
             new MagicWandTool(),
-            new BucketTool()
+            new BucketTool(),
+            new EffectTool(),
         ];
 
         this.eventManager.registerEventHandler({
