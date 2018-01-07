@@ -3,6 +3,7 @@ import { Color } from "./utils/Color";
 import { EventManager } from "./EventManager";
 import { DisplayableCanvas } from "./Image/DisplayableCanvas";
 import { LayerManager } from "./Image/LayerManager";
+import {Canvas} from "./Image/Canvas";
 
 
 /**
@@ -40,7 +41,7 @@ export class ImageWorkspace {
     /**
      * Canvas used to preview drawing operations made by the current tool.
      */
-    workingCanvas: DisplayableCanvas;
+    workingCanvas: Canvas;
 
     /**
      * Canvas used to display the current selection in the Canvas
@@ -101,6 +102,8 @@ export class ImageWorkspace {
         this.initSelection();
 
         eventManager.registerEventHandler(this.layersUpdateHandler);
+
+        window.requestAnimationFrame(() => this.onRequestAnimationFrame());
     }
 
 
@@ -131,7 +134,7 @@ export class ImageWorkspace {
         this.drawingCanvas = new DisplayableCanvas(width, height, "drawing_canvas", eventManager);
         this.drawingLayers = new LayerManager(width, height, eventManager);
         this.drawingLayers.createLayer();
-        this.workingCanvas = new DisplayableCanvas(width, height, "working_canvas", eventManager);
+        this.workingCanvas = new Canvas(width, height, eventManager);
         this.selectionCanvas = new DisplayableCanvas(width, height, "selection_canvas", eventManager);
     }
 
@@ -143,7 +146,22 @@ export class ImageWorkspace {
      */
     redrawDrawingLayers() {
         this.drawingCanvas.clear();
-        this.drawingLayers.drawOn(this.drawingCanvas);
+        this.drawingLayers.drawLowerLayersOn(this.drawingCanvas);
+        // TODO add other types of layers (currently, only blend is implemented)
+        this.drawingLayers.selectedLayer.drawOnCanvas(this.drawingCanvas);
+        this.drawingCanvas.drawCanvas(this.workingCanvas);
+        this.drawingLayers.drawUpperLayersOn(this.drawingCanvas);
+    }
+
+
+    /**
+     * Function to call when a frame is drawn.
+     *
+     * @author Mathieu Fehr
+     */
+    onRequestAnimationFrame() {
+        this.redrawDrawingLayers();
+        window.requestAnimationFrame(() => this.onRequestAnimationFrame());
     }
 
 
