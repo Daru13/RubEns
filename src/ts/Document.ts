@@ -17,6 +17,10 @@ export class Document {
      */
     imageWorkspace: ImageWorkspace;
 
+    /**
+     *History used to store changes on document.
+     * @type {History}
+     */
     history: History;
 
     /**
@@ -48,7 +52,7 @@ export class Document {
         this.imageWorkspace = new ImageWorkspace(this.parameters.width.value,
                                                  this.parameters.height.value,
                                                  eventManager);
-        this.history = new History(this);
+        this.history = new History(this, this.eventManager);
     }
 
 

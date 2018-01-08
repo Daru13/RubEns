@@ -112,10 +112,10 @@ export class History {
      *
      * @author Josselin GIET
      */
-    constructor(document: Document){
+    constructor(document: Document, eventManager: EventManager){
         this.document = document;
         this.listOfActions[0] = {
-            // basically, this step is ony useful since it contais an image.
+            // basically, this step is only useful since it contains an image.
             // the actios are "empty" functions.
             redo: function () { null },
             undo: function () { null },
