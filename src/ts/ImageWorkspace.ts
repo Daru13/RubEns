@@ -30,12 +30,12 @@ export class ImageWorkspace {
     eventManager: EventManager;
 
     /**
-     * Canvas used to display the actual image.
+     * Structure containing all the layers of the current image.
      */
     drawingLayers: LayerManager;
 
     /**
-     * Canvas used to display the layers.
+     * Canvas used to display the actual image and the preview of the current tool.
      */
     drawingCanvas: DisplayableCanvas;
 
