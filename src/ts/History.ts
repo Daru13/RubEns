@@ -176,13 +176,13 @@ export class History {
     clearHead() {
         if (this.currentStep < this.numberOfStep) {
             // First, we delete the steps between the curent one and the head of the history.
-            for (var i = this.currentStep+1; i <= this.numberOfStep; i++){
+            for (let i = this.currentStep+1; i <= this.numberOfStep; i++){
                 delete this.listOfActions[i];
             }
             // Then, we correct the number of Step in the current step.
             this.numberOfStep = this.currentStep;
             // Finally, we put the nearestForwardImage of the "new" head of the history.
-            for (var i = this.numberOfStep; i < this.listOfActions[this.currentStep].nearestBackwardImage; i++){
+            for (let i = this.numberOfStep; i < this.listOfActions[this.currentStep].nearestBackwardImage; i++){
                 this.listOfActions[i].nearestForwardImage = -1;
             }
         }
@@ -245,15 +245,15 @@ export class History {
         // Case 2: limit of action on Canvas is reached.
             if (this.numberOfImages > this.boundOnImages) {
             // Case 2.1: we have to clear an image and the steps after until the next image.
-                var beginning = this.firstAvailableStep;
-                var end = this.listOfActions[beginning+1].nearestForwardImage;
+                let beginning = this.firstAvailableStep;
+                let end = this.listOfActions[beginning+1].nearestForwardImage;
                 for (let i = beginning; i < end; i++){
                     delete this.listOfActions[i];
                 }
                 this.firstAvailableStep = end;
             }
             // Then, we store an image.
-            var thisStep: number = this.numberOfStep;
+            let thisStep: number = this.numberOfStep;
             this.listOfActions[thisStep] =
                 {redo: redo,
                  undo: undo,
@@ -285,10 +285,10 @@ export class History {
             alert("Unavailable step!");
             return;
         }
-        var step: HistoryStep = this.listOfActions[stepNumber];
+        let step: HistoryStep = this.listOfActions[stepNumber];
 
         // We check if we can use the undo function.
-        var useUndo: boolean = true;
+        let useUndo: boolean = true;
         if (step.nearestForwardImage == -1)
         {
             useUndo = false; // TODO
@@ -296,21 +296,21 @@ export class History {
         if (useUndo && (stepNumber - step.nearestBackwardImage < step.nearestForwardImage - stepNumber)){
             useUndo = false;
         }
-        for(var i = stepNumber + 1; useUndo && (i < step.nearestForwardImage); i++){
+        for(let i = stepNumber + 1; useUndo && (i < step.nearestForwardImage); i++){
             if (this.listOfActions[i].undo != null) { useUndo = false; }
         }
         // Depending on the results of several check above, we use undo function, or not.
         if (useUndo) {
         // Case 1: we use undo functions.
             this.document.imageWorkspace.drawingCanvas.setImageData(this.listOfActions[step.nearestForwardImage].image);
-            for (var i = step.nearestForwardImage-1; i > stepNumber; i--){
+            for (let i = step.nearestForwardImage-1; i > stepNumber; i--){
                 this.listOfActions[i].undo();
             }
         }
         else {
         // Case 2: we use redo functions.
             this.document.imageWorkspace.drawingCanvas.setImageData(this.listOfActions[step.nearestBackwardImage].image);
-            for (var i = step.nearestBackwardImage; i <= stepNumber; i++){
+            for (let i = step.nearestBackwardImage; i <= stepNumber; i++){
                 this.listOfActions[i].redo();
             }
         }
