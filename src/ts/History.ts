@@ -1,4 +1,7 @@
 import { Document } from "./Document";
+import { EventManager } from "./EventManager";
+import { EventHandler } from "./EventHandler";
+
 
 type HistoryFunction = () => void;
 
@@ -63,6 +66,12 @@ export class History {
     document: Document;
 
     /**
+     * The event manager used to dispatch events
+     */
+    eventManager: EventManager;
+
+
+    /**
      * The list of the actions applied on the document and storred.
      */
     listOfActions: HistoryStep[] = [];
@@ -104,6 +113,21 @@ export class History {
      */
     boundOnCanvas: number = 10;
 
+
+    handleApply: EventHandler = {
+        eventTypes: ["rubens_historyApply"],
+        callback : (event: CustomEvent) => {
+            this.apply(event.detail.redo, event.detail.undo)
+        }
+    }
+
+    handleApplyOnCanvas: EventHandler = {
+        eventTypes: ["rubens_historyApplyOnCanvas"],
+        callback : (event: CustomEvent) => {
+            this.apply(event.detail.redo, event.detail.undo)
+        }
+    }
+
     /**
      * The constructor that initializes the History
      * by adding an *empty* step with the image in the beginning.
@@ -127,7 +151,12 @@ export class History {
         this.numberOfStep = 0;
         this.numberOfImages = 1;
         this.currentStep = 0;
+
+        this.eventManager = eventManager;
+        this.eventManager.registerEventHandler(this.handleApply);
+        this.eventManager.registerEventHandler(this.handleApplyOnCanvas);
     }
+
 
     /**
      * This function delete the history between the current step and this.numberOfStep.
