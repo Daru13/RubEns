@@ -13,11 +13,6 @@ export class DisplayableCanvas extends Canvas {
     id: string;
 
     /**
-     * The bounding rectangle of the canvas.
-     */
-    private canvasBoundingRect: ClientRect;
-
-    /**
      * Event handler for document resized.
      */
     protected documentResizedHandler = {
@@ -28,18 +23,8 @@ export class DisplayableCanvas extends Canvas {
 
             this.updateDimensions(newWidth, newHeight);
             this.updatePosition();
-            this.updateBoundingRect();
         }
     };
-
-    /**
-     * Event handler for window resized.
-     */
-    private windowResizedHandler = {
-        eventTypes: ["resize"],
-        callback  : (_) => { this.updateBoundingRect(); }
-    };
-
 
 
     /**
@@ -65,8 +50,6 @@ export class DisplayableCanvas extends Canvas {
         canvas.css("width", this.width + "px");
         canvas.attr("id", this.id);
 
-        eventManager.registerEventHandler(this.windowResizedHandler);
-
         this.updateCanvasNodeRelatedProperties();
     }
 
@@ -79,17 +62,6 @@ export class DisplayableCanvas extends Canvas {
     updateCanvasNodeRelatedProperties () {
         this.updateDimensions(this.width, this.height);
         this.updatePosition();
-        this.updateBoundingRect();
-    }
-
-    /**
-     * Compute and save the bounding rectangle of the HTML canvas.
-     * This method should be called whenever the canvas changes in the DOM.
-     *
-     * @author Camille Gobert
-     */
-    updateBoundingRect () {
-        this.canvasBoundingRect = this.canvas.getBoundingClientRect();
     }
 
 
@@ -140,7 +112,7 @@ export class DisplayableCanvas extends Canvas {
      * @author Camille Gobert
      */
     getMouseEventCoordinates (event: MouseEvent) {
-        let boundingRect = this.canvasBoundingRect;
+        let boundingRect = this.canvas.getBoundingClientRect();
 
         let mouseX = (event.clientX - boundingRect.left);
         let mouseY = (event.clientY - boundingRect.top);
