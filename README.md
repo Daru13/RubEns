@@ -34,8 +34,9 @@ Please note that, because of web technologies (e.g. Javascript engines) performa
 
 ## Development
 
-The app is written in Typescript (2.6+), HTML 5 and CSS 3.
+The app is written in Typescript (2.6+), HTML and CSS.
 [You can find the source code documentation online!](https://daru13.github.io/RubEns/docs)
+You can also read the [contribution guidelines](CONTRIBUTING.md) and the [code overview](misc/OVERVIEW.md).
 
 It also uses several external libraries and tools for development and testing purposes, and a few runtime libraries. The provided `Makefile` and `package.json` ease the setup, building and testing processes. You can find details about those below.
 
@@ -63,22 +64,17 @@ Several libraries are required in order to compile and test RubEns, listed below
 
 We provide an easy-to-use setup script, which takes care of installing all dependencies you may need to develop and test RubEns. It requires [`npm`](https://www.npmjs.com/) and a C++11 compiler (for `canvas` package) to be installed and available on your path.
 
-Then, simply run `make setup` to prepare the setup the development environement!
+Then, simply run `make setup` to prepare the setup the development environment!
 
 *Please note that even though most dependencies are installed as local packages, we did not manage to setup the testing framework without installing `typescript`, `ts-mocha` and `mocha` as global packages.*
 
 
 ### Compiling and testing
 
-Once the environement is set up, the Makefile provides the following commands:
+Once the environment is set up, the Makefile provides the following commands:
 
 * `make build` will compile all the sources, and produce a standalone app in a `build` directory;
 * `make doc` will produce a web docs for the full Typescript sources in a `docs` directory;
 * `make test` will run the tests available in the `test` directory (using [`mocha`](https://mochajs.org/) framework).
 
 In addition, you can also run `make` to run the three commands listed above, and `make clean` to remove any build or doc output.
-
-
-### Guidelines
-
-Arriving soon!

@@ -12,19 +12,19 @@ export class Convolution {
      * The convolution matrix is expected to be correct (which mean that every line should have the same size).
      * The convolution matrix height and width should also be odd.
      *
-     * @param {Matrix} matrix       The matrix to convolve with the image
+     * @param {Matrix} kernel       The matrix to convolve with the image
      * @param {ImageData} image     The image where the convolution is done
      */
-    static convolve(matrix: Matrix, image: ImageData) {
+    static convolve(kernel: Matrix, image: ImageData) {
 
         // We check that the height and width is odd
-        if (matrix.height % 2 == 0 || matrix.width % 2 == 0) {
+        if (kernel.height % 2 == 0 || kernel.width % 2 == 0) {
             console.error("Convolution should be made with a matrix that has odd height and width");
             return;
         }
 
         // We check that the convolution matrix is small enough
-        if ((matrix.height - 1) / 2 > image.height || (matrix.width - 1) / 2 > image.width) {
+        if ((kernel.height - 1) / 2 > image.height || (kernel.width - 1) / 2 > image.width) {
             console.error("The convolution matrix is too big to convolve the image");
             return;
         }
@@ -39,8 +39,8 @@ export class Convolution {
             let newColor = new Color(0, 0, 0, 0);
 
             // We compute the new pixel color by convolving the matrix with the pixel's neighbors.
-            for (let dy = -(matrix.height - 1) / 2; dy++; dy <= (matrix.height - 1) / 2) {
-                for (let dx = -(matrix.width - 1) / 2; dx++; dx <= (matrix.width - 1) / 2) {
+            for (let dy = -(kernel.height - 1) / 2; dy <= (kernel.height - 1) / 2; dy++) {
+                for (let dx = -(kernel.width - 1) / 2; dx <= (kernel.width - 1) / 2; dx++) {
 
                     // If the pixel is outside of the borders,
                     // we get the mirrored pixel
@@ -60,20 +60,28 @@ export class Convolution {
 
                     let neighborPosition = pixelX + image.width * pixelY;
 
-                    newColor.red += matrix[dy][dx] * image[4 * neighborPosition];
-                    newColor.green += matrix[dy][dx] * image[4 * neighborPosition + 1];
-                    newColor.blue += matrix[dy][dx] * image[4 * neighborPosition + 2];
-                    newColor.alpha += matrix[dy][dx] * image[4 * neighborPosition + 3];
+                    let kernelY = dy + (kernel.height - 1) / 2;
+                    let kernelX = dx + (kernel.width - 1) / 2;
+
+                    let alpha = image.data[4 * neighborPosition + 3];
+                    let neighborColorFactor = alpha * kernel.data[kernelY][kernelX];
+
+                    newColor.red   += neighborColorFactor * image.data[4 * neighborPosition];
+                    newColor.green += neighborColorFactor * image.data[4 * neighborPosition + 1];
+                    newColor.blue  += neighborColorFactor * image.data[4 * neighborPosition + 2];
+                    newColor.alpha += neighborColorFactor;
                 }
             }
 
-            let pixelPosition = x + image.width * y;
-
             // We set the new color
-            newArray[4 * pixelPosition] = newColor.red;
-            newArray[4 * pixelPosition + 1] = newColor.green;
-            newArray[4 * pixelPosition + 2] = newColor.blue;
-            newArray[4 * pixelPosition + 3] = newColor.alpha;
+            if(newColor.alpha == 0) {
+                newArray[4 * position + 3] = 0;
+            } else {
+                newArray[4 * position] = Math.round(newColor.red / newColor.alpha);
+                newArray[4 * position + 1] = Math.round(newColor.green / newColor.alpha);
+                newArray[4 * position + 2] = Math.round(newColor.blue / newColor.alpha);
+                newArray[4 * position + 3] = Math.round(newColor.alpha);
+            }
         }
 
         // We set the new colors to the image data.
@@ -112,7 +120,7 @@ export class Convolution {
         for(let i = -halfSize; i <= halfSize; i++) {
             for(let j = -halfSize; j <= halfSize; j++) {
                 let distanceSquared = i*i + j*j;
-                kernel[i + halfSize][j + halfSize] = normalizationFactor * Math.exp(-distanceSquared / twoSigmaSquared);
+                kernel.data[i + halfSize][j + halfSize] = normalizationFactor * Math.exp(-distanceSquared / twoSigmaSquared);
             }
         }
 
@@ -144,10 +152,9 @@ export class Convolution {
 
         for(let i = 0; i<size; i++) {
             for(let j = 0; j<size; j++) {
-                kernel[i][j] = sizeSquaredInv;
+                kernel.data[i][j] = sizeSquaredInv;
             }
         }
-
         return kernel;
     }
 
@@ -172,10 +179,10 @@ export class Convolution {
         let kernel = new Matrix(size, size);
         for(let i = 0; i<size; i++) {
             for(let j = 0; j<size; j++) {
-                kernel[i][j] = 0;
+                kernel.data[i][j] = 0;
             }
         }
-        kernel[(size-1)/2][(size-1)/2] = 1;
+        kernel.data[(size-1)/2][(size-1)/2] = 1;
 
         return kernel;
     }

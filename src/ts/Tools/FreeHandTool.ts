@@ -75,7 +75,7 @@ export class FreeHandTool extends Tool {
         }
 
         this.workingCanvasImageData = this.workspace.workingCanvas.getImageData();
-        this.lastPosition = this.workspace.workingCanvas.getMouseEventCoordinates(event);
+        this.lastPosition = this.workspace.drawingCanvas.getMouseEventCoordinates(event);
         this.lastPosition.x = Math.floor(this.lastPosition.x);
         this.lastPosition.y = Math.floor(this.lastPosition.y);
     }
@@ -91,7 +91,7 @@ export class FreeHandTool extends Tool {
             return;
         }
 
-        let currentPosition = this.workspace.workingCanvas.getMouseEventCoordinates(event);
+        let currentPosition = this.workspace.drawingCanvas.getMouseEventCoordinates(event);
         currentPosition.x = Math.floor(currentPosition.x);
         currentPosition.y = Math.floor(currentPosition.y);
         this.drawLine(this.workspace.workingCanvas, currentPosition);
