@@ -150,7 +150,7 @@ else if (typedString.endsWith("!")) {
 
 ### Imports and exports
 * Use the Typescript `export` and `import` keywords for modules.
-* Start any file with all its imports, with **no blank line before* and at least **two blank lines after**.
+* Start any file with all its imports, with **no blank line before** and at least **two blank lines after**.
 * Put spaces **before and after each bracket** in an import.
 * Import aliases (using `as`) must be written in `PascalCase`.
 
@@ -275,7 +275,7 @@ class Foo {
    * It checks whether the given string matches the given regex.
    * @param  {string} parameter1 The string to test.
    * @param  {RegExp} parameter2 The regex to match.
-   * @return {[type]}            `true` if there is at least one match, `false` otherwise.
+   * @return {boolean}           `true` if there is at least one match, `false` otherwise.
    *
    * @author Camille Gobert
    */
