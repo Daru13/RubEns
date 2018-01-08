@@ -155,7 +155,7 @@ describe("Test of the user interface:", function () {
         it("Should contain zero or two canvases", function (done) {
             JSDOMPromise.then(_ => {
                 let nb_html_canvases = $("#canvas_container").children().length;
-                assert(nb_html_canvases === 0 || nb_html_canvases === 3);
+                assert(nb_html_canvases === 0 || nb_html_canvases === 2);
 
                 done();
             });
@@ -167,7 +167,7 @@ describe("Test of the user interface:", function () {
 
                 setTimeout(_ => {
                     let nb_html_canvases = $("#canvas_container").children().length;
-                    assert(nb_html_canvases === 3);
+                    assert(nb_html_canvases === 2);
                 }, 5);
 
                 // Always failing if put in the timeout callback
