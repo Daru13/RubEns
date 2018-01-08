@@ -33,6 +33,10 @@ describe("Test of RubEns:", function () {
             .then(loadedDOM => {
                 global.window = loadedDOM.window;
 
+                // Fix for the missing animation timers
+                global.window.requestAnimationFrame = function (_: (_: number) => void) {};
+                global.window.cancelAnimationFrame  = function (_: number) {};
+
                 let defaultParameters = new RubEnsParameters();
                 rubEns = new RubEns(defaultParameters);
             })
