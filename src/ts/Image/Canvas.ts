@@ -33,7 +33,7 @@ export class Canvas {
     /**
      * The 2D context of the canvas.
      */
-    private canvas2DContext: CanvasRenderingContext2D;
+    canvas2DContext: CanvasRenderingContext2D;
 
 
     /**

@@ -4,6 +4,7 @@ import { EventManager } from "./EventManager";
 import { DisplayableCanvas } from "./Image/DisplayableCanvas";
 import { LayerManager } from "./Image/LayerManager";
 import {Canvas} from "./Image/Canvas";
+import {Layer} from "./Image/Layer";
 
 
 /**
@@ -42,6 +43,12 @@ export class ImageWorkspace {
      * Canvas used to preview drawing operations made by the current tool.
      */
     workingCanvas: Canvas;
+
+    /**
+     * Canvas used to contain the addition of the working canvas and the current layer.
+     * This canvas is used to reduce memory allocation/deallocation
+     */
+    currentLayerPreview: Layer;
 
     /**
      * Canvas used to display the current selection in the Canvas
@@ -135,6 +142,7 @@ export class ImageWorkspace {
         this.drawingLayers = new LayerManager(width, height, eventManager);
         this.drawingLayers.createLayer();
         this.workingCanvas = new Canvas(width, height, eventManager);
+        this.currentLayerPreview = new Layer(width, height, eventManager, "", -1);
         this.selectionCanvas = new DisplayableCanvas(width, height, "selection_canvas", eventManager);
     }
 
@@ -145,11 +153,27 @@ export class ImageWorkspace {
      * @author Mathieu Fehr
      */
     redrawDrawingLayers() {
+        // First, we clear the drawing canvas
         this.drawingCanvas.clear();
+
+        // Then, we draw the lower layers on the canvas
         this.drawingLayers.drawLowerLayersOn(this.drawingCanvas);
-        // TODO add other types of layers (currently, only blend is implemented)
-        this.drawingLayers.selectedLayer.drawOnCanvas(this.drawingCanvas);
-        this.drawingCanvas.drawCanvas(this.workingCanvas);
+
+        // We display the selected layer only if necessary
+        if (!this.drawingLayers.selectedLayer.hidden) {
+
+            // We compute the preview of the selected layer
+            // (by applying the tool preview on the data of the selected layer in a buffer layer)
+            this.currentLayerPreview.canvas.clear();
+            this.currentLayerPreview.blendMode = this.drawingLayers.selectedLayer.blendMode;
+            this.currentLayerPreview.canvas.drawCanvas(this.drawingLayers.selectedLayer.canvas);
+            this.currentLayerPreview.canvas.drawCanvas(this.workingCanvas);
+
+            // We then draw the preview of the selected layer on the lower layers
+            this.currentLayerPreview.drawOnCanvas(this.drawingCanvas);
+        }
+
+        // Finally, we draw the upper layers on the drawn layers
         this.drawingLayers.drawUpperLayersOn(this.drawingCanvas);
     }
 
