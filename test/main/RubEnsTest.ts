@@ -48,19 +48,23 @@ describe("Test of RubEns:", function () {
 
     describe("Main application (RubEns):", function () {
 
-        it("Should initialize the event manager", function () {
+        it("Should initialize the event manager", function (done) {
             JSDOMPromise.then(_ => {
                 assert(rubEns.eventManager);
+
+                done();
             });
         });
 
-        it("Should instanciate the tools", function () {
+        it("Should instanciate the tools", function (done) {
             JSDOMPromise.then(_ => {
                 assert(rubEns.tools && rubEns.tools.length > 0);
+
+                done();
             });
         });
 
-        it("Should create a new document if required, none otherwise", function () {
+        it("Should create a new document if required, none otherwise", function (done) {
             JSDOMPromise.then(_ => {
                 if (rubEns.parameters.createDocumentOnStartup) {
                     assert(rubEns.document);
@@ -68,12 +72,16 @@ describe("Test of RubEns:", function () {
                 else {
                     assert(! rubEns.document);
                 }
+
+                done();
             });
         });
 
-        it("Should initialize the user interface", function () {
+        it("Should initialize the user interface", function (done) {
             JSDOMPromise.then(_ => {
                 assert(rubEns.rootLayout)
+
+                done();
             });
         });
     });
