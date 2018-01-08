@@ -2,7 +2,9 @@ import { Document } from "./Document";
 import { EventManager } from "./EventManager";
 import { EventHandler } from "./EventHandler";
 
-
+/**
+ * An function given to the history has no rgument and returns nothing.
+ */
 type HistoryFunction = () => void;
 
 /**
@@ -113,7 +115,9 @@ export class History {
      */
     boundOnCanvas: number = 10;
 
-
+    /**
+     * This EventHandler is called for basic operations.
+     */
     handleApply: EventHandler = {
         eventTypes: ["rubens_historyApply"],
         callback : (event: CustomEvent) => {
@@ -121,6 +125,9 @@ export class History {
         }
     }
 
+    /**
+     * This EventHandler should be called when you make an operation on canvas.
+     */
     handleApplyOnCanvas: EventHandler = {
         eventTypes: ["rubens_historyApplyOnCanvas"],
         callback : (event: CustomEvent) => {
