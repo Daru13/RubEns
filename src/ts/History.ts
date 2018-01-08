@@ -150,7 +150,7 @@ export class History {
             // the actios are "empty" functions.
             redo: function () { null },
             undo: function () { null },
-            image: this.document.imageWorkspace.drawingCanvas.getImageData(),
+            image: this.document.imageWorkspace.drawingLayers.selectedLayer.canvas.getImageData(),
             nearestForwardImage: 0,
             nearestBackwardImage: 0,
             numberOfActionOnCanvas:0,
@@ -302,19 +302,20 @@ export class History {
         // Depending on the results of several check above, we use undo function, or not.
         if (useUndo) {
         // Case 1: we use undo functions.
-            this.document.imageWorkspace.drawingCanvas.setImageData(this.listOfActions[step.nearestForwardImage].image);
+            this.document.imageWorkspace.drawingLayers.selectedLayer.canvas.setImageData(this.listOfActions[step.nearestForwardImage].image);
             for (let i = step.nearestForwardImage-1; i > stepNumber; i--){
                 this.listOfActions[i].undo();
             }
         }
         else {
         // Case 2: we use redo functions.
-            this.document.imageWorkspace.drawingCanvas.setImageData(this.listOfActions[step.nearestBackwardImage].image);
+            this.document.imageWorkspace.drawingLayers.selectedLayer.canvas.setImageData(this.listOfActions[step.nearestBackwardImage].image);
             for (let i = step.nearestBackwardImage; i <= stepNumber; i++){
                 this.listOfActions[i].redo();
             }
         }
         this.currentStep = stepNumber;
+        this.document.imageWorkspace.redrawDrawingLayers();
     // TODO : if we can undo from the current Step, we have to !
     }
 
