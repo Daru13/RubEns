@@ -375,4 +375,40 @@ export class LayerManager {
             this.layers[i].drawOnCanvas(canvas);
         }
     }
+
+
+    /**
+     * Draw all the layers that are strictly under the selected layer on the canvas.
+     *
+     * @param {Canvas} canvas The canvas where the layers should be drawn.
+     *
+     * @author Mathieu Fehr
+     */
+    drawLowerLayersOn (canvas: Canvas) {
+        let i = this.layers.length - 1;
+        while(this.selectedLayer.id != this.layers[i].id) {
+            this.layers[i].drawOnCanvas(canvas);
+            i--;
+        }
+    }
+
+
+    /**
+     * Draw all the layers that are strictly above the selected layer on the canvas.
+     *
+     * @param {Canvas} canvas The canvas where the layers should be drawn.
+     *
+     * @author Mathieu Fehr
+     */
+    drawUpperLayersOn (canvas: Canvas) {
+        let i = 0;
+        while(this.selectedLayer.id != this.layers[i].id) {
+            i++;
+        }
+        i--;
+        while(i >= 0) {
+            this.layers[i].drawOnCanvas(canvas);
+            i--;
+        }
+    }
 }
