@@ -237,7 +237,10 @@ export class ImageWorkspace {
      * @author Mathieu Fehr
      */
     displaySelection(selection: SelectedArea) {
-        let imageData = this.drawingCanvas.getImageData();
+        this.selectionCanvas.clear();
+        this.drawingLayers.drawOn(this.selectionCanvas);
+
+        let imageData = this.selectionCanvas.getImageData();
 
         if (this.selectionDrawingIntervalID === null) {
             this.selectionDrawingIntervalID = window.setInterval(() => {
