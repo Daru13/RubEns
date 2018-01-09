@@ -121,7 +121,7 @@ export class History {
     handleApply: EventHandler = {
         eventTypes: ["rubens_historyApply"],
         callback : (event: CustomEvent) => {
-            this.apply(event.detail.redo, event.detail.undo)
+            this.applied(event.detail.redo, event.detail.undo)
         }
     }
 
@@ -131,7 +131,7 @@ export class History {
     handleApplyOnCanvas: EventHandler = {
         eventTypes: ["rubens_historyApplyOnCanvas"],
         callback : (event: CustomEvent) => {
-            this.apply(event.detail.redo, event.detail.undo)
+            this.appliedOnCanvas(event.detail.redo, event.detail.undo)
         }
     }
 
@@ -196,7 +196,7 @@ export class History {
      *
      * @author Josselin GIET
      */
-    apply(redo: HistoryFunction, undo?: HistoryFunction){
+    applied(redo: HistoryFunction, undo?: HistoryFunction){
         //First, we have to clear the head.
         this.clearHead();
         // Then, we increment the right indices.
@@ -216,14 +216,14 @@ export class History {
 
     /**
      * This function stores the functions given in argument and calls this function,
-     * and icreases numberOfActionOnCanvas.
+     * and increases numberOfActionOnCanvas.
      * @param  {HistoryFunction} redo the function to apply.
      * @param  {HistoryFunction} undo the inverse function of undo.
      * @return {void} Returns nothing : works by side-effect.
      *
      * @author Josselin GIET
      */
-    applyOnCanvas(redo: HistoryFunction, undo?: HistoryFunction){
+    appliedOnCanvas(redo: HistoryFunction, undo?: HistoryFunction){
         //First, we have to clear the head.
         this.clearHead();
         // Then, we increment the right indices.
