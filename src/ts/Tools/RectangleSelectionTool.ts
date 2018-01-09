@@ -77,7 +77,7 @@ export class RectangleSelectionTool extends Tool {
      * @author Mathieu Fehr
      */
     onMouseDown(event: MouseEvent) {
-        this.firstPoint = this.workspace.drawingCanvas.getMouseEventCoordinates(event);
+        this.firstPoint = this.workspace.getMouseEventCoordinates(event);
         this.firstPoint.x = Math.floor(this.firstPoint.x);
         this.firstPoint.y = Math.floor(this.firstPoint.y);
     }
@@ -95,7 +95,7 @@ export class RectangleSelectionTool extends Tool {
             return;
         }
 
-        this.secondPoint = this.workspace.drawingCanvas.getMouseEventCoordinates(event);
+        this.secondPoint = this.workspace.getMouseEventCoordinates(event);
         this.secondPoint.x = Math.floor(this.secondPoint.x);
         this.secondPoint.y = Math.floor(this.secondPoint.y);
 
@@ -121,7 +121,7 @@ export class RectangleSelectionTool extends Tool {
         if(this.firstPoint === null) {
             return;
         }
-        this.secondPoint = this.workspace.drawingCanvas.getMouseEventCoordinates(event);
+        this.secondPoint = this.workspace.getMouseEventCoordinates(event);
         this.secondPoint.x = Math.floor(this.secondPoint.x);
         this.secondPoint.y = Math.floor(this.secondPoint.y);
         this.applySelection(this.firstPoint, this.secondPoint);

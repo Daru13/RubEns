@@ -50,7 +50,7 @@ export class StatusBar extends HTMLRenderer {
             // Update last known mouse position
             if (this.app.document) {
                 let mouseEvent = <MouseEvent> event;
-                this.lastKnownMousePosition = this.app.document.imageWorkspace.drawingCanvas.getMouseEventCoordinates(mouseEvent);
+                this.lastKnownMousePosition = this.app.document.imageWorkspace.getMouseEventCoordinates(mouseEvent);
             }
 
             this.updateMousePositionNode();

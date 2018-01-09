@@ -322,4 +322,16 @@ export class ImageWorkspace {
 
         this.selectionCanvas.setImageData(imageData);
     }
+
+
+    /**
+     * Get the position of a mouse event relative to the image workspace.
+     * @param  {MouseEvent} event The mouse event
+     * @return                    The position of the mouse event relative to the image workspace.
+     *
+     * @author Mathieu Fehr
+     */
+    getMouseEventCoordinates(event: MouseEvent) {
+        return this.drawingCanvas.getMouseEventCoordinates(event);
+    }
 }
