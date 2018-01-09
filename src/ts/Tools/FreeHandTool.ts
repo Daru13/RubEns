@@ -5,6 +5,7 @@ import { Line } from "../DrawingPrimitives/Line";
 import * as Params from "../Parameter";
 import { ToolParameters } from "./Tool";
 import { Color } from "../utils/Color";
+import { EventManager } from "../EventManager"
 
 /**
  * Set of parameters used by [[FreeHandTool]].
@@ -106,6 +107,7 @@ export class FreeHandTool extends Tool {
     onMouseUp(event: MouseEvent) {
         // We first draw the last line
         this.onMouseMove(event);
+        this.saveInHistory();
         this.workspace.applyWorkingCanvas();
         this.lastPosition = null;
         this.workingCanvasImageData = null;
@@ -155,5 +157,19 @@ export class FreeHandTool extends Tool {
         Line.draw(this.workingCanvasImageData, this.lastPosition, currentPosition, thickness, color);
 
         image.setImageData(this.workingCanvasImageData);
+    }
+
+    saveInHistory() {
+        let copyOfImageData = this.workingCanvasImageData;
+
+        EventManager.spawnEvent(
+            "rubens_historyApplyOnCanvas",
+            {description: "drawing "+this.name,
+             redo: () => {
+                 this.workspace.workingCanvas.setImageData(copyOfImageData);
+                 console.log("OK!")
+                 this.workspace.applyWorkingCanvas();
+             },
+             undo: null});
     }
 }
