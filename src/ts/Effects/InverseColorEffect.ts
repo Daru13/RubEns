@@ -4,12 +4,18 @@ import { ColorEffects } from "../DrawingPrimitives/ColorEffects";
 export class InverseColorEffect extends Effect {
 
     /**
+     * The name of the effect.
+     * This information may for instance be used by the UI.
+     */
+    readonly name = "Inverse colors";
+
+
+    /**
      * Inverse the color of the current layer.
      *
      * @author Mathieu Fehr
      */
     apply() {
-
         // We check that there is a selected layer.
         if (this.workspace.drawingLayers.selectedLayer === null) {
             return;
