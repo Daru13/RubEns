@@ -224,6 +224,9 @@ export class ImageWorkspace {
         this.drawingLayers.selectedLayer.canvas.setImageData(drawingImageData);
         this.redrawDrawingLayers();
         this.workingCanvas.clear();
+
+        EventManager.spawnEvent("rubens_historyApplyOnCanvas",{redo: function () {},
+                                                               undo: function () {}});
     }
 
 
