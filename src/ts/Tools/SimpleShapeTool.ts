@@ -140,7 +140,10 @@ export abstract class SimpleShapeTool extends Tool {
         EventManager.spawnEvent(
             "rubens_historyApplyOnCanvas",
             {description: "drawing "+this.name,
-             redo: () => {this.drawShape(firstPointCopy, secondPointCopy)},
+             redo: () => {
+                 this.drawShape(firstPointCopy, secondPointCopy);
+                 this.workspace.applyWorkingCanvas()
+             },
              undo: null});
     }
 }

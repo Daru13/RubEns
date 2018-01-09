@@ -289,7 +289,6 @@ export class History {
             }
         }
         this.currentStep = stepNumber;
-        this.document.imageWorkspace.redrawDrawingLayers();
     // TODO : if we can undo from the current Step, we have to !
     }
 
