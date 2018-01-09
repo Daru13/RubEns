@@ -53,7 +53,7 @@ export class MagicWandTool extends Tool {
     onMouseDown(event: MouseEvent) {
 
         // The area selected is the one with the same color as the source pixel.
-        let source = this.workspace.selectionCanvas.getMouseEventCoordinates(event);
+        let source = this.workspace.getMouseEventCoordinates(event);
         source.x = Math.round(source.x);
         source.y = Math.round(source.y);
 

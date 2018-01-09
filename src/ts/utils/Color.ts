@@ -94,6 +94,43 @@ export class Color {
         }
     }
 
+    /**
+     * Get the hexadecimal string of the current color (always opaque).
+     *
+     * The syntax is `#rrggbb`, where rr, gg and bb respectively are the red, green and blue
+     * components of the colors encoded in base 16.
+     * If the color is not valid (red, green or blue not being in the range [0,255]),
+     * then null is returned.
+     *
+     * @author Mathieu Fehr
+     */
+    getHex () {
+        let red = Math.round(this.red);
+        let green = Math.round(this.green);
+        let blue = Math.round(this.blue);
+
+        if(red < 0 || green < 0 || blue < 0 || red > 255 || green > 255 || blue > 255) {
+            return null;
+        }
+
+        let redString = red.toString(16);
+        if (redString.length === 1) {
+            redString = "0" + redString;
+        }
+
+        let greenString = green.toString(16);
+        if (greenString.length === 1) {
+            greenString = "0" + greenString;
+        }
+
+        let blueString = blue.toString(16);
+        if (blueString.length === 1) {
+            blueString = "0" + blueString;
+        }
+
+        return "#" + redString + greenString + blueString;
+    }
+
 
     /**
      * Blend the color src to the color dest.

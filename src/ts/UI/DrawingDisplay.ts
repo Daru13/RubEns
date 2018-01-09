@@ -75,9 +75,6 @@ export class DrawingDisplay extends HTMLRenderer {
         }
 
         this.canvasContainer.append(document.imageWorkspace.drawingCanvas.canvas);
-        document.imageWorkspace.drawingCanvas.updateBoundingRect();
-
         this.canvasContainer.append(document.imageWorkspace.selectionCanvas.canvas);
-        document.imageWorkspace.selectionCanvas.updateBoundingRect();
     }
 }

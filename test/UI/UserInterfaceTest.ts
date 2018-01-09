@@ -40,6 +40,10 @@ describe("Test of the user interface:", function () {
             .then(loadedDOM => {
                 global.window = loadedDOM.window;
 
+                // Fix for the missing animation timers
+                global.window.requestAnimationFrame = function (_: (_: number) => void) {};
+                global.window.cancelAnimationFrame  = function (_: number) {};
+
                 let defaultParameters = new RubEnsParameters();
                 rubEns = new RubEns(defaultParameters);
             })
@@ -52,48 +56,60 @@ describe("Test of the user interface:", function () {
 
     describe("Root layout:", function () {
 
-        it("Should create a root layout", function () {
+        it("Should create a root layout", function (done) {
             JSDOMPromise.then(_ => {
                 assert(rubEns.rootLayout);
                 assert(rubEns.rootLayout.rootNode);
+
+                done();
             });
         });
 
-        it("Should create a main menu", function () {
+        it("Should create a main menu", function (done) {
             JSDOMPromise.then(_ => {
                 assert(rubEns.rootLayout.mainMenu);
                 assert(rubEns.rootLayout.mainMenu.rootNode);
+
+                done();
             });
         });
 
-        it("Should create a drawing display", function () {
+        it("Should create a drawing display", function (done) {
             JSDOMPromise.then(_ => {
                 assert(rubEns.rootLayout.drawingDisplay);
                 assert(rubEns.rootLayout.drawingDisplay.rootNode);
+
+                done();
             });
         });
 
-        it("Should create a sidebar", function () {
+        it("Should create a sidebar", function (done) {
             JSDOMPromise.then(_ => {
                 assert(rubEns.rootLayout.sidebar);
                 assert(rubEns.rootLayout.sidebar.rootNode);
+
+                done();
             });
         });
 
-        it("Should create a status bar", function () {
+        it("Should create a status bar", function (done) {
             JSDOMPromise.then(_ => {
                 assert(rubEns.rootLayout.statusBar);
                 assert(rubEns.rootLayout.statusBar.rootNode);
+
+                done();
             });
         });
 
-        it("Should create a tool menu", function () {
+        it("Should create a tool menu", function (done) {
             JSDOMPromise.then(_ => {
                 assert(rubEns.rootLayout.toolMenu);
                 assert(rubEns.rootLayout.toolMenu.rootNode);
-                
+
                 assert(rubEns.rootLayout.toolMenu.toolSelectionMenu);
                 assert(rubEns.rootLayout.toolMenu.toolSelectionMenu.rootNode);
+
+                done();
             });
         });
     });
@@ -101,10 +117,12 @@ describe("Test of the user interface:", function () {
 
     describe("Main menu:", function () {
 
-        it("Should create a submenu for document actions", function () {
+        it("Should create a submenu for document actions", function (done) {
             JSDOMPromise.then(_ => {
                 assert(rubEns.rootLayout.mainMenu.documentActionsMenu);
                 assert(rubEns.rootLayout.mainMenu.documentActionsMenu.rootNode);
+
+                done();
             });
         });
     });
@@ -112,17 +130,21 @@ describe("Test of the user interface:", function () {
 
     describe("Sidebar:", function () {
 
-        it("Should create a global parameter field", function () {
+        it("Should create a global parameter field", function (done) {
             JSDOMPromise.then(_ => {
                 assert(rubEns.rootLayout.sidebar.globalParametersField);
                 assert(rubEns.rootLayout.sidebar.globalParametersField.rootNode);
+
+                done();
             });
         });
 
-        it("Should create a tool-local parameter field", function () {
+        it("Should create a tool-local parameter field", function (done) {
             JSDOMPromise.then(_ => {
                 assert(rubEns.rootLayout.sidebar.currentToolParametersField);
                 assert(rubEns.rootLayout.sidebar.currentToolParametersField.rootNode);
+
+                done();
             });
         });
     });
@@ -130,34 +152,40 @@ describe("Test of the user interface:", function () {
 
     describe("Drawing display:", function () {
 
-        it("Should contain zero or three canvases", function () {
+        it("Should contain zero or two canvases", function (done) {
             JSDOMPromise.then(_ => {
                 let nb_html_canvases = $("#canvas_container").children().length;
-                assert(nb_html_canvases === 0 || nb_html_canvases === 3);
+                assert(nb_html_canvases === 0 || nb_html_canvases === 2);
+
+                done();
             });
         });
 
-        it("Should create three canvases when a document is created", function () {
+        it("Should create two canvases when a document is created", function (done) {
             JSDOMPromise.then(_ => {
                 rubEns.createEmptyDocument();
 
-                // Simulate/handle event dispatch delay
-                setTimeout(function () {
+                setTimeout(_ => {
                     let nb_html_canvases = $("#canvas_container").children().length;
-                    assert(nb_html_canvases === 3);
+                    assert(nb_html_canvases === 2);
                 }, 5);
+
+                // Always failing if put in the timeout callback
+                done();
             });
         });
 
-        it("Should remove three canvases when a document is closed", function () {
+        it("Should remove all canvases when a document is closed", function (done) {
             JSDOMPromise.then(_ => {
                 rubEns.closeDocument();
 
-                // Simulate/handle event dispatch delay
-                setTimeout(function () {
+                setTimeout(_ => {
                     let nb_html_canvases = $("#canvas_container").children().length;
                     assert(nb_html_canvases === 0);
-                }, 2);
+                }, 5);
+
+                // Always failing if put in the timeout callback
+                done();
             });
         });
     });
@@ -171,51 +199,59 @@ describe("Test of the user interface:", function () {
             disabled: false
         };
 
-        it("Should be listening for events", function () {
+        it("Should be listening for events", function (done) {
             JSDOMPromise.then(_ => {
                 assert(rubEns.eventManager.isListening);
+
+                done();
             });
         });
 
-        it("Should allow to register an event handler", function () {
+        it("Should allow to register an event handler", function (done) {
             JSDOMPromise.then(_ => {
                 rubEns.eventManager.registerEventHandler(dummyEventHandler);
                 assert(rubEns.eventManager.registeredHandlers.has("rubens_test"));
                 assert(rubEns.eventManager.registeredHandlers.get("rubens_test").size === 1);
+
+                done();
             });
         });
 
-        it("Should trigger an event handler when conditions are fulfilled", function () {
+        it("Should trigger an event handler when conditions are fulfilled", function (done) {
             JSDOMPromise.then(_ => {
                 let event = new Event("rubens_test");
                 document.dispatchEvent(event);
 
-                // Attempt to simulate event bubbling delday...
-                setTimeout(function() {
+                setTimeout(_ => {
                     assert(dummyCounter === 1);
-                }, 2);
+                }, 10);
+
+                done();
             });
         });
 
-        it("Should ignore disabled event handlers", function () {
+        it("Should ignore disabled event handlers", function (done) {
             JSDOMPromise.then(_ => {
                 dummyEventHandler.disabled = true;
 
                 let event = new Event("rubens_test");
                 document.dispatchEvent(event);
 
-                // Attempt to simulate event bubbling delday...
-                setTimeout(function() {
-                    assert(dummyCounter === 1 /* not 2 */);
-                }, 5);
+                setTimeout(_ => {
+                    assert(dummyCounter === 1 /* instead of 2 */);
+                }, 10);
+
+                done();
             });
         });
 
-        it("Should allow to unregister an event handler", function () {
+        it("Should allow to unregister an event handler", function (done) {
             JSDOMPromise.then(_ => {
                 assert(rubEns.eventManager.registeredHandlers.get("rubens_test").size === 1);
                 rubEns.eventManager.unregisterEventHandler(dummyEventHandler);
                 assert(! rubEns.eventManager.registeredHandlers.has("rubens_test"));
+
+                done();
             });
         });
     });

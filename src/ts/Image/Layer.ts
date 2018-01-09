@@ -83,11 +83,23 @@ export class Layer {
 
         // In this function, we will check the blend mode
         switch (this.blendMode) {
-            default: // TODO: implement other blend modes
+            case BlendModes.Add:
+                canvas.canvas2DContext.globalCompositeOperation = "lighter";
+                break;
 
-            case BlendModes.Normal:
-                canvas.drawCanvas(this.canvas);
+            case BlendModes.Subtract:
+                canvas.canvas2DContext.globalCompositeOperation = "difference";
+                break;
+
+            case BlendModes.Multiply:
+                canvas.canvas2DContext.globalCompositeOperation = "multiply";
+                break;
+
+            default:
                 break;
         }
+
+        canvas.drawCanvas(this.canvas);
+        canvas.canvas2DContext.globalCompositeOperation = "source-over";
     }
 }

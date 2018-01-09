@@ -4,6 +4,7 @@ import { EventManager } from "./EventManager";
 import { DisplayableCanvas } from "./Image/DisplayableCanvas";
 import { LayerManager } from "./Image/LayerManager";
 import {Canvas} from "./Image/Canvas";
+import {Layer} from "./Image/Layer";
 
 
 /**
@@ -24,17 +25,12 @@ export class ImageWorkspace {
     width: number;
 
     /**
-     * Reference to the application event manager.
-     */
-    eventManager: EventManager;
-
-    /**
-     * Canvas used to display the actual image.
+     * Structure containing all the layers of the current image.
      */
     drawingLayers: LayerManager;
 
     /**
-     * Canvas used to display the layers.
+     * Canvas used to display the actual image and the preview of the current tool.
      */
     drawingCanvas: DisplayableCanvas;
 
@@ -42,6 +38,12 @@ export class ImageWorkspace {
      * Canvas used to preview drawing operations made by the current tool.
      */
     workingCanvas: Canvas;
+
+    /**
+     * Canvas used to contain the addition of the working canvas and the current layer.
+     * This canvas is used to reduce memory allocation/deallocation
+     */
+    currentLayerPreview: Layer;
 
     /**
      * Canvas used to display the current selection in the Canvas
@@ -96,9 +98,8 @@ export class ImageWorkspace {
     constructor(width: number, height: number, eventManager: EventManager) {
         this.width = width;
         this.height = height;
-        this.eventManager = eventManager;
 
-        this.createCanvases();
+        this.createCanvases(eventManager);
         this.initSelection();
 
         eventManager.registerEventHandler(this.layersUpdateHandler);
@@ -123,18 +124,19 @@ export class ImageWorkspace {
 
     /**
      * Create canvases abstracting the three related HTML nodes.
+     * @param {EventManager} eventManager   Reference to the event manager.
      *
      * @author Camille Gobert
      */
-    createCanvases() {
+    createCanvases(eventManager: EventManager) {
         let width = this.width;
         let height = this.height;
-        let eventManager = this.eventManager;
 
         this.drawingCanvas = new DisplayableCanvas(width, height, "drawing_canvas", eventManager);
         this.drawingLayers = new LayerManager(width, height, eventManager);
         this.drawingLayers.createLayer();
         this.workingCanvas = new Canvas(width, height, eventManager);
+        this.currentLayerPreview = new Layer(width, height, eventManager, "", -1);
         this.selectionCanvas = new DisplayableCanvas(width, height, "selection_canvas", eventManager);
     }
 
@@ -145,11 +147,27 @@ export class ImageWorkspace {
      * @author Mathieu Fehr
      */
     redrawDrawingLayers() {
+        // First, we clear the drawing canvas
         this.drawingCanvas.clear();
+
+        // Then, we draw the lower layers on the canvas
         this.drawingLayers.drawLowerLayersOn(this.drawingCanvas);
-        // TODO add other types of layers (currently, only blend is implemented)
-        this.drawingLayers.selectedLayer.drawOnCanvas(this.drawingCanvas);
-        this.drawingCanvas.drawCanvas(this.workingCanvas);
+
+        // We display the selected layer only if necessary
+        if (!this.drawingLayers.selectedLayer.hidden) {
+
+            // We compute the preview of the selected layer
+            // (by applying the tool preview on the data of the selected layer in a buffer layer)
+            this.currentLayerPreview.canvas.clear();
+            this.currentLayerPreview.blendMode = this.drawingLayers.selectedLayer.blendMode;
+            this.currentLayerPreview.canvas.drawCanvas(this.drawingLayers.selectedLayer.canvas);
+            this.currentLayerPreview.canvas.drawCanvas(this.workingCanvas);
+
+            // We then draw the preview of the selected layer on the lower layers
+            this.currentLayerPreview.drawOnCanvas(this.drawingCanvas);
+        }
+
+        // Finally, we draw the upper layers on the drawn layers
         this.drawingLayers.drawUpperLayersOn(this.drawingCanvas);
     }
 
@@ -237,7 +255,10 @@ export class ImageWorkspace {
      * @author Mathieu Fehr
      */
     displaySelection(selection: SelectedArea) {
-        let imageData = this.drawingCanvas.getImageData();
+        this.selectionCanvas.clear();
+        this.drawingLayers.drawOn(this.selectionCanvas);
+
+        let imageData = this.selectionCanvas.getImageData();
 
         if (this.selectionDrawingIntervalID === null) {
             this.selectionDrawingIntervalID = window.setInterval(() => {
@@ -294,5 +315,17 @@ export class ImageWorkspace {
         });
 
         this.selectionCanvas.setImageData(imageData);
+    }
+
+
+    /**
+     * Get the position of a mouse event relative to the image workspace.
+     * @param  {MouseEvent} event The mouse event
+     * @return                    The position of the mouse event relative to the image workspace.
+     *
+     * @author Mathieu Fehr
+     */
+    getMouseEventCoordinates(event: MouseEvent) {
+        return this.drawingCanvas.getMouseEventCoordinates(event);
     }
 }
