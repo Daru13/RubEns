@@ -109,6 +109,7 @@ export class EffectMenu extends HTMLRenderer {
         let effectClassName = effect.constructor.name;
 
         let effectButton = $("<button>");
+        effectButton.html(effectName);
         effectButton.attr("type", "button");
         effectButton.attr("data-effect-classname", effectClassName);
         effectButton.attr("title", effectName);
