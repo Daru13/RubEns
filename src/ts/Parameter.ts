@@ -1,7 +1,8 @@
 export enum ParameterKind {
     Number = "number",
     String = "string",
-    Color = "color"
+    Color = "color",
+    OptionList = "optionList"
 }
 
 /**
@@ -85,5 +86,13 @@ export interface StringParameter extends Parameter<string> {
  */
 export interface ColorParameter extends Parameter<string> {
     kind: ParameterKind.Color;
+}
 
+export interface OptionListParameter extends Parameter<string> {
+    kind: ParameterKind.OptionList;
+
+    /**
+     * List of available options (i.e. values).
+     */
+    options: string[];
 }
