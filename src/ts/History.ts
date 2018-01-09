@@ -229,44 +229,13 @@ export class History {
         // Then, we increment the right indices.
         this.currentStep += 1;
         this.numberOfStep += 1;
-        if (this.listOfActions[this.currentStep-1].numberOfActionOnCanvas <= this.boundOnCanvas){
-        // Case 1: limit of action on Canvas isn't reached.
-        // Therefore we just have to save the step.
-            this.listOfActions[this.numberOfStep] =
-                {redo: redo,
-                 undo: undo,
-                 image: null,
-                 nearestForwardImage: -1,
-                 nearestBackwardImage: this.listOfActions[this.numberOfStep-1].nearestBackwardImage,
-                 numberOfActionOnCanvas: this.listOfActions[this.numberOfStep-1].numberOfActionOnCanvas +1,
-                }
-        }
-        else {
-        // Case 2: limit of action on Canvas is reached.
-            if (this.numberOfImages > this.boundOnImages) {
-            // Case 2.1: we have to clear an image and the steps after until the next image.
-                let beginning = this.firstAvailableStep;
-                let end = this.listOfActions[beginning+1].nearestForwardImage;
-                for (let i = beginning; i < end; i++){
-                    delete this.listOfActions[i];
-                }
-                this.firstAvailableStep = end;
-            }
-            // Then, we store an image.
-            let thisStep: number = this.numberOfStep;
-            this.listOfActions[thisStep] =
-                {redo: redo,
-                 undo: undo,
-                 image: this.document.imageWorkspace.drawingCanvas.getImageData(),
-                 nearestForwardImage: this.numberOfStep,
-                 nearestBackwardImage: this.numberOfStep,
-                 numberOfActionOnCanvas: this.listOfActions[this.numberOfStep-1].numberOfActionOnCanvas +1,
-                }
-            this.numberOfImages ++;
-            // To finish, We update the nearestForwardImage of the head of the history.
-            for (let i: number = this.listOfActions[thisStep-1].nearestBackwardImage+1; i < thisStep; i++){
-                this.listOfActions[i].nearestForwardImage = thisStep;
-            }
+        this.listOfActions[this.numberOfStep] = {
+            redo: function () {},
+            undo: function () {},
+            image: this.document.imageWorkspace.drawingLayers.selectedLayer.canvas.getImageData(),
+            nearestForwardImage: this.numberOfStep,
+            nearestBackwardImage: this.numberOfStep,
+            numberOfActionOnCanvas: 0, // TODO : this field is not useful anymore.
         }
     }
 
