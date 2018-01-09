@@ -235,13 +235,14 @@ export class History {
         this.numberOfStep += 1;
         this.listOfActions[this.numberOfStep] = {
             description: description,
-            redo: function () {},
-            undo: function () {},
+            redo: redo,
+            undo: undo,
             image: this.document.imageWorkspace.drawingLayers.selectedLayer.canvas.getImageData(),
-            nearestForwardImage: this.numberOfStep,
+            nearestForwardImage: -1,
             nearestBackwardImage: this.numberOfStep,
             numberOfActionOnCanvas: 0, // TODO : this field is not useful anymore.
         }
+        this.listOfActions[this.numberOfStep-1].nearestForwardImage = this.currentStep;
     }
 
     /**
