@@ -1,5 +1,3 @@
-import { EventManager } from "../EventManager";
-import { EventHandler } from "../EventHandler";
 import { ImageWorkspace } from "../ImageWorkspace";
 
 
@@ -23,11 +21,6 @@ export abstract class Effect {
     readonly name: string;
 
     /**
-     * The list of event handlers.
-     */
-    protected eventHandlers: EventHandler[];
-
-    /**
      * The image workspace where to apply the effect operations.
      */
     workspace: ImageWorkspace;
@@ -36,7 +29,7 @@ export abstract class Effect {
      * The set of parameters local to the effect.
      * It may be empty.
      */
-    parameters: EffectParameters = {};
+    parameters: EffectParameters;
 
 
     /**
@@ -45,7 +38,7 @@ export abstract class Effect {
      * @author Camille Gobert
      */
     constructor () {
-        this.eventHandlers = [];
+        this.parameters = {};
     }
 
 
@@ -56,30 +49,4 @@ export abstract class Effect {
      * @author Camille Gobert
      */
     abstract apply ();
-
-
-    /**
-     * Register all necessary events handlers required by the effect.
-     * @param eventManager The related event manager.
-     *
-     * @author Mathieu Fehr
-     */
-    registerEvents(eventManager: EventManager) {
-        for (let handler of this.eventHandlers) {
-            eventManager.registerEventHandler(handler);
-        }
-    }
-
-
-    /**
-     * Unregister all necessary event handlers required by the effect.
-     * @param eventManager The related event manager.
-     *
-     * @author Mathieu Fehr
-     */
-    unregisterEvents(eventManager: EventManager) {
-        for (let handler of this.eventHandlers) {
-            eventManager.unregisterEventHandler(handler);
-        }
-    }
 }
