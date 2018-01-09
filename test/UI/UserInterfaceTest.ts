@@ -224,7 +224,7 @@ describe("Test of the user interface:", function () {
 
                 setTimeout(_ => {
                     assert(dummyCounter === 1);
-                }, 2);
+                }, 10);
 
                 done();
             });
@@ -239,7 +239,7 @@ describe("Test of the user interface:", function () {
 
                 setTimeout(_ => {
                     assert(dummyCounter === 1 /* instead of 2 */);
-                }, 2);
+                }, 10);
 
                 done();
             });
