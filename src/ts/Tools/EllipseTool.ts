@@ -7,7 +7,7 @@ import { Color } from "../utils/Color";
 
 
 /**
- * Set of parameters used by [[RectangleTool]].
+ * Set of parameters used by [[EllipseTool]].
  * Default values of those parameters are defined in the class implementation.
  */
 export class EllipseParameters implements ToolParameters {
