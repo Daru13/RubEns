@@ -25,11 +25,6 @@ export class ImageWorkspace {
     width: number;
 
     /**
-     * Reference to the application event manager.
-     */
-    eventManager: EventManager;
-
-    /**
      * Structure containing all the layers of the current image.
      */
     drawingLayers: LayerManager;
@@ -103,9 +98,8 @@ export class ImageWorkspace {
     constructor(width: number, height: number, eventManager: EventManager) {
         this.width = width;
         this.height = height;
-        this.eventManager = eventManager;
 
-        this.createCanvases();
+        this.createCanvases(eventManager);
         this.initSelection();
 
         eventManager.registerEventHandler(this.layersUpdateHandler);
@@ -130,13 +124,13 @@ export class ImageWorkspace {
 
     /**
      * Create canvases abstracting the three related HTML nodes.
+     * @param {EventManager} eventManager   Reference to the event manager.
      *
      * @author Camille Gobert
      */
-    createCanvases() {
+    createCanvases(eventManager: EventManager) {
         let width = this.width;
         let height = this.height;
-        let eventManager = this.eventManager;
 
         this.drawingCanvas = new DisplayableCanvas(width, height, "drawing_canvas", eventManager);
         this.drawingLayers = new LayerManager(width, height, eventManager);
