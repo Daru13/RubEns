@@ -18,6 +18,7 @@ import { EyeDropperTool } from "./Tools/EyeDropperTool";
 
 // Effects
 import { Effect } from "./Effects/Effect";
+import { InverseColorEffect } from "./Effects/InverseColorEffect";
 
 
 /**
@@ -184,7 +185,7 @@ export class RubEns {
      */
     initEffects () {
         this.effects = [
-            // TODO
+            new InverseColorEffect()
         ];
 
         this.eventManager.registerEventHandler({
