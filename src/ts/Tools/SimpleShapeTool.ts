@@ -1,6 +1,6 @@
 import { Tool } from "./Tool";
 import { Point } from "../utils/Point";
-
+import { EventManager } from "../EventManager"
 
 /**
  * Abstract tool used to draw simple shapes, like rectangles, ellipses or lines.
@@ -89,6 +89,8 @@ export abstract class SimpleShapeTool extends Tool {
         if(this.firstPoint === null) {
             return;
         }
+        
+        this.saveInHistory();
 
         this.workspace.applyWorkingCanvas();
 
@@ -125,4 +127,20 @@ export abstract class SimpleShapeTool extends Tool {
      * @author Mathieu Fehr
      */
     abstract drawShape(firstPoint: Point, secondPoint: Point);
+
+    /**
+     * This function save the drawn shape in the history.
+     * @return {[type]} [description]
+     */
+    saveInHistory(){
+        // first we copy parameters.
+        let firstPointCopy = JSON.parse(JSON.stringify(this.firstPoint));
+        let secondPointCopy = JSON.parse(JSON.stringify(this.secondPoint));
+
+        EventManager.spawnEvent(
+            "rubens_historyApplyOnCanvas",
+            {description: "drawing "+this.name,
+             redo: function () {this.drawShape(firstPointCopy, secondPointCopy)},
+             undo: null});
+    }
 }
