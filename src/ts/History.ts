@@ -248,7 +248,6 @@ export class History {
      */
     goToStep(stepNumber: number){
         if (stepNumber > this.numberOfStep || stepNumber < this.firstAvailableStep){
-            alert("Unavailable step!");
             return;
         }
         let step: HistoryStep = this.listOfActions[stepNumber];
