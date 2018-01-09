@@ -22,7 +22,7 @@ export interface HistoryStep {
      */
     undo?: HistoryFunction;
     /**
-     * the image before the redo function is apply.
+     * the image after the redo function is applied.
      * @type {HistoryFunction}
      */
     image?: ImageData;
@@ -54,11 +54,8 @@ export interface HistoryStep {
  * It works as follow :
  * - each action is saved in a "HistoryStep" that contains the action
  * and sometimes, a function that cancels it.
- * - In order to save time when we want to go to a previous step,
- * we save image at some step.
- * - We make a difference between actions on canvas and all the other one,
- * since an action on canvas take much time than the other one,
- * we decide that only the number of action on canvas determines the number of step between two images.
+ * - If the action affect Canvas (eg. draws a rectangele) we store the ImageData
+ * of the corresponding Layer
  */
 export class History {
 
