@@ -287,6 +287,11 @@ export class RubEns {
 
         // Update the workspace
         this.document.imageWorkspace.redrawDrawingLayers();
+
+        // Update the History.
+        // TODO: make this new step the first one.
+        EventManager.spawnEvent("rubens_historyApplyOnCanvas",{redo: function () {},
+                                                               undo: function () {}});
     }
 
 

@@ -22,7 +22,7 @@ export interface HistoryStep {
      */
     undo?: HistoryFunction;
     /**
-     * the image before the redo function is apply.
+     * the image after the redo function is applied.
      * @type {HistoryFunction}
      */
     image?: ImageData;
@@ -54,11 +54,8 @@ export interface HistoryStep {
  * It works as follow :
  * - each action is saved in a "HistoryStep" that contains the action
  * and sometimes, a function that cancels it.
- * - In order to save time when we want to go to a previous step,
- * we save image at some step.
- * - We make a difference between actions on canvas and all the other one,
- * since an action on canvas take much time than the other one,
- * we decide that only the number of action on canvas determines the number of step between two images.
+ * - If the action affect Canvas (eg. draws a rectangele) we store the ImageData
+ * of the corresponding Layer
  */
 export class History {
 
@@ -121,7 +118,7 @@ export class History {
     handleApply: EventHandler = {
         eventTypes: ["rubens_historyApply"],
         callback : (event: CustomEvent) => {
-            this.apply(event.detail.redo, event.detail.undo)
+            this.applied(event.detail.redo, event.detail.undo)
         }
     }
 
@@ -131,7 +128,7 @@ export class History {
     handleApplyOnCanvas: EventHandler = {
         eventTypes: ["rubens_historyApplyOnCanvas"],
         callback : (event: CustomEvent) => {
-            this.apply(event.detail.redo, event.detail.undo)
+            this.appliedOnCanvas(event.detail.redo, event.detail.undo)
         }
     }
 
@@ -150,7 +147,7 @@ export class History {
             // the actios are "empty" functions.
             redo: function () { null },
             undo: function () { null },
-            image: this.document.imageWorkspace.drawingCanvas.getImageData(),
+            image: this.document.imageWorkspace.drawingLayers.selectedLayer.canvas.getImageData(),
             nearestForwardImage: 0,
             nearestBackwardImage: 0,
             numberOfActionOnCanvas:0,
@@ -196,7 +193,7 @@ export class History {
      *
      * @author Josselin GIET
      */
-    apply(redo: HistoryFunction, undo?: HistoryFunction){
+    applied(redo: HistoryFunction, undo?: HistoryFunction){
         //First, we have to clear the head.
         this.clearHead();
         // Then, we increment the right indices.
@@ -216,57 +213,26 @@ export class History {
 
     /**
      * This function stores the functions given in argument and calls this function,
-     * and icreases numberOfActionOnCanvas.
+     * and increases numberOfActionOnCanvas.
      * @param  {HistoryFunction} redo the function to apply.
      * @param  {HistoryFunction} undo the inverse function of undo.
      * @return {void} Returns nothing : works by side-effect.
      *
      * @author Josselin GIET
      */
-    applyOnCanvas(redo: HistoryFunction, undo?: HistoryFunction){
+    appliedOnCanvas(redo: HistoryFunction, undo?: HistoryFunction){
         //First, we have to clear the head.
         this.clearHead();
         // Then, we increment the right indices.
         this.currentStep += 1;
         this.numberOfStep += 1;
-        if (this.listOfActions[this.currentStep-1].numberOfActionOnCanvas <= this.boundOnCanvas){
-        // Case 1: limit of action on Canvas isn't reached.
-        // Therefore we just have to save the step.
-            this.listOfActions[this.numberOfStep] =
-                {redo: redo,
-                 undo: undo,
-                 image: null,
-                 nearestForwardImage: -1,
-                 nearestBackwardImage: this.listOfActions[this.numberOfStep-1].nearestBackwardImage,
-                 numberOfActionOnCanvas: this.listOfActions[this.numberOfStep-1].numberOfActionOnCanvas +1,
-                }
-        }
-        else {
-        // Case 2: limit of action on Canvas is reached.
-            if (this.numberOfImages > this.boundOnImages) {
-            // Case 2.1: we have to clear an image and the steps after until the next image.
-                let beginning = this.firstAvailableStep;
-                let end = this.listOfActions[beginning+1].nearestForwardImage;
-                for (let i = beginning; i < end; i++){
-                    delete this.listOfActions[i];
-                }
-                this.firstAvailableStep = end;
-            }
-            // Then, we store an image.
-            let thisStep: number = this.numberOfStep;
-            this.listOfActions[thisStep] =
-                {redo: redo,
-                 undo: undo,
-                 image: this.document.imageWorkspace.drawingCanvas.getImageData(),
-                 nearestForwardImage: this.numberOfStep,
-                 nearestBackwardImage: this.numberOfStep,
-                 numberOfActionOnCanvas: this.listOfActions[this.numberOfStep-1].numberOfActionOnCanvas +1,
-                }
-            this.numberOfImages ++;
-            // To finish, We update the nearestForwardImage of the head of the history.
-            for (let i: number = this.listOfActions[thisStep-1].nearestBackwardImage+1; i < thisStep; i++){
-                this.listOfActions[i].nearestForwardImage = thisStep;
-            }
+        this.listOfActions[this.numberOfStep] = {
+            redo: function () {},
+            undo: function () {},
+            image: this.document.imageWorkspace.drawingLayers.selectedLayer.canvas.getImageData(),
+            nearestForwardImage: this.numberOfStep,
+            nearestBackwardImage: this.numberOfStep,
+            numberOfActionOnCanvas: 0, // TODO : this field is not useful anymore.
         }
     }
 
@@ -302,19 +268,20 @@ export class History {
         // Depending on the results of several check above, we use undo function, or not.
         if (useUndo) {
         // Case 1: we use undo functions.
-            this.document.imageWorkspace.drawingCanvas.setImageData(this.listOfActions[step.nearestForwardImage].image);
+            this.document.imageWorkspace.drawingLayers.selectedLayer.canvas.setImageData(this.listOfActions[step.nearestForwardImage].image);
             for (let i = step.nearestForwardImage-1; i > stepNumber; i--){
                 this.listOfActions[i].undo();
             }
         }
         else {
         // Case 2: we use redo functions.
-            this.document.imageWorkspace.drawingCanvas.setImageData(this.listOfActions[step.nearestBackwardImage].image);
+            this.document.imageWorkspace.drawingLayers.selectedLayer.canvas.setImageData(this.listOfActions[step.nearestBackwardImage].image);
             for (let i = step.nearestBackwardImage; i <= stepNumber; i++){
                 this.listOfActions[i].redo();
             }
         }
         this.currentStep = stepNumber;
+        this.document.imageWorkspace.redrawDrawingLayers();
     // TODO : if we can undo from the current Step, we have to !
     }
 
@@ -325,7 +292,7 @@ export class History {
      * @author Josselin GIET
      */
     goToLatestStep () {
-        this.goToStep(0);
+        this.goToStep(this.currentStep -1);
     }
 
     /**
