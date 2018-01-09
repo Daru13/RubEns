@@ -1,5 +1,6 @@
 import { HTMLRenderer } from "./HTMLRenderer";
 import { DocumentActionsMenu } from "./DocumentActionsMenu";
+import { EffectMenu } from "./EffectMenu";
 import { RubEns } from "../RubEns";
 import { DocumentParameters } from "../DocumentParameters";
 import { ParametersFieldPopup, ParametersFieldPopupParameters } from "./ParametersFieldPopup";
@@ -26,6 +27,11 @@ export class MainMenu extends HTMLRenderer {
     documentActionsMenu: DocumentActionsMenu;
 
     /**
+     * Instance of the child effect menu.
+     */
+    effectMenu: EffectMenu;
+
+    /**
      * Reference to the node containing the app title.
      */
     titleNode: JQuery;
@@ -45,6 +51,7 @@ export class MainMenu extends HTMLRenderer {
         this.app = app;
 
         this.documentActionsMenu = new DocumentActionsMenu(this.rootNode, app);
+        this.effectMenu          = new EffectMenu(this.rootNode, app);
         this.createTitleNode();
 
         this.setDefaultDocumentActions();
