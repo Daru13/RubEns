@@ -295,7 +295,7 @@ export class History {
      * @author Josselin GIET
      */
     goToLatestStep () {
-        this.goToStep(0);
+        this.goToStep(this.currentStep -1);
     }
 
     /**
