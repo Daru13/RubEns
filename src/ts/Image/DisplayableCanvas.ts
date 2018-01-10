@@ -47,6 +47,7 @@ export class DisplayableCanvas extends Canvas {
         // Set the height and the width of the displayable object.
         let canvas = $(this.canvas);
         canvas.attr("id", this.id);
+        canvas.css("image-rendering", "-moz-crisp-edges");
 
         this.updateDimensions(this.width, this.height);
         this.updatePosition();
