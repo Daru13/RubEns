@@ -1,6 +1,8 @@
 import { Tool } from "./Tool";
+import { SelectedArea } from "../Image/SelectedArea";
 import { Point } from "../utils/Point";
 import { EventManager } from "../EventManager";
+import { EditSelectionStep } from "../HistoryStep";
 
 /**
  * Tool used to draw rectangle selection in the image
@@ -26,6 +28,10 @@ export class RectangleSelectionTool extends Tool {
      */
     private secondPoint: Point;
 
+    /**
+     * Used for saving the SelectedArea before the tool.
+     */
+    private previousSelection: SelectedArea;
 
     /**
      * Instantiates the object, and add the event handlers to the eventManager.
@@ -77,6 +83,7 @@ export class RectangleSelectionTool extends Tool {
      * @author Mathieu Fehr
      */
     onMouseDown(event: MouseEvent) {
+        this.previousSelection = this.workspace.selectedArea;
         this.workspace.clearSelection();
         this.firstPoint = this.workspace.getMouseEventCoordinates(event);
         this.firstPoint.x = Math.floor(this.firstPoint.x);
@@ -104,7 +111,7 @@ export class RectangleSelectionTool extends Tool {
             this.workspace.clearSelection();
         } else {
             this.applySelection(this.firstPoint, this.secondPoint);
-            this.saveInHistory();
+            this.saveInHistory(this.previousSelection, this.workspace.selectedArea);
         }
 
         this.firstPoint = null;
@@ -230,19 +237,17 @@ export class RectangleSelectionTool extends Tool {
 
 
     /**
-     * This function save the drawn shape in the history.
-     * @return {[type]} [description]
+     * This function saves the changement of SelectedArea.
+     * @param  {SelectedArea} previousSelection the SelectedArea before the action.
+     * @param  {SelectedArea} newSelection      the SelectedArea after the action.
+     * @return {[type]}                         returns nothing, works by side-effect.
+     *
+     * @author Josselin GIET
      */
-    saveInHistory(){
-        console.log("Truc chelou")
-        // first we copy parameters.
-        let firstPointCopy = JSON.parse(JSON.stringify(this.firstPoint));
-        let secondPointCopy = JSON.parse(JSON.stringify(this.secondPoint));
-
+    saveInHistory (previousSelection: SelectedArea, newSelection: SelectedArea){
         EventManager.spawnEvent(
-            "rubens_historyApply",
-            {description: this.name,
-             redo: () => {this.applySelection(firstPointCopy, secondPointCopy)},
-             undo: () => {this.workspace.clearSelection()}});
+            "rubens_historySaveStep",
+            new EditSelectionStep(this.name, previousSelection, newSelection)
+        )
     }
 }
