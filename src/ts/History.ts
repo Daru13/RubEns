@@ -116,18 +116,14 @@ export class History {
     saveStep(step: HistoryStep){
         this.clearHead();
         this.currentStep++;
-        console.log("Saving "+step.description);
-        console.log(this.currentStep);
         this.latestAvailableStep++;
         for (let i = this.firstAvailableStep; i < this.currentStep - this.boundOnStep; i++){
             this.listOfActions[i] = null;
         }
         if (step.type == "GenericHistoryStep"){
-            console.log(step.type);
             this.listOfActions[this.currentStep] = step;
         }
         else if (step.type == "EditLayerStep"){
-            console.log(step.type);
             let layerStep = <EditLayerStep> step;
             let id = layerStep.layerId;
 
@@ -156,14 +152,12 @@ export class History {
             // If we find a candidate ...
             else {
                 let candidateStep = <EditLayerStep>this.listOfActions[i];
-                console.log(i)
                 // ... we share the reference.
                 layerStep.previousImageData = candidateStep.newImageData;
                 this.listOfActions[this.currentStep] = layerStep;
             }
         }
         else if ( step.type == "EditSelectionStep"){
-            console.log(step.type);
             let selectionStep = <EditSelectionStep>step;
 
             // We check if there is an EditSelectionStep.
@@ -186,7 +180,6 @@ export class History {
             // If we find a candidate ...
             else {
                 let candidateStep = <EditSelectionStep>this.listOfActions[i];
-                console.log(i)
                 // ... we share the reference.
                 selectionStep.previousSelection = candidateStep.newSelection;
                 this.listOfActions[this.currentStep] = selectionStep;
@@ -205,8 +198,6 @@ export class History {
      * @author Josselin GIET
      */
     goToStep(stepNumber: number){
-        console.log("GoToStep")
-        console.log(stepNumber);
         if (stepNumber > this.latestAvailableStep || stepNumber < this.firstAvailableStep){
             return;
         }
