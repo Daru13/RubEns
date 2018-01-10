@@ -48,7 +48,7 @@ export class HistoryList extends HTMLRenderer {
      * Event handler for history changes (undo, redo, new step saved).
      */
     private historyChangeHandler = {
-        eventTypes: ["rubens_undo", "rubens_redo", "rubens_actionSaved"],
+        eventTypes: ["rubens_undo", "rubens_redo", "rubens_historySaveStep"],
         callback: (_) => { this.updateStepListNode(); }
     };
 
@@ -57,7 +57,16 @@ export class HistoryList extends HTMLRenderer {
      */
     private documentChangedHandler = {
         eventTypes: ["rubens_documentCreated", "rubens_documentClosed"],
-        callback: (_) => { this.updateRootNode(); }
+        callback: (_) => {
+            if (this.app.document) {
+                this.history = this.app.document.history;
+            }
+            else {
+                this.history = null;
+            }
+
+            this.updateRootNode();
+        }
     };
 
     /**
@@ -83,7 +92,7 @@ export class HistoryList extends HTMLRenderer {
         this.createRootNode();
 
         this.app     = app;
-        this.history = null; // TODO
+        this.history = null;
 
         // Display parameters
         this.maxNbStepsToDisplay = UNLIMITED_HISTORY_STEPS;
@@ -164,15 +173,8 @@ export class HistoryList extends HTMLRenderer {
             return;
         }
 
-        // TODO: update the step list from the actual history steps, instead of dummy entries
-        for (let i = 0; i < 5; i++) {
-            // If required, only dispay only a certain number of steps
-            if (this.maxNbStepsToDisplay !== UNLIMITED_HISTORY_STEPS
-            &&  this.maxNbStepsToDisplay > i) {
-                return;
-            }
-
-            let stepAsListElement = HistoryList.getHistoryStepAsListElement(i);
+        for (let step = this.history.firstAvailableStep; step < this.history.latestAvailableStep; step++) {
+            let stepAsListElement = this.getHistoryStepAsListElement(step);
             this.stepListNode.append(stepAsListElement);
         }
     }
@@ -180,45 +182,42 @@ export class HistoryList extends HTMLRenderer {
 
     /**
      * Create and return a list element representing the given history step.
-     * @param  {any}    step History step to transform into a list element.
+     * @param  {number} step History step to transform into a list element.
      * @return {JQuery}      List element representing the given step.
      *
      * @author Camille Gobert
      */
-    private static getHistoryStepAsListElement (step: any) {
+    private getHistoryStepAsListElement (step: number) {
+        let currentStep = this.history.currentStep;
+
         let stepNode = $("<li>");
         stepNode.addClass("history_step");
+        stepNode.html(this.history.listOfActions[step].description);
 
-        // Step identifier (in order to retrieve the right step from the UI)
-        // TODO: use a real identifier
+        // Step (in order to retrieve the right one from the UI)
         stepNode.attr("data-history-step", step);
 
         // If required, mark the step as canceled
-        // TODO: use a real test
-        if (step >= 4) {
+        if (step > currentStep) {
             stepNode.addClass("canceled");
         }
 
         // If required, mark the step as current
-        // TODO: use a real test
-        if (step == 3) {
+        if (step === currentStep) {
             stepNode.addClass("current");
         }
-
-        // TODO: replace this by an actual, short description of the step
-        stepNode.html("(Dummy step description...)");
 
         return stepNode;
     }
 
 
     private onHistoryStepClick (event: Event) {
-        // Retrieve the history step identifier
-        let historyStepId = $(event.target).closest(".history_step")
-                                           .attr("data-history-step");
+        // Retrieve the history step
+        let historyStep = parseInt($(event.target).closest(".history_step")
+                                                    .attr("data-history-step"));
 
-        // TODO: undo or redo
-        console.log("History step clicked (id:" + historyStepId + ")");
+        // console.log("History step clicked: " + historyStep + ")");
+        this.history.goToStep(historyStep);
     }
 
 

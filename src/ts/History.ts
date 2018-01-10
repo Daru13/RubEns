@@ -204,11 +204,13 @@ export class History {
         if (stepNumber > this.currentStep){
             for (let i = this.currentStep +1; i <= stepNumber; i++){
                 this.listOfActions[i].redo(this.document);
+                EventManager.spawnEvent("rubens_redo");
             }
         }
         else {
             for (let i = this.currentStep; i > stepNumber; i--){
                 this.listOfActions[i].undo(this.document);
+                EventManager.spawnEvent("rubens_undo");
             }
         }
         this.currentStep = stepNumber;
@@ -222,6 +224,7 @@ export class History {
      */
     goToLatestStep () {
         this.goToStep(this.currentStep -1);
+        EventManager.spawnEvent("rubens_undo");
     }
 
     /**
@@ -230,8 +233,9 @@ export class History {
      *
      * @author Josselin GIET
      */
-    goToNextStep(){
+    goToNextStep () {
         this.goToStep(this.currentStep+1);
+        EventManager.spawnEvent("rubens_redo");
     }
 
 }
