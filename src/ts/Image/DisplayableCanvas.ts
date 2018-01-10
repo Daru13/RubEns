@@ -48,16 +48,6 @@ export class DisplayableCanvas extends Canvas {
         let canvas = $(this.canvas);
         canvas.attr("id", this.id);
 
-        this.updateCanvasNodeRelatedProperties();
-    }
-
-
-    /**
-     * Create the HTML node related to this canvas, and update related properties.
-     *
-     * @author Camille Gobert
-     */
-    updateCanvasNodeRelatedProperties () {
         this.updateDimensions(this.width, this.height);
         this.updatePosition();
     }
