@@ -41,8 +41,11 @@ export class OptionListParameter extends Parameter {
         super.appendControlElement();
         this.controlNode.attr("type", "text");
 
+        console.log("List of options:");
+        console.log(this.parameter.options);
+
         for (let option of this.parameter.options) {
-            let optionNode = $("<select>").html(option);
+            let optionNode = $("<option>").html(option);
             this.controlNode.append(optionNode);
 
             if (option === this.parameter.value) {
