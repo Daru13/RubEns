@@ -167,7 +167,7 @@ export class RectangleSelectionTool extends Tool {
             this.workspace.selectedArea.data.fill(255, i*width + drawing_min_x, i*width + drawing_max_x+1)
         }
 
-        this.workspace.displaySelection(this.workspace.selectedArea);
+        this.workspace.displaySelection();
     }
 
 
