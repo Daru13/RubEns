@@ -49,8 +49,13 @@ export class MeanBlurEffect extends Effect {
     apply() {
         let imageData = this.workspace.drawingLayers.selectedLayer.canvas.getImageData();
 
-        let kernel = Convolution.createMeanKernel(Math.round(this.parameters.kernelSize.value));
-        Convolution.convolve(kernel, imageData);
+        let size = Math.round(this.parameters.kernelSize.value);
+
+        // We do two simple convolutions instead of one to improve performances
+        let horizontalKernel = Convolution.createMeanKernel(1,size);
+        let verticalKernel = Convolution.createMeanKernel(size,1);
+        Convolution.convolve(horizontalKernel, imageData);
+        Convolution.convolve(verticalKernel, imageData);
 
         this.workspace.drawingLayers.selectedLayer.canvas.setImageData(imageData);
     }
