@@ -5,8 +5,8 @@ import { Line } from "../DrawingPrimitives/Line";
 import * as Params from "../Parameter";
 import { ToolParameters } from "./Tool";
 import { Color } from "../utils/Color";
-import { EventManager } from "../EventManager"
-import { EditLayerStep } from "../HistoryStep"
+import { EventManager } from "../EventManager";
+import { EditLayerStep } from "../HistoryStep";
 
 /**
  * Set of parameters used by [[FreeHandTool]].
