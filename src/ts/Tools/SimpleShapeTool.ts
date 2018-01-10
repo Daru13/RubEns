@@ -1,6 +1,8 @@
 import { Tool } from "./Tool";
 import { Point } from "../utils/Point";
 import { EventManager } from "../EventManager"
+import { EditLayerStep } from "../HistoryStep"
+import { Layer } from "./../Image/Layer"
 
 /**
  * Abstract tool used to draw simple shapes, like rectangles, ellipses or lines.
@@ -89,10 +91,14 @@ export abstract class SimpleShapeTool extends Tool {
         if(this.firstPoint === null) {
             return;
         }
-        
-        this.saveInHistory();
+
+        let previousImageData: ImageData = this.workspace.drawingLayers.selectedLayer.canvas.getImageData();
 
         this.workspace.applyWorkingCanvas();
+
+        let newImageData: ImageData = this.workspace.drawingLayers.selectedLayer.canvas.getImageData();
+
+        this.saveInHistory(previousImageData, newImageData)
 
         this.firstPoint = null;
         this.secondPoint = null;
@@ -132,18 +138,10 @@ export abstract class SimpleShapeTool extends Tool {
      * This function save the drawn shape in the history.
      * @return {[type]} [description]
      */
-    saveInHistory(){
-        // first we copy parameters.
-        let firstPointCopy = JSON.parse(JSON.stringify(this.firstPoint));
-        let secondPointCopy = JSON.parse(JSON.stringify(this.secondPoint));
-
+    saveInHistory(previousImageData: ImageData, newImageData: ImageData){
         EventManager.spawnEvent(
-            "rubens_historyApplyOnCanvas",
-            {description: "drawing "+this.name,
-             redo: () => {
-                 this.drawShape(firstPointCopy, secondPointCopy);
-                 this.workspace.applyWorkingCanvas()
-             },
-             undo: null});
+            "rubens_historySaveStep",
+            new EditLayerStep(this.name, previousImageData, newImageData,this.workspace.drawingLayers.selectedLayer.id)
+        )
     }
 }
