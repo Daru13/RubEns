@@ -1,6 +1,6 @@
 import { Point } from "../../src/ts/utils/Point";
-import {Rectangle} from "../../src/ts/DrawingPrimitives/Rectangle";
-import {Color} from "../../src/ts/utils/Color";
+import { Rectangle } from "../../src/ts/DrawingPrimitives/Rectangle";
+import { Color } from "../../src/ts/utils/Color";
 
 const assert = require("assert");
 require("jsdom-global")();
