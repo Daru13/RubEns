@@ -1,6 +1,7 @@
 import { Layer, BlendModes } from "./Layer";
 import { EventManager } from "../EventManager";
 import { Canvas } from "./Canvas";
+import { GenericHistoryStep } from "../HistoryStep";
 
 /**
  * Canvas composed by multiple layers.
@@ -171,7 +172,7 @@ export class LayerManager {
      *
      * @author Mathieu Fehr, Camille Gobert
      */
-    moveLayer (id: number, nextPosition: number) {
+    moveLayer (id: number, nextPosition: number, saveInHistory: boolean = true) {
         if (nextPosition < 0) {
             console.error("The new position of the layer should be positive");
             nextPosition = 0;
@@ -186,6 +187,16 @@ export class LayerManager {
         this.layers.splice(nextPosition, 0, movedLayer);
 
         EventManager.spawnEvent("rubens_moveLayer");
+        if (saveInHistory){
+            EventManager.spawnEvent(
+                    "rubens_historySaveStep",
+                    new GenericHistoryStep(
+                        "Moving a layer",
+                        () => {this.moveLayer(id, nextPosition, false)},
+                        () => {this.moveLayer(id, layerIndex, false)}
+                    )
+            );
+        }
     }
 
 
@@ -283,12 +294,24 @@ export class LayerManager {
      *
      * @author Camille Gobert
      */
-    renameLayer (id: number, name: string) {
+    renameLayer (id: number, name: string, saveInHistory: boolean = true) {
         let index = this.getLayerIndexFromId(id);
 
+        let oldName = new String(this.layers[index].name).toString();
+        console.log(oldName+" -> "+name);
         if (index !== -1) {
             this.layers[index].name = name;
             EventManager.spawnEvent("rubens_renameLayer");
+            if (saveInHistory){
+                EventManager.spawnEvent(
+                    "rubens_historySaveStep",
+                    new GenericHistoryStep(
+                        "Rename layer",
+                        () => { this.renameLayer(id, name, false); },
+                        () => { this.renameLayer(id, oldName, false); },
+                    )
+                );
+            }
         }
     }
 
