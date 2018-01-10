@@ -112,6 +112,8 @@ export class ImageWorkspace {
 
         eventManager.registerEventHandler(this.layersUpdateHandler);
 
+        this.updateZoom();
+
         window.requestAnimationFrame(() => this.onRequestAnimationFrame());
     }
 
