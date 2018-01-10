@@ -42,7 +42,7 @@ describe("Test of RubEns:", function () {
             })
             .catch(error => {
                 console.log("Error: JSDOM could not load index.html for setting up the test environement.");
-                console.log(error);
+                console.error(error);
             });
     });
 
