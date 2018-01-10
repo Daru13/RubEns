@@ -6,12 +6,15 @@ import { EventManager } from "../EventManager";
  * All the available blend modes for layers.
  */
 export enum BlendModes {
-    Normal    = "Normal",
-    Add       = "Add",
-    Subtract  = "Subtract",
-    Multiply  = "Multiply"
-
-    // TODO: add more
+    Normal     = "Normal",
+    Add        = "Add",
+    Subtract   = "Subtract",
+    Multiply   = "Multiply",
+    Intensify  = "Intensify",
+    Screen     = "Screen",
+    Mask       = "Mask",
+    Color      = "Color",
+    Luminosity = "Luminosity"
 }
 
 
@@ -93,6 +96,26 @@ export class Layer {
 
             case BlendModes.Multiply:
                 canvas.canvas2DContext.globalCompositeOperation = "multiply";
+                break;
+
+            case BlendModes.Intensify:
+                canvas.canvas2DContext.globalCompositeOperation = "overlay";
+                break;
+
+            case BlendModes.Screen:
+                canvas.canvas2DContext.globalCompositeOperation = "screen";
+                break;
+
+            case BlendModes.Mask:
+                canvas.canvas2DContext.globalCompositeOperation = "source-in";
+                break;
+
+            case BlendModes.Color:
+                canvas.canvas2DContext.globalCompositeOperation = "color";
+                break;
+
+            case BlendModes.Luminosity:
+                canvas.canvas2DContext.globalCompositeOperation = "luminosity";
                 break;
 
             default:
