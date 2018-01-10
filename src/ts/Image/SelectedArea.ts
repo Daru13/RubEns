@@ -1,3 +1,5 @@
+import { Point } from "../utils/Point";
+
 /**
  * Class representing a selected area in the image.
  * The area is represented by an array of integers between 0 and 255.
@@ -11,6 +13,11 @@ export class SelectedArea {
      * The value of each cell represent the alpha
      */
     data: Uint8Array;
+
+    /**
+     * The selection frontier.
+     */
+    selectionFrontier: Point[];
 
     /**
      * The width of the image where the selection is applied
@@ -34,6 +41,7 @@ export class SelectedArea {
         this.width = width;
         this.height = height;
         this.data = new Uint8Array(width * height);
+        this.selectionFrontier = null;
     }
 
 
@@ -54,5 +62,35 @@ export class SelectedArea {
      */
     selectNothing() {
         this.data.fill(0);
+    }
+
+
+    /**
+     * Compute the selection frontier.
+     *
+     * @author Mathieu Fehr
+     */
+    computeSelectionFrontier() {
+        this.selectionFrontier = [];
+
+        outerLoop:
+        for(let position = 0; position < this.data.length; position++) {
+
+            let x = position % this.width;
+            let y = Math.floor(position / this.width);
+
+            if (this.data[y * this.width + x] !== 0) {
+                continue;
+            }
+
+            for (let i = Math.max(0, y - 1); i <= Math.min(y + 1, this.height - 1); i++) {
+                for (let j = Math.max(x - 1, 0); j <= Math.min(x + 1, this.width - 1); j++) {
+                    if (this.data[i * this.width + j] !== 0) {
+                        this.selectionFrontier.push(new Point(x,y));
+                        continue outerLoop;
+                    }
+                }
+            }
+        }
     }
 }
