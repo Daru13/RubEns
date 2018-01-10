@@ -15,14 +15,16 @@ import { RectangleSelectionTool } from "./Tools/RectangleSelectionTool";
 import { MagicWandTool } from "./Tools/MagicWandTool";
 import { BucketTool } from "./Tools/BucketTool";
 import { EyeDropperTool } from "./Tools/EyeDropperTool";
+import { ZoomInTool } from "./Tools/ZoomInTool";
+import { ZoomOutTool } from "./Tools/ZoomOutTool";
 
 // Effects
 import { Effect } from "./Effects/Effect";
 import { InverseColorEffect } from "./Effects/InverseColorEffect";
-import {GrayscaleEffect} from "./Effects/GrayscaleEffect";
-import {MeanBlurEffect} from "./Effects/MeanBlurEffect";
-import {GaussianBlurEffect} from "./Effects/GaussianBlurEffect";
-import {SharpenEffect} from "./Effects/SharpenEffect";
+import { GrayscaleEffect } from "./Effects/GrayscaleEffect";
+import { MeanBlurEffect } from "./Effects/MeanBlurEffect";
+import { GaussianBlurEffect } from "./Effects/GaussianBlurEffect";
+import { SharpenEffect } from "./Effects/SharpenEffect";
 
 
 /**
@@ -156,6 +158,8 @@ export class RubEns {
             new MagicWandTool(),
             new BucketTool(),
             new EyeDropperTool(),
+            new ZoomInTool(),
+            new ZoomOutTool()
         ];
 
         this.eventManager.registerEventHandler({

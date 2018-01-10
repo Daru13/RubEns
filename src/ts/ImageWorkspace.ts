@@ -67,9 +67,15 @@ export class ImageWorkspace {
     selectionDrawingIntervalID: number;
 
     /**
+     * The current zoom multiplier.
+     */
+    currentZoomLevel: number;
+
+    /**
      * The color of the drawingCanvas background.
      */
-    drawingCanvasBgColor: Color = new Color(211, 211, 211, 255);
+    readonly drawingCanvasBgColor: Color = new Color(211, 211, 211, 255);
+
 
     /**
      * The event handler redrawing the layers when they are modified.
@@ -98,6 +104,8 @@ export class ImageWorkspace {
     constructor(width: number, height: number, eventManager: EventManager) {
         this.width = width;
         this.height = height;
+
+        this.currentZoomLevel = 1;
 
         this.createCanvases(eventManager);
         this.initSelection();
@@ -315,6 +323,39 @@ export class ImageWorkspace {
         });
 
         this.selectionCanvas.setImageData(imageData);
+    }
+
+    /**
+     * Zoom in the image.
+     */
+    zoomIn() {
+        this.currentZoomLevel *= 2;
+        this.updateZoom();
+    }
+
+    /**
+     * Zoom out of the image.
+     */
+    zoomOut() {
+        this.currentZoomLevel /= 2;
+        this.updateZoom();
+    }
+
+    /**
+     * Update the canvas due to zoom change
+     */
+    updateZoom() {
+        let drawingCanvas = $(this.drawingCanvas.canvas);
+        drawingCanvas.css("height", this.currentZoomLevel*this.height + "px");
+        drawingCanvas.css("width", this.currentZoomLevel*this.width + "px");
+
+        let selectionCanvas = $(this.selectionCanvas.canvas);
+        selectionCanvas.css("height", this.currentZoomLevel*this.height + "px");
+        selectionCanvas.css("width", this.currentZoomLevel*this.width + "px");
+
+        let canvasContainer = $("#canvas_container");
+        canvasContainer.css("height", this.currentZoomLevel*this.height + 200 + "px");
+        canvasContainer.css("width", this.currentZoomLevel*this.width + 200 + "px");
     }
 
 

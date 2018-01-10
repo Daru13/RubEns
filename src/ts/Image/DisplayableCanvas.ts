@@ -46,8 +46,6 @@ export class DisplayableCanvas extends Canvas {
 
         // Set the height and the width of the displayable object.
         let canvas = $(this.canvas);
-        canvas.css("height", this.height + "px");
-        canvas.css("width", this.width + "px");
         canvas.attr("id", this.id);
 
         this.updateCanvasNodeRelatedProperties();
@@ -119,8 +117,8 @@ export class DisplayableCanvas extends Canvas {
 
         let coordinates = new Point(mouseX, mouseY);
 
-        coordinates.x *= (boundingRect.right  - boundingRect.left) / this.canvas.width;
-        coordinates.y *= (boundingRect.bottom - boundingRect.top)  / this.canvas.height;
+        coordinates.x /= (boundingRect.right  - boundingRect.left) / this.canvas.width;
+        coordinates.y /= (boundingRect.bottom - boundingRect.top)  / this.canvas.height;
 
         return coordinates;
     }
