@@ -151,8 +151,8 @@ export class History {
             // basically, this step is only useful since it contains an image.
             // the actios are "empty" functions.
             description: "Document initiation",
-            redo: function () { null },
-            undo: function () { null },
+            redo: () => {return},
+            undo: () => {return},
             image: this.document.imageWorkspace.drawingLayers.selectedLayer.canvas.getImageData(),
             nearestForwardImage: 0,
             nearestBackwardImage: 0,
