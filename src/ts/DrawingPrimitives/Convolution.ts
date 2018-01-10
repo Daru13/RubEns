@@ -91,25 +91,17 @@ export class Convolution {
     /**
      * Create a gaussian kernel
      *
-     * @param {number} size     The size of the kernel. The size should be odd.
      * @param {number} sigma    The standard deviation. This value should be positive.
      * @returns {Matrix}        The kernel.
      *
      * @author Mathieu Fehr
      */
-    static createGaussianKernel(size: number, sigma: number): Matrix {
-        if(sigma <= 0) {
-            console.error("The standard deviation of the gaussian kernel should be positive.");
-            return null;
+    static createGaussianKernel(sigma: number): Matrix {
+        // We check that sigma is positive or null, and we compute the size of the kernel
+        if (sigma < 0) {
+            sigma = 0;
         }
-        if(size <= 0) {
-            console.error("The size of the kernel should be positive.");
-            return null;
-        }
-        if(size % 2 == 0) {
-            console.error("The size of the kernel should be odd.");
-            return null;
-        }
+        let size = Convolution.getGaussianKernelSize(sigma);
 
         let kernel = new Matrix(size, size);
 
@@ -138,15 +130,15 @@ export class Convolution {
      * @author Mathieu Fehr
      */
     static createMeanKernel(size: number): Matrix {
-        if(size <= 0) {
-            console.error("The size of the kernel should be positive.");
-            return null;
+        // We first set a correct size for the kernel
+        if(size < 0) {
+            size = 1;
         }
         if(size % 2 == 0) {
-            console.error("The size of the kernel should be odd.");
-            return null;
+            size += 1;
         }
 
+        // Then we create it
         let kernel = new Matrix(size, size);
         let sizeSquaredInv = 1 / (size*size);
 
@@ -167,14 +159,6 @@ export class Convolution {
      * @author Mathieu Fehr
      */
     static createIdentityKernel(size: number): Matrix {
-        if(size <= 0) {
-            console.error("The size of the kernel should be positive.");
-            return null;
-        }
-        if(size % 2 == 0) {
-            console.error("The size of the kernel should be odd.");
-            return null;
-        }
 
         let kernel = new Matrix(size, size);
         for(let i = 0; i<size; i++) {
@@ -190,23 +174,41 @@ export class Convolution {
     /**
      * Create a kernel sharpening the image.
      *
-     * @param {number} size     The size of the kernel. The size should be odd.
      * @param {number} sigma    The standard deviation of the gaussian kernel
      * @returns {Matrix}        The kernel.
      */
-    static createSharpenKernel(size: number, sigma: number): Matrix {
-        if(size <= 0) {
-            console.error("The size of the kernel should be positive.");
-            return null;
+    static createSharpenKernel(sigma: number): Matrix {
+        // We check that sigma is positive or null, and we compute the size of the kernel
+        if (sigma < 0) {
+            sigma = 0;
         }
-        if(size % 2 == 0) {
-            console.error("The size of the kernel should be odd.");
-            return null;
-        }
+        let size = Convolution.getGaussianKernelSize(sigma);
 
-        let blurKernel = Convolution.createGaussianKernel(size, sigma);
+        let blurKernel = Convolution.createGaussianKernel(sigma);
         let identityKernel = Convolution.createIdentityKernel(size);
 
         return identityKernel.scalarMultiplication(2).subtract(blurKernel);
+    }
+
+
+    /**
+     * Get the size of a gaussian kernel, given sigma
+     *
+     * @param {number} sigma    The standard deviation of the gaussian kernel.
+     * @returns {number}        The size of the gaussian kernel.
+     */
+    static getGaussianKernelSize(sigma: number): number {
+        // We check that sigma is positive or null.
+        if (sigma < 0) {
+            sigma = 0;
+        }
+
+        // We compute the size of the kernel
+        let size = Math.ceil(sigma * 3);
+        if (size % 2 === 0) {
+            size += 1;
+        }
+
+        return size;
     }
 }
