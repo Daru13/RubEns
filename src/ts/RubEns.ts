@@ -38,7 +38,7 @@ export class RubEns {
     /**
      * Version of the application.
      */
-    static version: string = "0.1";
+    static version: string = "0.2";
 
     /**
      * Application-level parameters.
