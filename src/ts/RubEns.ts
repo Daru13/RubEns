@@ -19,6 +19,10 @@ import { EyeDropperTool } from "./Tools/EyeDropperTool";
 // Effects
 import { Effect } from "./Effects/Effect";
 import { InverseColorEffect } from "./Effects/InverseColorEffect";
+import {GrayscaleEffect} from "./Effects/GrayscaleEffect";
+import {MeanBlurEffect} from "./Effects/MeanBlurEffect";
+import {GaussianBlurEffect} from "./Effects/GaussianBlurEffect";
+import {SharpenEffect} from "./Effects/SharpenEffect";
 
 
 /**
@@ -185,7 +189,11 @@ export class RubEns {
      */
     initEffects () {
         this.effects = [
-            new InverseColorEffect()
+            new InverseColorEffect(),
+            new GrayscaleEffect(),
+            new MeanBlurEffect(),
+            new GaussianBlurEffect(),
+            new SharpenEffect(),
         ];
 
         this.eventManager.registerEventHandler({

@@ -1,6 +1,6 @@
 import { Tool } from "./Tool";
 import { Point } from "../utils/Point";
-
+import { EventManager } from "../EventManager";
 
 /**
  * Tool used to draw rectangle selection in the image
@@ -103,6 +103,7 @@ export class RectangleSelectionTool extends Tool {
             this.workspace.clearSelection();
         } else {
             this.applySelection(this.firstPoint, this.secondPoint);
+            this.saveInHistory();
         }
 
         this.firstPoint = null;
@@ -161,5 +162,22 @@ export class RectangleSelectionTool extends Tool {
         }
 
         this.workspace.displaySelection(this.workspace.selectedArea);
+    }
+
+    /**
+     * This function save the drawn shape in the history.
+     * @return {[type]} [description]
+     */
+    saveInHistory(){
+        console.log("Truc chelou")
+        // first we copy parameters.
+        let firstPointCopy = JSON.parse(JSON.stringify(this.firstPoint));
+        let secondPointCopy = JSON.parse(JSON.stringify(this.secondPoint));
+
+        EventManager.spawnEvent(
+            "rubens_historyApply",
+            {description: this.name,
+             redo: () => {this.applySelection(firstPointCopy, secondPointCopy)},
+             undo: () => {this.workspace.clearSelection()}});
     }
 }

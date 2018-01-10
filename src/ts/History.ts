@@ -12,6 +12,11 @@ type HistoryFunction = () => void;
  */
 export interface HistoryStep {
     /**
+     * A short description of the step for the UI.
+     * @type {string}
+     */
+    description: string;
+    /**
      * the action to apply. Works only by side effect.
      * @type {HistoryFunction}
      */
@@ -118,7 +123,7 @@ export class History {
     handleApply: EventHandler = {
         eventTypes: ["rubens_historyApply"],
         callback : (event: CustomEvent) => {
-            this.applied(event.detail.redo, event.detail.undo)
+            this.applied(event.detail.description, event.detail.redo, event.detail.undo)
         }
     }
 
@@ -128,7 +133,7 @@ export class History {
     handleApplyOnCanvas: EventHandler = {
         eventTypes: ["rubens_historyApplyOnCanvas"],
         callback : (event: CustomEvent) => {
-            this.appliedOnCanvas(event.detail.redo, event.detail.undo)
+            this.appliedOnCanvas(event.detail.description, event.detail.redo, event.detail.undo)
         }
     }
 
@@ -145,8 +150,9 @@ export class History {
         this.listOfActions[0] = {
             // basically, this step is only useful since it contains an image.
             // the actios are "empty" functions.
-            redo: function () { null },
-            undo: function () { null },
+            description: "Document initiation",
+            redo: () => {return},
+            undo: () => {return},
             image: this.document.imageWorkspace.drawingLayers.selectedLayer.canvas.getImageData(),
             nearestForwardImage: 0,
             nearestBackwardImage: 0,
@@ -193,14 +199,15 @@ export class History {
      *
      * @author Josselin GIET
      */
-    applied(redo: HistoryFunction, undo?: HistoryFunction){
+    applied(description: string, redo: HistoryFunction, undo?: HistoryFunction){
         //First, we have to clear the head.
         this.clearHead();
         // Then, we increment the right indices.
         this.currentStep += 1;
         this.numberOfStep += 1;
         this.listOfActions[this.numberOfStep] =
-            {redo: redo,
+            {description: description,
+             redo: redo,
              undo: undo,
              image: null,
              nearestForwardImage: -1,
@@ -220,20 +227,22 @@ export class History {
      *
      * @author Josselin GIET
      */
-    appliedOnCanvas(redo: HistoryFunction, undo?: HistoryFunction){
+    appliedOnCanvas(description: string, redo: HistoryFunction, undo?: HistoryFunction){
         //First, we have to clear the head.
         this.clearHead();
         // Then, we increment the right indices.
         this.currentStep += 1;
         this.numberOfStep += 1;
         this.listOfActions[this.numberOfStep] = {
-            redo: function () {},
-            undo: function () {},
+            description: description,
+            redo: redo,
+            undo: undo,
             image: this.document.imageWorkspace.drawingLayers.selectedLayer.canvas.getImageData(),
-            nearestForwardImage: this.numberOfStep,
+            nearestForwardImage: -1,
             nearestBackwardImage: this.numberOfStep,
             numberOfActionOnCanvas: 0, // TODO : this field is not useful anymore.
         }
+        this.listOfActions[this.numberOfStep-1].nearestForwardImage = this.currentStep;
     }
 
     /**
@@ -248,7 +257,6 @@ export class History {
      */
     goToStep(stepNumber: number){
         if (stepNumber > this.numberOfStep || stepNumber < this.firstAvailableStep){
-            alert("Unavailable step!");
             return;
         }
         let step: HistoryStep = this.listOfActions[stepNumber];
@@ -281,7 +289,6 @@ export class History {
             }
         }
         this.currentStep = stepNumber;
-        this.document.imageWorkspace.redrawDrawingLayers();
     // TODO : if we can undo from the current Step, we have to !
     }
 

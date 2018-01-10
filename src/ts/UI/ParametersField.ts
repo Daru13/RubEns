@@ -5,6 +5,7 @@ import { NumberParameter } from "./NumberParameter";
 import { StringParameter } from "./StringParameter";
 import { ColorParameter } from "./ColorParameter";
 import { RubEns } from "../RubEns";
+import { OptionListParameter } from "./OptionListParameter";
 
 /**
  * UI element representing a set of related parameters.
@@ -86,6 +87,9 @@ export class ParametersField extends HTMLRenderer {
                 break;
             case "color":
                 wrappedParameter = new ColorParameter(this.rootNode, this.app, <Params.ColorParameter> parameter);
+                break;
+            case "optionList":
+                wrappedParameter = new OptionListParameter(this.rootNode, this.app, <Params.OptionListParameter> parameter);
                 break;
         }
 
