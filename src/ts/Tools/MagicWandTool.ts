@@ -109,7 +109,7 @@ export class MagicWandTool extends Tool {
         }
 
         this.workspace.selectedArea = selectedArea;
-        this.workspace.displaySelection(selectedArea);
+        this.workspace.displaySelection();
 
         this.saveInHistory(previousSelection, selectedArea);
     }
