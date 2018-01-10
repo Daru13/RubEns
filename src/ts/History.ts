@@ -161,7 +161,36 @@ export class History {
                 layerStep.previousImageData = candidateStep.newImageData;
                 this.listOfActions[this.currentStep] = layerStep;
             }
+        }
+        else if ( step.type == "EditSelectionStep"){
+            console.log(step.type);
+            let selectionStep = <EditSelectionStep>step;
 
+            // We check if there is an EditSelectionStep.
+            let i: number = this.currentStep-1;
+            while(true){
+                // We check if we reach the limit of actions.
+                if (i < this.firstAvailableStep){
+                    break;
+                }
+                // We check if this step is from the right type.
+                else if (this.listOfActions[i].type == "EditSelectionStep"){
+                    break;
+                }
+                i--;
+            }
+            // If we didn't find a candidate
+            if (i < this.firstAvailableStep){
+                this.listOfActions[this.currentStep] = step
+            }
+            // If we find a candidate ...
+            else {
+                let candidateStep = <EditSelectionStep>this.listOfActions[i];
+                console.log(i)
+                // ... we share the reference.
+                selectionStep.previousSelection = candidateStep.newSelection;
+                this.listOfActions[this.currentStep] = selectionStep;
+            }
         }
     }
 
