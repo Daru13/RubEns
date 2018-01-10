@@ -1,7 +1,8 @@
 import { Effect, EffectParameters } from "./Effect";
 import * as Params from "../Parameter";
 import { Convolution } from "../DrawingPrimitives/Convolution";
-
+import { EventManager } from  "../EventManager";
+import { EditLayerStep } from "../HistoryStep";
 
 /**
  * Set of parameters used by [[GrayscaleEffect]].
@@ -47,11 +48,31 @@ export class GaussianBlurEffect extends Effect {
      * @author Mathieu Fehr
      */
     apply() {
+        let previousImageData = this.workspace.drawingLayers.selectedLayer.canvas.getImageData();
         let imageData = this.workspace.drawingLayers.selectedLayer.canvas.getImageData();
 
-        let kernel = Convolution.createGaussianKernel(Math.round(this.parameters.sigma.value));
-        Convolution.convolve(kernel, imageData);
+        let sigma = this.parameters.sigma.value;
+        let size = Convolution.getGaussianKernelSize(sigma);
+
+        // We do two simple convolutions instead of one to improve performances
+        let horizontalKernel = Convolution.createGaussianKernel(sigma, size, 1);
+        let verticalKernel = Convolution.createGaussianKernel(sigma, 1, size);
+        Convolution.convolve(horizontalKernel, imageData);
+        Convolution.convolve(verticalKernel, imageData);
 
         this.workspace.drawingLayers.selectedLayer.canvas.setImageData(imageData);
+
+        this.saveInHistory(previousImageData, imageData);
+    }
+
+    /**
+     * This function save the drawn shape in the history.
+     * @return {[type]} [description]
+     */
+    saveInHistory(previousImageData: ImageData, newImageData: ImageData){
+        EventManager.spawnEvent(
+            "rubens_historySaveStep",
+            new EditLayerStep(this.name, previousImageData, newImageData,this.workspace.drawingLayers.selectedLayer.id)
+        )
     }
 }

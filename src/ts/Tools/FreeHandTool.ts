@@ -5,7 +5,8 @@ import { Line } from "../DrawingPrimitives/Line";
 import * as Params from "../Parameter";
 import { ToolParameters } from "./Tool";
 import { Color } from "../utils/Color";
-import { EventManager } from "../EventManager"
+import { EventManager } from "../EventManager";
+import { EditLayerStep } from "../HistoryStep";
 
 /**
  * Set of parameters used by [[FreeHandTool]].
@@ -107,8 +108,14 @@ export class FreeHandTool extends Tool {
     onMouseUp(event: MouseEvent) {
         // We first draw the last line
         this.onMouseMove(event);
-        this.saveInHistory();
+
+        let previousImageData: ImageData = this.workspace.drawingLayers.selectedLayer.canvas.getImageData();
+
         this.workspace.applyWorkingCanvas();
+
+        let newImageData: ImageData = this.workspace.drawingLayers.selectedLayer.canvas.getImageData();
+
+        this.saveInHistory(previousImageData, newImageData);
         this.lastPosition = null;
         this.workingCanvasImageData = null;
     }
@@ -159,16 +166,14 @@ export class FreeHandTool extends Tool {
         image.setImageData(this.workingCanvasImageData);
     }
 
-    saveInHistory() {
-        let copyOfImageData = this.workingCanvasImageData;
-
+    /**
+     * This function save the drawn shape in the history.
+     * @return {[type]} [description]
+     */
+    saveInHistory(previousImageData: ImageData, newImageData: ImageData){
         EventManager.spawnEvent(
-            "rubens_historyApplyOnCanvas",
-            {description: "drawing "+this.name,
-             redo: () => {
-                 this.workspace.workingCanvas.setImageData(copyOfImageData);
-                 this.workspace.applyWorkingCanvas();
-             },
-             undo: null});
+            "rubens_historySaveStep",
+            new EditLayerStep(this.name, previousImageData, newImageData,this.workspace.drawingLayers.selectedLayer.id)
+        )
     }
 }

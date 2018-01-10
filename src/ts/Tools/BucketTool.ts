@@ -1,6 +1,7 @@
 import { Tool } from "./Tool";
 import { Color } from "../utils/Color";
-
+import { EventManager } from "../EventManager";
+import { EditLayerStep } from "../HistoryStep";
 
 /**
  * Tool used to select an area that has the same color.
@@ -51,6 +52,7 @@ export class BucketTool extends Tool {
     onMouseDown(event: MouseEvent) {
         let imageData = new ImageData(this.workspace.width, this.workspace.height);
 
+        let previousImageData = this.workspace.drawingLayers.selectedLayer.canvas.getImageData();
 
         this.workspace.selectedArea.data.forEach((value, index, array) => {
 
@@ -66,5 +68,18 @@ export class BucketTool extends Tool {
 
         this.workspace.workingCanvas.setImageData(imageData);
         this.workspace.applyWorkingCanvas();
+
+        this.saveInHistory(previousImageData, imageData);
+    }
+
+    /**
+     * This function save the drawn shape in the history.
+     * @return {[type]} [description]
+     */
+    saveInHistory(previousImageData: ImageData, newImageData: ImageData){
+        EventManager.spawnEvent(
+            "rubens_historySaveStep",
+            new EditLayerStep(this.name, previousImageData, newImageData,this.workspace.drawingLayers.selectedLayer.id)
+        )
     }
 }

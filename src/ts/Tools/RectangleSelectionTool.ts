@@ -77,6 +77,7 @@ export class RectangleSelectionTool extends Tool {
      * @author Mathieu Fehr
      */
     onMouseDown(event: MouseEvent) {
+        this.workspace.clearSelection();
         this.firstPoint = this.workspace.getMouseEventCoordinates(event);
         this.firstPoint.x = Math.floor(this.firstPoint.x);
         this.firstPoint.y = Math.floor(this.firstPoint.y);
@@ -125,7 +126,7 @@ export class RectangleSelectionTool extends Tool {
         this.secondPoint = this.workspace.getMouseEventCoordinates(event);
         this.secondPoint.x = Math.floor(this.secondPoint.x);
         this.secondPoint.y = Math.floor(this.secondPoint.y);
-        this.applySelection(this.firstPoint, this.secondPoint);
+        this.previewSelection(this.firstPoint, this.secondPoint);
     }
 
 
@@ -138,8 +139,6 @@ export class RectangleSelectionTool extends Tool {
      * @author Mathieu Fehr
      */
     applySelection(firstPoint: Point, secondPoint: Point) {
-        //this.previewSelection(firstPoint, secondPoint);
-
         // The current image
         let width = this.workspace.selectedArea.width;
         let height = this.workspace.selectedArea.height;
@@ -163,6 +162,68 @@ export class RectangleSelectionTool extends Tool {
 
         this.workspace.displaySelection(this.workspace.selectedArea);
     }
+
+
+    /**
+     * Preview the selection in the selection canvas.
+     *
+     * @param {Point} firstPoint    The first point selected by the user
+     * @param {Point} secondPoint   The second point selected by the user
+     *
+     * @author Mathieu Fehr
+     */
+    previewSelection(firstPoint: Point, secondPoint: Point) {
+        // The current image
+        let width = this.workspace.selectedArea.width;
+        let height = this.workspace.selectedArea.height;
+
+        // Get the rectangle corners
+        let min_x = Math.min(firstPoint.x, secondPoint.x);
+        let min_y = Math.min(firstPoint.y, secondPoint.y);
+        let max_x = Math.max(firstPoint.x, secondPoint.x);
+        let max_y = Math.max(firstPoint.y, secondPoint.y);
+
+        // The selection rectangle will be contained in this box
+        let drawing_min_x = Math.max(0,min_x);
+        let drawing_min_y = Math.max(0,min_y);
+        let drawing_max_x = Math.min(width-1,max_x);
+        let drawing_max_y = Math.min(height-1,max_y);
+
+        this.workspace.selectionCanvas.clear();
+        let previewImage = this.workspace.selectionCanvas.getImageData();
+        for(let j = Math.max(drawing_min_x - 1, 0); j <= Math.min(drawing_max_x + 1, width - 1); j++) {
+            if (drawing_min_y - 1 >= 0) {
+                previewImage.data[4 * (j + width * (drawing_min_y - 1))] = 126;
+                previewImage.data[4 * (j + width * (drawing_min_y - 1)) + 1] = 126;
+                previewImage.data[4 * (j + width * (drawing_min_y - 1)) + 2] = 126;
+                previewImage.data[4 * (j + width * (drawing_min_y - 1)) + 3] = 255;
+            }
+            if (drawing_max_y + 1 < height) {
+                previewImage.data[4 * (j + width * (drawing_max_y + 1))] = 126;
+                previewImage.data[4 * (j + width * (drawing_max_y + 1)) + 1] = 126;
+                previewImage.data[4 * (j + width * (drawing_max_y + 1)) + 2] = 126;
+                previewImage.data[4 * (j + width * (drawing_max_y + 1)) + 3] = 255;
+            }
+        }
+
+        for(let i = Math.max(drawing_min_y - 1, 0); i <= Math.min(drawing_max_y + 1, height - 1); i++) {
+            if (drawing_min_x - 1 >= 0) {
+                previewImage.data[4 * (drawing_min_x - 1 + width * i)] = 126;
+                previewImage.data[4 * (drawing_min_x - 1 + width * i) + 1] = 126;
+                previewImage.data[4 * (drawing_min_x - 1 + width * i) + 2] = 126;
+                previewImage.data[4 * (drawing_min_x - 1 + width * i) + 3] = 255;
+            }
+            if (drawing_max_x + 1 < width) {
+                previewImage.data[4 * (drawing_max_x + 1 + width * i)] = 126;
+                previewImage.data[4 * (drawing_max_x + 1 + width * i) + 1] = 126;
+                previewImage.data[4 * (drawing_max_x + 1 + width * i) + 2] = 126;
+                previewImage.data[4 * (drawing_max_x + 1 + width * i) + 3] = 255;
+            }
+        }
+
+        this.workspace.selectionCanvas.setImageData(previewImage);
+    }
+
 
     /**
      * This function save the drawn shape in the history.

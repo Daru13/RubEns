@@ -88,31 +88,29 @@ export class Convolution {
         image.data.set(newArray);
     }
 
+
     /**
      * Create a gaussian kernel
      *
      * @param {number} sigma    The standard deviation. This value should be positive.
+     * @param {number} width    The width of the kernel, should be odd.
+     * @param {number} height   The height of the kernel, should be odd.
      * @returns {Matrix}        The kernel.
      *
      * @author Mathieu Fehr
      */
-    static createGaussianKernel(sigma: number): Matrix {
-        // We check that sigma is positive or null, and we compute the size of the kernel
-        if (sigma < 0) {
-            sigma = 0;
-        }
-        let size = Convolution.getGaussianKernelSize(sigma);
+    static createGaussianKernel(sigma: number, width: number, height: number): Matrix {
+        let kernel = new Matrix(width, height);
 
-        let kernel = new Matrix(size, size);
-
-        let halfSize = (size - 1) / 2;
+        let halfWidth = (width - 1) / 2;
+        let halfHeight = (height - 1) / 2;
         let twoSigmaSquared = 2 * sigma * sigma;
         let normalizationFactor = 1 / Math.sqrt(Math.PI * twoSigmaSquared);
 
-        for(let i = -halfSize; i <= halfSize; i++) {
-            for(let j = -halfSize; j <= halfSize; j++) {
+        for(let i = -halfHeight; i <= halfHeight; i++) {
+            for(let j = -halfWidth; j <= halfWidth; j++) {
                 let distanceSquared = i*i + j*j;
-                kernel.data[i + halfSize][j + halfSize] = normalizationFactor * Math.exp(-distanceSquared / twoSigmaSquared);
+                kernel.data[i + halfHeight][j + halfWidth] = normalizationFactor * Math.exp(-distanceSquared / twoSigmaSquared);
             }
         }
 
@@ -124,70 +122,22 @@ export class Convolution {
     /**
      * Create a kernel doing a mean filter.
      *
-     * @param {number} size     The size of the kernel. The size should be odd.
+     * @param {number} width    The width of the kernel. The width should be odd.
+     * @param {number} height   The height of the kernel. The height should be odd.
      * @returns {Matrix}        The kernel
      *
      * @author Mathieu Fehr
      */
-    static createMeanKernel(size: number): Matrix {
-        // We first set a correct size for the kernel
-        if(size < 0) {
-            size = 1;
-        }
-        if(size % 2 == 0) {
-            size += 1;
-        }
+    static createMeanKernel(width: number, height: number): Matrix {
+        let kernel = new Matrix(width, height);
+        let sizeSquaredInv = 1 / (width*height);
 
-        // Then we create it
-        let kernel = new Matrix(size, size);
-        let sizeSquaredInv = 1 / (size*size);
-
-        for(let i = 0; i<size; i++) {
-            for(let j = 0; j<size; j++) {
+        for(let i = 0; i<height; i++) {
+            for(let j = 0; j<width; j++) {
                 kernel.data[i][j] = sizeSquaredInv;
             }
         }
         return kernel;
-    }
-
-    /**
-     * Create a kernel doing an identity filer.
-     *
-     * @param {number} size     The size of the kernel. The size should be odd.
-     * @returns {Matrix}        The kernel.
-     *
-     * @author Mathieu Fehr
-     */
-    static createIdentityKernel(size: number): Matrix {
-
-        let kernel = new Matrix(size, size);
-        for(let i = 0; i<size; i++) {
-            for(let j = 0; j<size; j++) {
-                kernel.data[i][j] = 0;
-            }
-        }
-        kernel.data[(size-1)/2][(size-1)/2] = 1;
-
-        return kernel;
-    }
-
-    /**
-     * Create a kernel sharpening the image.
-     *
-     * @param {number} sigma    The standard deviation of the gaussian kernel
-     * @returns {Matrix}        The kernel.
-     */
-    static createSharpenKernel(sigma: number): Matrix {
-        // We check that sigma is positive or null, and we compute the size of the kernel
-        if (sigma < 0) {
-            sigma = 0;
-        }
-        let size = Convolution.getGaussianKernelSize(sigma);
-
-        let blurKernel = Convolution.createGaussianKernel(sigma);
-        let identityKernel = Convolution.createIdentityKernel(size);
-
-        return identityKernel.scalarMultiplication(2).subtract(blurKernel);
     }
 
 
@@ -198,11 +148,6 @@ export class Convolution {
      * @returns {number}        The size of the gaussian kernel.
      */
     static getGaussianKernelSize(sigma: number): number {
-        // We check that sigma is positive or null.
-        if (sigma < 0) {
-            sigma = 0;
-        }
-
         // We compute the size of the kernel
         let size = Math.ceil(sigma * 3);
         if (size % 2 === 0) {

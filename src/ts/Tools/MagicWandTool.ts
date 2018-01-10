@@ -1,7 +1,8 @@
 import { Tool } from "./Tool";
 import { SelectedArea } from "../Image/SelectedArea";
 import { Point } from "../utils/Point";
-
+import { EventManager } from "../EventManager";
+import { EditSelectionStep } from "../HistoryStep";
 
 /**
  * Tool used to select an area that has the same color.
@@ -61,6 +62,8 @@ export class MagicWandTool extends Tool {
         let imageHeight = this.workspace.height;
         let imageWidth = this.workspace.width;
 
+        let previousSelection = this.workspace.selectedArea;
+
         let selectedArea = new SelectedArea(imageWidth, imageHeight);
 
         if(this.workspace.drawingLayers.selectedLayer === null) {
@@ -107,6 +110,14 @@ export class MagicWandTool extends Tool {
 
         this.workspace.selectedArea = selectedArea;
         this.workspace.displaySelection(selectedArea);
+
+        this.saveInHistory(previousSelection, selectedArea);
     }
 
+    saveInHistory (previousSelection: SelectedArea, newSelection: SelectedArea){
+        EventManager.spawnEvent(
+            "rubens_historySaveStep",
+            new EditSelectionStep(this.name, previousSelection, newSelection)
+        )
+    }
 }
