@@ -124,6 +124,6 @@ export class Matrix {
         if(oldSum == 0) {
             return;
         }
-        this.scalarMultiplication(newSum / oldSum);
+        this.data = this.scalarMultiplication(newSum / oldSum).data;
     }
 }
