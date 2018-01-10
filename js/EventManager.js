@@ -1,0 +1,161 @@
+define(["require", "exports", "jquery"], function (require, exports, $) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /**
+     * Generic event manager, dispatching events to registrer event handlers.
+     *
+     * It is meant to be a central part of the Controller part of the MVC model,
+     * allowing in particular the View and the Model to communicate over events.
+     *
+     * Each event type with at least one handler is mapped to its set of handlers.
+     * Rgistrered event handlers thus cannot be duplicated.
+     */
+    class EventManager {
+        /**
+         * Instanciates and initializes a new EventManager object.
+         *
+         * Note: it does not start listening for events until the [[startListening]] method is called.
+         * @return {EventManager} Fresh instance of EventManager.
+         *
+         * @author Camille Gobert
+         */
+        constructor() {
+            this.registeredHandlers = new Map();
+            this.DOMEventListeners = new Map();
+            this.isListening = false;
+        }
+        /**
+         * Add an event handler to the manager.
+         * This method has no effect if the exact same handler has already been registered.
+         *
+         * The handler is added for every specified event type.
+         * @param {EventHandler} handler Event handler to register.
+         *
+         * @author Camille Gobert
+         */
+        registerEventHandler(handler) {
+            for (let eventType of handler.eventTypes) {
+                // If an event type is encountered for the first time by the manager,
+                // it must create a fresh set for this type
+                if (!this.registeredHandlers.has(eventType)) {
+                    this.registeredHandlers.set(eventType, new Set());
+                    // Also add the appropriate event handler
+                    this.startListeningFor(eventType);
+                }
+                this.registeredHandlers.get(eventType).add(handler);
+            }
+        }
+        /**
+         * Remove an event handler from the event manager.
+         *
+         * The handler is removed for every specified event type.
+         * @param  {EventHandler} handler  Event handler to unregister.
+         *
+         * @author Camille Gobert
+         */
+        unregisterEventHandler(handler) {
+            for (let eventType of handler.eventTypes) {
+                let eventTypeSet = this.registeredHandlers.get(eventType);
+                if (!eventTypeSet) {
+                    continue;
+                }
+                eventTypeSet.delete(handler);
+                // Possibly remove the set if it becomes empty
+                if (eventTypeSet.size === 0) {
+                    this.registeredHandlers.delete(eventType);
+                    // Also remove the appropriate event handler
+                    this.stopListeningFor(eventType);
+                }
+            }
+        }
+        /**
+         * Internally dispatch an event to matching, registered event handlers.
+         * @param {Event}  event     Event to dispatch.
+         *
+         * @author Camille Gobert
+         */
+        dispatchEvent(event) {
+            if (!this.isListening) {
+                return;
+            }
+            // Browse all registered event handlers for the event type
+            let handlers = this.registeredHandlers.get(event.type);
+            for (let handler of handlers.values()) {
+                if (handler.disabled) {
+                    continue;
+                }
+                // Check if the handler selector applies to the event target node
+                if (handler.selector) {
+                    let matchingElement = $(event.target).closest(handler.selector);
+                    if (matchingElement.length === 0) {
+                        continue;
+                    }
+                }
+                // Notify the handler
+                handler.callback(event);
+            }
+        }
+        /**
+         * Start listening for a particular type of event, and save the related DOM event listener.
+         * This method has no effect if a listener already exist for the given type of event.
+         * @param  {string} eventType The event type to start listenning for.
+         *
+         * @author Camille Gobert
+         */
+        startListeningFor(eventType) {
+            if (this.DOMEventListeners.has(eventType)) {
+                return;
+            }
+            let eventListener = (event) => this.dispatchEvent(event);
+            this.DOMEventListeners.set(eventType, eventListener);
+            window.addEventListener(eventType, eventListener);
+        }
+        /**
+         * Stop listening for a particular type of event, and remove the previously saved DOM event listener.
+         * This method has no effet is there is no listener for the gven type of event.
+         * @param  {string} eventType The event type to stop listenning for.
+         *
+         * @author Camille Gobert
+         */
+        stopListeningFor(eventType) {
+            let eventListener = this.DOMEventListeners.get(eventType);
+            if (!eventListener) {
+                return;
+            }
+            this.DOMEventListeners.delete(eventType);
+            window.removeEventListener(eventType, eventListener);
+        }
+        /**
+         * Start listening for events.
+         * Nothing happens if the manager was already listening.
+         *
+         * @author Camille Gobert
+         */
+        startListening() {
+            if (this.isListening) {
+                return;
+            }
+            this.isListening = true;
+        }
+        /**
+         * Stop listening for events.
+         * Nothing happens if the manager was not listening.
+         *
+         * @author Camille Gobert
+         */
+        stopListening() {
+            if (!this.isListening) {
+                return;
+            }
+            this.isListening = false;
+        }
+        static spawnEvent(type, data = {}, source = $(document)) {
+            let event = new CustomEvent(type, {
+                bubbles: true,
+                detail: data
+            });
+            source[0].dispatchEvent(event);
+        }
+    }
+    exports.EventManager = EventManager;
+});

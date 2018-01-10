@@ -1,0 +1,44 @@
+/******************************************************************
+/* Drawing display
+/*****************************************************************/
+
+#drawing_display {
+    position: absolute;
+    top: 80px;
+    left: 0;
+    width: calc(100% - 400px);
+    height: calc(100% - 30px - 80px);
+    background: #32383D;
+    overflow: auto;
+    z-index: 40;
+}
+
+
+/* Canvases */
+
+#drawing_display canvas {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 800px;
+    height: 600px;
+    margin-left: -400px;
+    margin-top: -300px;
+}
+
+#drawing_canvas {
+    background-color: lightgrey;
+    border: 1px solid black;
+    box-shadow: 0 0 15px #222222;
+    z-index: 50;
+}
+
+#working_canvas {
+    border: 1px solid transparent;
+    z-index: 60;
+}
+
+#selection_canvas {
+    border: 1px solid transparent;
+    z-index: 70;
+}
