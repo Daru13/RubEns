@@ -142,29 +142,6 @@ export class Convolution {
 
 
     /**
-     * Create a kernel doing an identity filer.
-     *
-     * @param {number} width    The width of the kernel. The width should be odd.
-     * @param {number} height   the height of the kernel. The height should be odd.
-     * @returns {Matrix}        The kernel.
-     *
-     * @author Mathieu Fehr
-     */
-    static createIdentityKernel(width: number, height: number): Matrix {
-
-        let kernel = new Matrix(width, height);
-        for(let i = 0; i<height; i++) {
-            for(let j = 0; j<width; j++) {
-                kernel.data[i][j] = 0;
-            }
-        }
-        kernel.data[(height-1)/2][(width-1)/2] = 1;
-
-        return kernel;
-    }
-
-
-    /**
      * Get the size of a gaussian kernel, given sigma
      *
      * @param {number} sigma    The standard deviation of the gaussian kernel.
