@@ -15,7 +15,9 @@
 
   "script": [
     "make setup",
-    "make all",
+    "make build",
+    "make doc",
+    "make test || true",
     "mv docs build",
     "touch build/.nojekyll"
   ],

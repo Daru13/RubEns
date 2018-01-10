@@ -193,30 +193,34 @@ export class RectangleSelectionTool extends Tool {
         let previewImage = this.workspace.selectionCanvas.getImageData();
         for(let j = Math.max(drawing_min_x - 1, 0); j <= Math.min(drawing_max_x + 1, width - 1); j++) {
             if (drawing_min_y - 1 >= 0) {
-                previewImage.data[4 * (j + width * (drawing_min_y - 1))] = 126;
-                previewImage.data[4 * (j + width * (drawing_min_y - 1)) + 1] = 126;
-                previewImage.data[4 * (j + width * (drawing_min_y - 1)) + 2] = 126;
+                let greyColor = Math.floor(((j + drawing_min_y - 1) % 10) / 5) * 255;
+                previewImage.data[4 * (j + width * (drawing_min_y - 1))] = greyColor;
+                previewImage.data[4 * (j + width * (drawing_min_y - 1)) + 1] = greyColor;
+                previewImage.data[4 * (j + width * (drawing_min_y - 1)) + 2] = greyColor;
                 previewImage.data[4 * (j + width * (drawing_min_y - 1)) + 3] = 255;
             }
             if (drawing_max_y + 1 < height) {
-                previewImage.data[4 * (j + width * (drawing_max_y + 1))] = 126;
-                previewImage.data[4 * (j + width * (drawing_max_y + 1)) + 1] = 126;
-                previewImage.data[4 * (j + width * (drawing_max_y + 1)) + 2] = 126;
+                let greyColor = Math.floor(((j + drawing_max_y + 1) % 10) / 5) * 255;
+                previewImage.data[4 * (j + width * (drawing_max_y + 1))] = greyColor;
+                previewImage.data[4 * (j + width * (drawing_max_y + 1)) + 1] = greyColor;
+                previewImage.data[4 * (j + width * (drawing_max_y + 1)) + 2] = greyColor;
                 previewImage.data[4 * (j + width * (drawing_max_y + 1)) + 3] = 255;
             }
         }
 
         for(let i = Math.max(drawing_min_y - 1, 0); i <= Math.min(drawing_max_y + 1, height - 1); i++) {
             if (drawing_min_x - 1 >= 0) {
-                previewImage.data[4 * (drawing_min_x - 1 + width * i)] = 126;
-                previewImage.data[4 * (drawing_min_x - 1 + width * i) + 1] = 126;
-                previewImage.data[4 * (drawing_min_x - 1 + width * i) + 2] = 126;
+                let greyColor = Math.floor(((drawing_min_x - 1 + i) % 10) / 5) * 255;
+                previewImage.data[4 * (drawing_min_x - 1 + width * i)] = greyColor;
+                previewImage.data[4 * (drawing_min_x - 1 + width * i) + 1] = greyColor;
+                previewImage.data[4 * (drawing_min_x - 1 + width * i) + 2] = greyColor;
                 previewImage.data[4 * (drawing_min_x - 1 + width * i) + 3] = 255;
             }
             if (drawing_max_x + 1 < width) {
-                previewImage.data[4 * (drawing_max_x + 1 + width * i)] = 126;
-                previewImage.data[4 * (drawing_max_x + 1 + width * i) + 1] = 126;
-                previewImage.data[4 * (drawing_max_x + 1 + width * i) + 2] = 126;
+                let greyColor = Math.floor(((drawing_max_x + 1 + i) % 10) / 5) * 255;
+                previewImage.data[4 * (drawing_max_x + 1 + width * i)] = greyColor;
+                previewImage.data[4 * (drawing_max_x + 1 + width * i) + 1] = greyColor;
+                previewImage.data[4 * (drawing_max_x + 1 + width * i) + 2] = greyColor;
                 previewImage.data[4 * (drawing_max_x + 1 + width * i) + 3] = 255;
             }
         }
