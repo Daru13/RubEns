@@ -1,6 +1,8 @@
 import { Effect, EffectParameters } from "./Effect";
 import { ColorEffects } from "../DrawingPrimitives/ColorEffects";
 import * as Params from "../Parameter";
+import { EventManager } from  "../EventManager";
+import { EditLayerStep } from "../HistoryStep";
 
 /**
  * The different types of grayscale
@@ -55,6 +57,7 @@ export class GrayscaleEffect extends Effect {
      * @author Mathieu Fehr
      */
     apply() {
+        let previousImageData = this.workspace.drawingLayers.selectedLayer.canvas.getImageData();
         let imageData = this.workspace.drawingLayers.selectedLayer.canvas.getImageData();
 
         switch(this.parameters.grayscaleType.value) {
@@ -70,5 +73,19 @@ export class GrayscaleEffect extends Effect {
         }
 
         this.workspace.drawingLayers.selectedLayer.canvas.setImageData(imageData);
+
+        this.saveInHistory(previousImageData, imageData);
+    }
+
+    /**
+     * This function save the drawn shape in the history.
+     * @return {[type]} [description]
+     */
+    // TODO : involution trivial to optimise (a little GenericHistoryStep should be enough !)
+    saveInHistory(previousImageData: ImageData, newImageData: ImageData){
+        EventManager.spawnEvent(
+            "rubens_historySaveStep",
+            new EditLayerStep(this.name, previousImageData, newImageData,this.workspace.drawingLayers.selectedLayer.id)
+        )
     }
 }
