@@ -1,6 +1,6 @@
-import {Color} from "../../src/ts/utils/Color";
-import {Ellipse} from "../../src/ts/DrawingPrimitives/Ellipse";
-import {Point} from "../../src/ts/utils/Point";
+import { Color } from "../../src/ts/utils/Color";
+import { Ellipse } from "../../src/ts/DrawingPrimitives/Ellipse";
+import { Point } from "../../src/ts/utils/Point";
 
 const assert = require("assert");
 require("jsdom-global")();

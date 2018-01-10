@@ -11,7 +11,7 @@ global.window = window;
 global.$ = require('jquery');
 
 
-describe("Test of RubEns:", function () {
+describe("Test of the event manager:", function () {
 
     let JSDOMPromise: Promise;
     let rubEns: RubEns;
@@ -46,48 +46,66 @@ describe("Test of RubEns:", function () {
             });
     });
 
-    describe("Main application (RubEns):", function () {
 
-        it("Should initialize the event manager", function (done) {
+    describe("Event manager:", function () {
+        let dummyCounter = 0;
+        let dummyEventHandler: EventHandler = {
+            eventTypes: ["rubens_test"],
+            callback: (_) => { dummyCounter++; },
+            disabled: false
+        };
+
+        it("Should be listening for events", function (done) {
             JSDOMPromise.then(_ => {
-                assert(rubEns.eventManager);
+                assert(rubEns.eventManager.isListening);
 
                 done();
             });
         });
 
-        it("Should instanciate the tools", function (done) {
+        it("Should allow to register an event handler", function (done) {
             JSDOMPromise.then(_ => {
-                assert(rubEns.tools && rubEns.tools.length > 0);
+                rubEns.eventManager.registerEventHandler(dummyEventHandler);
+                assert(rubEns.eventManager.registeredHandlers.has("rubens_test"));
+                assert(rubEns.eventManager.registeredHandlers.get("rubens_test").size === 1);
 
                 done();
             });
         });
 
-        it("Should instanciate the effects", function (done) {
+        it("Should trigger an event handler when conditions are fulfilled", function (done) {
             JSDOMPromise.then(_ => {
-                assert(rubEns.effects && rubEns.effects.length > 0);
+                let event = new Event("rubens_test");
+                document.dispatchEvent(event);
+
+                setTimeout(_ => {
+                    assert(dummyCounter === 1);
+                }, 20);
 
                 done();
             });
         });
 
-        it("Should create a new document if required, none otherwise", function (done) {
+        it("Should ignore disabled event handlers", function (done) {
             JSDOMPromise.then(_ => {
-                if (rubEns.parameters.createDocumentOnStartup) {
-                    assert(rubEns.document);
-                }
-                else {
-                    assert(! rubEns.document);
-                }
+                dummyEventHandler.disabled = true;
+
+                let event = new Event("rubens_test");
+                document.dispatchEvent(event);
+
+                setTimeout(_ => {
+                    assert(dummyCounter === 1 /* instead of 2 */);
+                }, 20);
 
                 done();
             });
         });
 
-        it("Should initialize the user interface", function (done) {
+        it("Should allow to unregister an event handler", function (done) {
             JSDOMPromise.then(_ => {
-                assert(rubEns.rootLayout)
+                assert(rubEns.eventManager.registeredHandlers.get("rubens_test").size === 1);
+                rubEns.eventManager.unregisterEventHandler(dummyEventHandler);
+                assert(! rubEns.eventManager.registeredHandlers.has("rubens_test"));
 
                 done();
             });

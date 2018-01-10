@@ -1,6 +1,6 @@
 import { Line } from "../../src/ts/DrawingPrimitives/Line";
 import { Point } from "../../src/ts/utils/Point";
-import {Color} from "../../src/ts/utils/Color";
+import { Color } from "../../src/ts/utils/Color";
 
 const assert = require("assert");
 require("jsdom-global")();

@@ -1,11 +1,5 @@
 import { RubEns } from "../../src/ts/RubEns";
 import { RubEnsParameters } from "../../src/ts/RubEnsParameters";
-import { RootLayout } from "../../src/ts/UI/RootLayout";
-import { MainMenu } from "../../src/ts/UI/MainMenu";
-import { DrawingDisplay } from "../../src/ts/UI/DrawingDisplay"
-import { Sidebar } from "../../src/ts/UI/Sidebar";
-import { StatusBar } from "../../src/ts/UI/StatusBar";
-import { EventHandler } from "../../src/ts/UI/EventHandler";
 import { EventManager } from "../../src/ts/UI/EventManager";
 
 
@@ -125,6 +119,15 @@ describe("Test of the user interface:", function () {
                 done();
             });
         });
+
+        it("Should create an effect menu", function (done) {
+            JSDOMPromise.then(_ => {
+                assert(rubEns.rootLayout.mainMenu.effectMenu);
+                assert(rubEns.rootLayout.mainMenu.effectMenu.rootNode);
+
+                done();
+            });
+        });
     });
 
 
@@ -139,10 +142,28 @@ describe("Test of the user interface:", function () {
             });
         });
 
-        it("Should create a tool-local parameter field", function (done) {
+        it("Should create a tool-related parameter field", function (done) {
             JSDOMPromise.then(_ => {
                 assert(rubEns.rootLayout.sidebar.currentToolParametersField);
                 assert(rubEns.rootLayout.sidebar.currentToolParametersField.rootNode);
+
+                done();
+            });
+        });
+
+        it("Should create a history list", function (done) {
+            JSDOMPromise.then(_ => {
+                assert(rubEns.rootLayout.sidebar.historyList);
+                assert(rubEns.rootLayout.sidebar.historyList.rootNode);
+
+                done();
+            });
+        });
+
+        it("Should create a layer list", function (done) {
+            JSDOMPromise.then(_ => {
+                assert(rubEns.rootLayout.sidebar.layerList);
+                assert(rubEns.rootLayout.sidebar.layerList.rootNode);
 
                 done();
             });
@@ -185,72 +206,6 @@ describe("Test of the user interface:", function () {
                 }, 20);
 
                 // Always failing if put in the timeout callback
-                done();
-            });
-        });
-    });
-
-
-    describe("Event manager:", function () {
-        let dummyCounter = 0;
-        let dummyEventHandler: EventHandler = {
-            eventTypes: ["rubens_test"],
-            callback: (_) => { dummyCounter++; },
-            disabled: false
-        };
-
-        it("Should be listening for events", function (done) {
-            JSDOMPromise.then(_ => {
-                assert(rubEns.eventManager.isListening);
-
-                done();
-            });
-        });
-
-        it("Should allow to register an event handler", function (done) {
-            JSDOMPromise.then(_ => {
-                rubEns.eventManager.registerEventHandler(dummyEventHandler);
-                assert(rubEns.eventManager.registeredHandlers.has("rubens_test"));
-                assert(rubEns.eventManager.registeredHandlers.get("rubens_test").size === 1);
-
-                done();
-            });
-        });
-
-        it("Should trigger an event handler when conditions are fulfilled", function (done) {
-            JSDOMPromise.then(_ => {
-                let event = new Event("rubens_test");
-                document.dispatchEvent(event);
-
-                setTimeout(_ => {
-                    assert(dummyCounter === 1);
-                }, 20);
-
-                done();
-            });
-        });
-
-        it("Should ignore disabled event handlers", function (done) {
-            JSDOMPromise.then(_ => {
-                dummyEventHandler.disabled = true;
-
-                let event = new Event("rubens_test");
-                document.dispatchEvent(event);
-
-                setTimeout(_ => {
-                    assert(dummyCounter === 1 /* instead of 2 */);
-                }, 20);
-
-                done();
-            });
-        });
-
-        it("Should allow to unregister an event handler", function (done) {
-            JSDOMPromise.then(_ => {
-                assert(rubEns.eventManager.registeredHandlers.get("rubens_test").size === 1);
-                rubEns.eventManager.unregisterEventHandler(dummyEventHandler);
-                assert(! rubEns.eventManager.registeredHandlers.has("rubens_test"));
-
                 done();
             });
         });
