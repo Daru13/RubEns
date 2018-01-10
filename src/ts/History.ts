@@ -105,6 +105,7 @@ export class History {
                 delete this.listOfActions[i];
             }
         }
+        this.latestAvailableStep = this.currentStep;
     }
 
     /**
