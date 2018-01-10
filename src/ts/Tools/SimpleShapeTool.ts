@@ -135,8 +135,13 @@ export abstract class SimpleShapeTool extends Tool {
     abstract drawShape(firstPoint: Point, secondPoint: Point);
 
     /**
-     * This function save the drawn shape in the history.
-     * @return {[type]} [description]
+     * This function save the applied operation by the tool in the history.
+     *
+     * @param  {ImageData} previousImageData the ImageData before the effect is applied.
+     * @param  {ImageData} newImageData      the ImageData after the effect is applied.
+     * @return {void}                      Returns nothing, works by side-effect.
+     *
+     * @author Josselin GIET
      */
     saveInHistory(previousImageData: ImageData, newImageData: ImageData){
         EventManager.spawnEvent(
