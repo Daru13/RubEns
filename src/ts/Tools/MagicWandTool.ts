@@ -114,6 +114,14 @@ export class MagicWandTool extends Tool {
         this.saveInHistory(previousSelection, selectedArea);
     }
 
+    /**
+     * This function saves the changement of SelectedArea.
+     * @param  {SelectedArea} previousSelection the SelectedArea before the action.
+     * @param  {SelectedArea} newSelection      the SelectedArea after the action.
+     * @return {[type]}                         returns nothing, works by side-effect.
+     *
+     * @author Josselin GIET
+     */
     saveInHistory (previousSelection: SelectedArea, newSelection: SelectedArea){
         EventManager.spawnEvent(
             "rubens_historySaveStep",
