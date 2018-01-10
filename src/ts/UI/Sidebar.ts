@@ -41,6 +41,27 @@ export class Sidebar extends HTMLRenderer {
     layerList: LayerList;
 
     /**
+     * Event handler for tool changes.
+     */
+    toolChangedEventHandler = {
+        eventTypes: ["rubens_toolChanged"],
+        callback: (event) => {
+            this.updateCurrentToolParametersField();
+        }
+    };
+
+    /**
+     * Event handler for document or parameter changes.
+     */
+    documentOrParametersChangedEventHandler = {
+        eventTypes: ["rubens_documentCreated", "rubens_documentClosed", "rubens_globalParameterChanged"],
+        callback: (event) => {
+            this.updateRootNode();
+        }
+    };
+
+
+    /**
      * Instanciates and initializes a new Sidebar object and its sub-modules.
      * @param  {JQuery}  parentNode Parent node owning current instance.
      * @param  {RubEns}  app        Related app instance.
@@ -59,19 +80,7 @@ export class Sidebar extends HTMLRenderer {
         this.historyList                = new HistoryList(this.rootNode, app);
         this.layerList                  = new LayerList(this.rootNode, app);
 
-        // TODO: move the handlers elsewhere!
-        this.app.eventManager.registerEventHandler({
-            eventTypes: ["rubens_toolChanged"],
-            callback: (event) => {
-                this.updateCurrentToolParametersField();
-        }});
-
-        this.app.eventManager.registerEventHandler({
-            eventTypes: ["rubens_documentCreated", "rubens_documentClosed", "rubens_globalParameterChanged"],
-            callback: (event) => {
-                this.updateRootNode();
-        }});
-
+        this.registerEventHandler();
         this.updateRootNode();
     }
 
@@ -126,5 +135,25 @@ export class Sidebar extends HTMLRenderer {
         let currentToolParameters = currentTool.parameters;
         this.currentToolParametersField.addAllParameters(Object.keys(currentToolParameters)
                                                                .map((key) => currentToolParameters[key]));
+    }
+
+    /**
+     * Register all event handlers to the event manager.
+     *
+     * @author Camille Gobert
+     */
+    registerEventHandler () {
+        this.app.eventManager.registerEventHandler(this.toolChangedEventHandler);
+        this.app.eventManager.registerEventHandler(this.documentOrParametersChangedEventHandler);
+    }
+
+    /**
+     * Unregister all event handlers to the event manager.
+     *
+     * @author Camille Gobert
+     */
+    unregisterEventHandler () {
+        this.app.eventManager.unregisterEventHandler(this.toolChangedEventHandler);
+        this.app.eventManager.unregisterEventHandler(this.documentOrParametersChangedEventHandler);
     }
 }

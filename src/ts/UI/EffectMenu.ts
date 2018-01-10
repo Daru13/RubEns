@@ -154,7 +154,7 @@ export class EffectMenu extends HTMLRenderer {
 
         let popupParameters = new ParametersFieldPopupParameters();
         let popup = new ParametersFieldPopup(this.rootNode, this.app, popupParameters,
-                                             parametersToDisplay, "New document");
+                                             parametersToDisplay, effect.name);
         popup.onParameterChangesApplied = _ => {
             effect.apply();
         };

@@ -26,6 +26,9 @@ export class GrayscaleParameters implements EffectParameters {
 }
 
 
+/**
+ * Effect that does a grayscale conversion of the current layer.
+ */
 export class GrayscaleEffect extends Effect {
 
     /**

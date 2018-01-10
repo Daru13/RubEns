@@ -73,20 +73,6 @@ export class ParametersField extends HTMLRenderer {
      * @author Camille Gobert
      */
     private wrapAndDisplayParameter (parameter: Params.Parameter<any>) {
-        // TODO: do it differently?
-/*
-        let wrapperClassesPerKind = {
-            "number": NumberParameter,
-            "string": StringParameter,
-            "color": ColorParameter
-        };
-
-        let parameterKind = parameter.kind;
-        if (! (parameterKind in wrapperClassesPerKind)) {
-            console.log("Parameter of kind " + parameterKind + " has no wrapper class!");
-            return null;
-        }
-*/
         // Wrap the raw parameter in an UI parameter
         //  Kinda dirty fix using a switch statement for fixing an issue in Travis...
         let parameterKind    = parameter.kind;

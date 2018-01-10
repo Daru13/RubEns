@@ -148,7 +148,6 @@ export class Canvas {
      * @author Mathieu Fehr
      */
     exportImage (format: ImageFormat, fileName: string) {
-        // TODO add test to travis
         // The html node is used to trigger the download from the web page
         let htmlNode = document.createElement("a");
         htmlNode.setAttribute("href",this.canvas.toDataURL("image/" + format));

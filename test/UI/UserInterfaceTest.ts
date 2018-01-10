@@ -49,7 +49,7 @@ describe("Test of the user interface:", function () {
             })
             .catch(error => {
                 console.log("Error: JSDOM could not load index.html for setting up the test environement.");
-                // console.log(error);
+                console.error(error);
             });
     });
 
@@ -168,7 +168,7 @@ describe("Test of the user interface:", function () {
                 setTimeout(_ => {
                     let nb_html_canvases = $("#canvas_container").children().length;
                     assert(nb_html_canvases === 2);
-                }, 5);
+                }, 20);
 
                 // Always failing if put in the timeout callback
                 done();
@@ -182,7 +182,7 @@ describe("Test of the user interface:", function () {
                 setTimeout(_ => {
                     let nb_html_canvases = $("#canvas_container").children().length;
                     assert(nb_html_canvases === 0);
-                }, 5);
+                }, 20);
 
                 // Always failing if put in the timeout callback
                 done();
@@ -224,7 +224,7 @@ describe("Test of the user interface:", function () {
 
                 setTimeout(_ => {
                     assert(dummyCounter === 1);
-                }, 10);
+                }, 20);
 
                 done();
             });
@@ -239,7 +239,7 @@ describe("Test of the user interface:", function () {
 
                 setTimeout(_ => {
                     assert(dummyCounter === 1 /* instead of 2 */);
-                }, 10);
+                }, 20);
 
                 done();
             });

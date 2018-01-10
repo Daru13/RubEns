@@ -265,11 +265,9 @@ export class ParametersFieldPopup extends Popup {
     /**
      * Apply the modifications of the copied set of parameters to the real set.
      * In other words, it copies displayed, copied parameters values to the internally saved, original set.
+     * If defined, the `onParameterChangesApplied` callback is also called (after applying changes).
      *
      * Note: this method assumes the original and the copied sets contain parameters **in the same order**.
-     * TODO: ensure this and avoid this trick!
-     *
-     * If defined, the `onParameterChangesApplied` callback is also called (after applying changes).
      *
      * @author Camille Gobert
      */

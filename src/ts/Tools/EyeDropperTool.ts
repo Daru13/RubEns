@@ -60,8 +60,10 @@ export class EyeDropperTool extends Tool {
         let blue = imageData.data[4 * position + 2];
         let alpha = imageData.data[4 * position + 3];
 
-        let color = new Color(red, green, blue, alpha);
-        this.documentParameters.sharedToolParameters.mainColor.value = color.getHex();
+        if(alpha !== 0) {
+            let color = new Color(red, green, blue, alpha);
+            this.documentParameters.sharedToolParameters.mainColor.value = color.getHex();
+        }
 
         EventManager.spawnEvent("rubens_globalParameterChanged");
     }

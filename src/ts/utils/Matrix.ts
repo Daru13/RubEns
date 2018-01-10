@@ -21,10 +21,10 @@ export class Matrix {
     /**
      * Construct a null matrix with given width and height
      *
-     * @param width
-     * @param height
+     * @param width     The width of the matrix
+     * @param height    The height of the matrix
      */
-    constructor(width, height) {
+    constructor(width: number, height: number) {
         this.width = width;
         this.height = height;
         this.data = [];
@@ -124,6 +124,6 @@ export class Matrix {
         if(oldSum == 0) {
             return;
         }
-        this.scalarMultiplication(newSum / oldSum);
+        this.data = this.scalarMultiplication(newSum / oldSum).data;
     }
 }
