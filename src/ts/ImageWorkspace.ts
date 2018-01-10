@@ -258,25 +258,16 @@ export class ImageWorkspace {
      * Display a representation of the selection given in parameters.
      * The selection canvas is equal to the drawing canvas, where the pixels selected have alpha = 0.
      * The selection hull is colored to distinguish the pixels selected.
-     * @param {SelectedArea} selection The selected area instance to display.
      *
      * @author Mathieu Fehr
      */
-    displaySelection(selection: SelectedArea) {
+    displaySelection() {
         this.selectionCanvas.clear();
         this.drawingLayers.drawOn(this.selectionCanvas);
 
         let imageData = this.selectionCanvas.getImageData();
 
-        if (this.selectionDrawingIntervalID === null) {
-            this.selectionDrawingIntervalID = window.setInterval(() => {
-                this.selectionBorderColorShift += 3;
-                this.selectionBorderColorShift %= 10;
-                this.displaySelection(this.selectedArea);
-            }, 200);
-        }
-
-        selection.data.forEach((value, index) => {
+        this.selectedArea.data.forEach((value, index) => {
             let x = index % this.width;
             let y = Math.floor(index / this.width);
 
@@ -303,24 +294,52 @@ export class ImageWorkspace {
                 imageData.data[4 * (y * this.width + x) + 3] = outColor.alpha;
             }
 
-            if (x === 0 || y === 0 || x === this.width - 1 || y === this.height - 1) {
-                return;
-            }
-
-            // We draw the selection hull
-            for (let i = y - 1; i <= y + 1; i++) {
-                for (let j = x - 1; j <= x + 1; j++) {
-                    if (selection.data[i * this.width + j] !== 0) {
-                        let greyColor = Math.floor(((x + y + this.selectionBorderColorShift) % 10) / 5) * 255;
-                        imageData.data[4 * (y * this.width + x)] = greyColor;
-                        imageData.data[4 * (y * this.width + x) + 1] = greyColor;
-                        imageData.data[4 * (y * this.width + x) + 2] = greyColor;
-                        imageData.data[4 * (y * this.width + x) + 3] = 255;
-                        return;
-                    }
-                }
-            }
         });
+
+        this.selectionCanvas.setImageData(imageData);
+
+        // We precompute the selection frontier
+        this.selectedArea.computeSelectionFrontier();
+
+        // We launch the selection update routine
+        this.updateSelectionDisplay();
+    }
+
+
+    /**
+     * Update the selection canvas regularly.
+     * Set selectionDrawingIntervalID if it wasn't set before.
+     * This function call itself 5 times per seconds, to update the selection.
+     *
+     * @author Mathieu Fehr
+     */
+    updateSelectionDisplay() {
+
+        // If the routine wasn't started, we start it
+        if (this.selectionDrawingIntervalID === null) {
+            this.selectionDrawingIntervalID = window.setInterval(() => {
+                this.selectionBorderColorShift += 3;
+                this.selectionBorderColorShift %= 10;
+                this.updateSelectionDisplay();
+            }, 200);
+        }
+
+        let imageData = this.selectionCanvas.getImageData();
+
+        // We draw the frontier's pixel in the right color
+        let length = this.selectedArea.selectionFrontier.length;
+        for(let i = 0; i < length; i++) {
+
+            let point = this.selectedArea.selectionFrontier[i];
+            let x = point.x;
+            let y = point.y;
+
+            let greyColor = Math.floor(((x + y + this.selectionBorderColorShift) % 10) / 5) * 255;
+            imageData.data[4 * (y * this.width + x)] = greyColor;
+            imageData.data[4 * (y * this.width + x) + 1] = greyColor;
+            imageData.data[4 * (y * this.width + x) + 2] = greyColor;
+            imageData.data[4 * (y * this.width + x) + 3] = 255;
+        }
 
         this.selectionCanvas.setImageData(imageData);
     }
