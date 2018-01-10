@@ -1,5 +1,6 @@
 import { RubEnsParameters } from "./RubEnsParameters";
 import { Document } from "./Document";
+import { History } from "./History";
 import { DocumentParameters } from "./DocumentParameters";
 import { EventManager } from "./EventManager";
 import { SupportChecker } from "./SupportChecker";
@@ -241,7 +242,7 @@ export class RubEns {
      */
     initUserInterface () {
         this.rootLayout = new RootLayout($("body"), this);
-        
+
         this.rootLayout.mainMenu.effectMenu.setEffects(this.effects);
         this.rootLayout.toolMenu.toolSelectionMenu.setTools(this.tools);
     }
@@ -303,6 +304,8 @@ export class RubEns {
         // TODO: make this new step the first one.
         EventManager.spawnEvent("rubens_historyApplyOnCanvas",{redo: function () {},
                                                                undo: function () {}});
+
+        this.document.history = new History(this.document, this.eventManager);
     }
 
 
