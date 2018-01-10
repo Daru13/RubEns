@@ -77,7 +77,7 @@ export class LayerManager {
      *
      * @author Camille Gobert
      */
-    private getLayerIndexFromId (id: number) {
+    getLayerIndexFromId (id: number) {
         return this.layers.findIndex((layer: Layer) => { return layer.id === id; });
     }
 

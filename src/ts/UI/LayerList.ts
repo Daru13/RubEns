@@ -421,9 +421,17 @@ export class LayerList extends HTMLRenderer {
         let layerId = parseInt(eventTarget.closest(".layer")
                                           .attr("data-layer-id"));
 
-        // Rename the layer
+        // Rename the layer, if it has not been done yet
+        // This avoids double-renaming, which would save the action twice in the history
         let newName = <string> eventTarget.val();
-        this.layerManager.renameLayer(layerId, newName);
+
+        let renamedLayerIndex = this.layerManager.getLayerIndexFromId(layerId);
+        if (this.layerManager.layers[renamedLayerIndex].name != newName) {
+            this.layerManager.renameLayer(layerId, newName);
+        }
+        else {
+            this.updateLayerListNode();
+        }
     }
 
 
