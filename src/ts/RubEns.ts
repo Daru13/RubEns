@@ -5,6 +5,7 @@ import { EventManager } from "./EventManager";
 import { SupportChecker } from "./SupportChecker";
 import { RootLayout } from "./UI/RootLayout";
 
+// Tools
 import { Tool } from "./Tools/Tool";
 import { LineTool } from "./Tools/LineTool";
 import { EllipseTool } from "./Tools/EllipseTool";
@@ -14,6 +15,11 @@ import { RectangleSelectionTool } from "./Tools/RectangleSelectionTool";
 import { MagicWandTool } from "./Tools/MagicWandTool";
 import { BucketTool } from "./Tools/BucketTool";
 import { EyeDropperTool } from "./Tools/EyeDropperTool";
+
+// Effects
+import { Effect } from "./Effects/Effect";
+import { InverseColorEffect } from "./Effects/InverseColorEffect";
+import {GrayscaleEffect} from "./Effects/GrayscaleEffect";
 
 
 /**
@@ -54,6 +60,11 @@ export class RubEns {
     private tools: Tool[];
 
     /**
+     * List of all available [[Effect]] instances.
+     */
+    private effects: Effect[];
+
+    /**
      * Instanciates and initializes a new RubEns object.
      *
      * This method calls various intiialization functions defined in this class,
@@ -70,6 +81,7 @@ export class RubEns {
 
         this.initEventManager();
         this.initTools();
+        this.initEffects();
         this.initUserInterface();
         this.initDocument();
     }
@@ -167,6 +179,39 @@ export class RubEns {
 
 
     /**
+     * Initialize the list of available effects.
+     * This method should save an instance of every exposed [[Effect]] object.
+     *
+     * @author Camille Gobert
+     */
+    initEffects () {
+        this.effects = [
+            new InverseColorEffect(),
+            new GrayscaleEffect(),
+        ];
+
+        this.eventManager.registerEventHandler({
+            eventTypes: ["rubens_documentCreated"],
+            callback  : (event: CustomEvent) => {
+                let newDocument = event.detail.document;
+                for (let effect of this.effects) {
+                    effect.workspace = newDocument.imageWorkspace;
+                }
+            }
+        });
+
+        this.eventManager.registerEventHandler({
+            eventTypes: ["rubens_documentClosed"],
+            callback  : (_) => {
+                for (let effect of this.effects) {
+                    effect.workspace = undefined;
+                }
+            }
+        });
+    }
+
+
+    /**
      * Updates every saved [[Tool]] instance, to keep its state up to date.
      * As of now, simply updates the document parameters of every tool.
      *
@@ -190,6 +235,8 @@ export class RubEns {
      */
     initUserInterface () {
         this.rootLayout = new RootLayout($("body"), this);
+        
+        this.rootLayout.mainMenu.effectMenu.setEffects(this.effects);
         this.rootLayout.toolMenu.toolSelectionMenu.setTools(this.tools);
     }
 

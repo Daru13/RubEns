@@ -50,9 +50,11 @@
 }
 
 
-/* Menu */
+/******************************************************************
+/* Submenus
+/*****************************************************************/
 
-#document_actions_menu {
+#main_menu > ul {
     display: inline-block;
     padding: 0 15px 0 15px;
     margin: 0;
@@ -64,18 +66,18 @@
 
 /* Menus elements */
 
-#document_actions_menu > li {
+#main_menu > ul > li {
     display: inline-block;
     margin: 0 15px 0 0;
     padding: 0;
     list-style: none;
 }
 
-#document_actions_menu > li:last-child {
+#main_menu > ul > li:last-child {
     margin: 0;
 }
 
-#document_actions_menu .document_action_button {
+#main_menu > ul button {
     margin: 0;
     padding: 8px 8px 10px 8px;
     background-color: #8898A3;
@@ -88,13 +90,13 @@
     animation: 250ms ease-in;
 }
 
-#document_actions_menu .document_action_button:hover {
+#main_menu > ul button:hover {
     padding: 8px;
     background-color: #6E7B85;
     box-shadow: none;
 }
 
-#document_actions_menu .document_action_button:disabled {
+#main_menu > ul button:disabled {
     opacity: 0.5;
     box-shadow: none;
 

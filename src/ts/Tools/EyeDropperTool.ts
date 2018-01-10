@@ -1,5 +1,6 @@
 import { Tool } from "./Tool";
-import {Color} from "../utils/Color";
+import { Color } from "../utils/Color";
+import { EventManager } from "../EventManager";
 
 
 /**
@@ -61,6 +62,8 @@ export class EyeDropperTool extends Tool {
 
         let color = new Color(red, green, blue, alpha);
         this.documentParameters.sharedToolParameters.mainColor.value = color.getHex();
+
+        EventManager.spawnEvent("rubens_globalParameterChanged");
     }
 
 }

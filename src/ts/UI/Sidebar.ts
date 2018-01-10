@@ -67,7 +67,7 @@ export class Sidebar extends HTMLRenderer {
         }});
 
         this.app.eventManager.registerEventHandler({
-            eventTypes: ["rubens_documentCreated", "rubens_documentClosed"],
+            eventTypes: ["rubens_documentCreated", "rubens_documentClosed", "rubens_globalParameterChanged"],
             callback: (event) => {
                 this.updateRootNode();
         }});
