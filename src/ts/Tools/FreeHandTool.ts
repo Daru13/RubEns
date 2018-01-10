@@ -167,7 +167,6 @@ export class FreeHandTool extends Tool {
             {description: "drawing "+this.name,
              redo: () => {
                  this.workspace.workingCanvas.setImageData(copyOfImageData);
-                 console.log("OK!")
                  this.workspace.applyWorkingCanvas();
              },
              undo: null});
